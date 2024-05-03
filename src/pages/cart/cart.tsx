@@ -52,7 +52,7 @@ const CartPage = () => {
       <div className="flex flex-col items-start justify-start w-full">
         {items.length === 0 && (
           <div className="flex flex-row justify-center w-full my-10 tracking-widest">
-            <p> You have no items in your cart</p>
+            <p> You have no items in your cart.</p>
           </div>
         )}
         {items.length !== 0 &&

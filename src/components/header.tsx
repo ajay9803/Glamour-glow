@@ -1,5 +1,6 @@
 import {
   faBars,
+  faMicrophone,
   faMoon,
   faSearch,
   faShoppingBag,
@@ -14,6 +15,7 @@ import ThePulseLoader from "./pulse-loader";
 import SearchItem from "../pages/home/search_item";
 import HeaderAuthPopUp from "./header_auth_popup";
 import { useNavigate } from "react-router-dom";
+import useSpeechRecognition from "../hooks/speech_recognition_hook";
 
 const TheHeader: React.FC = () => {
   const themeState = useAppSelector((state) => {
@@ -43,12 +45,18 @@ const TheHeader: React.FC = () => {
     setShowMenu(!showMenu);
   };
 
-  const [searchValue, setSearchValue] = useState<string>("");
-
   const dispatch = useAppDispatch();
   let products = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
   const navigate = useNavigate();
+
+  const {
+    text,
+    startListening,
+    isListening,
+    hasRecognitionSupport,
+    setTextValue,
+  } = useSpeechRecognition();
 
   return (
     <div className="flex flex-col sticky top-0 z-30">
@@ -94,13 +102,13 @@ const TheHeader: React.FC = () => {
               setShowSearchBar(true);
             }}
             onChange={(e) => {
-              setSearchValue(e.target.value);
+              setTextValue(e.target.value);
               setIsLoading(true);
               setTimeout(() => {
                 setIsLoading(false);
               }, 3000);
             }}
-            value={searchValue}
+            value={text}
             placeholder="What are you looking for ?"
             className="px-3 py-2 rounded-3xl  bg-zinc-900  w-full pl-10 pr-14"
           />
@@ -110,15 +118,25 @@ const TheHeader: React.FC = () => {
             icon={faSearch}
           ></FontAwesomeIcon>
           <p
-            className="absolute top-1.5 right-5 cursor-pointer "
+            className="absolute top-1.5 right-12 cursor-pointer "
             onClick={() => {
-              setSearchValue("");
+              setTextValue("");
               setShowSearchBar(false);
             }}
           >
             {" "}
             Clear{" "}
           </p>
+          <FontAwesomeIcon
+            onClick={() => {
+              if (isListening) {
+                return;
+              }
+              startListening();
+            }}
+            className="absolute top-3 right-5 cursor-pointer"
+            icon={faMicrophone}
+          ></FontAwesomeIcon>
           {showSearchBar && (
             <div
               style={{
@@ -185,7 +203,10 @@ const TheHeader: React.FC = () => {
               icon={faShoppingBag}
             ></FontAwesomeIcon>
             {totalItemCount > 0 && (
-              <p className="font-semibold tracking-widest hidden md:flex"> Rs. {totalPrice}</p>
+              <p className="font-semibold tracking-widest hidden md:flex">
+                {" "}
+                Rs. {totalPrice}
+              </p>
             )}
             {totalItemCount > 0 && (
               <p
@@ -211,9 +232,9 @@ const TheHeader: React.FC = () => {
         >
           <div className="relative shadow-md shadow-black my-7 mx-6">
             <input
-              value={searchValue}
+              value={text}
               onChange={(e) => {
-                setSearchValue(e.target.value);
+                setTextValue(e.target.value);
                 setIsLoading(true);
                 setTimeout(() => {
                   setIsLoading(false);
@@ -226,16 +247,27 @@ const TheHeader: React.FC = () => {
               className="absolute top-4 left-3"
               icon={faSearch}
             />
+
             <p
               onClick={() => {
-                setSearchValue("");
+                setTextValue("");
                 setShowSearchBar(false);
               }}
-              className="absolute top-3 right-4 hover:cursor-pointer"
+              className="absolute top-3 right-12 hover:cursor-pointer"
             >
               {" "}
               Clear{" "}
             </p>
+            <FontAwesomeIcon
+              onClick={() => {
+                if (isListening) {
+                  return;
+                }
+                startListening();
+              }}
+              className="absolute top-4 right-5 cursor-pointer"
+              icon={faMicrophone}
+            ></FontAwesomeIcon>
           </div>
           {isLoading && (
             <div className="flex flex-row justify-center">

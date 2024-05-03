@@ -47,7 +47,7 @@ const App: React.FC = () => {
   return (
     <div
       className={`${
-        darkMode ? "text-white bg-zinc-900" : "text-black bg-white"
+        darkMode ? "text-white bg-zinc-950" : "text-black bg-white"
       } transition-all duration-500 ease-in-out`}
     >
       <Toaster
