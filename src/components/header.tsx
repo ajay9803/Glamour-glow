@@ -23,6 +23,13 @@ const TheHeader: React.FC = () => {
   const primaryColor = themeState.primaryColor;
   const primaryTextColor = themeState.primaryTextColor;
 
+  const cartState = useAppSelector((state) => {
+    return state.cart;
+  });
+
+  let totalItemCount = cartState.totalItemCount;
+  let totalPrice = cartState.totalPrice;
+
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -58,7 +65,7 @@ const TheHeader: React.FC = () => {
           }}
         ></div>
       )}
-      <div className="w-full flex flex-row items-center justify-between px-10 py-8 bg-zinc-950 text-white">
+      <div className="w-full flex flex-row items-center justify-between px-10 py-8 bg-zinc-950 text-white gap-x-6">
         <div className="flex lg:hidden mt-1.5 pr-4 ">
           <FontAwesomeIcon
             icon={faBars}
@@ -81,7 +88,7 @@ const TheHeader: React.FC = () => {
           {" "}
           PRETTYCLICK
         </p>
-        <div className="relative hidden lg:flex w-full mx-20">
+        <div className="relative hidden lg:flex w-2/4">
           <input
             onClick={() => {
               setShowSearchBar(true);
@@ -139,7 +146,7 @@ const TheHeader: React.FC = () => {
             </div>
           )}
         </div>
-        <div className="flex flex-row gap-x-8 items-center">
+        <div className="flex flex-row gap-x-5 items-center">
           <FontAwesomeIcon
             className="cursor-pointer text-2xl hidden lg:flex"
             onClick={() => {
@@ -167,14 +174,34 @@ const TheHeader: React.FC = () => {
               setShow={toggleAuthPopup}
             ></HeaderAuthPopUp>
           </div>
-          <div className="border border-solid border-white px-4 py-2 rounded-md shadow-md shadow-white cursor-pointer">
+          <div
+            onClick={() => {
+              navigate("/my-cart");
+            }}
+            className="relative w-full flex flex-row items-center gap-x-3 border border-solid border-white px-4 py-2 rounded-md shadow-md shadow-white cursor-pointer"
+          >
             <FontAwesomeIcon
               className="text-2xl"
               icon={faShoppingBag}
             ></FontAwesomeIcon>
+            {totalItemCount > 0 && (
+              <p className="font-semibold tracking-widest"> Rs. {totalPrice}</p>
+            )}
+            {totalItemCount > 0 && (
+              <p
+                style={{
+                  fontSize: "11px",
+                }}
+                className="text-white shadow-sm shadow-white absolute -top-2 -right-2 bg-purple-500 rounded-full flex py-0.5 px-1.5"
+              >
+                {totalItemCount}
+              </p>
+            )}
           </div>
         </div>
       </div>
+
+      {/* search results */}
       {showSearchBar && (
         <div
           className={`${primaryColor} max-h-96 z-30 overflow-y-scroll fixed flex lg:hidden flex-col top-28 right-0 left-0 py-10 rounded-b-2xl shadow-sm shadow-black mb-20 `}
@@ -231,6 +258,7 @@ const TheHeader: React.FC = () => {
         </div>
       )}
 
+      {/* general categories */}
       <div
         className={`flex-row  hidden lg:flex ${
           darkMode ? "bg-black" : "bg-slate-100"

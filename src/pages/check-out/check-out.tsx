@@ -91,7 +91,7 @@ const CheckOut: React.FC = () => {
                   <ErrorMessage
                     name="houseNumber"
                     component="div"
-                    className="text-red-500"
+                    className="text-purple-500"
                   />
                 </div>
 
@@ -111,7 +111,7 @@ const CheckOut: React.FC = () => {
                   <ErrorMessage
                     name="streetName"
                     component="div"
-                    className="text-red-500"
+                    className="text-purple-500"
                   />
                 </div>
               </div>
@@ -132,7 +132,7 @@ const CheckOut: React.FC = () => {
                   <ErrorMessage
                     name="city"
                     component="div"
-                    className="text-red-500"
+                    className="text-purple-500"
                   />
                 </div>
 
@@ -152,7 +152,7 @@ const CheckOut: React.FC = () => {
                   <ErrorMessage
                     name="district"
                     component="div"
-                    className="text-red-500"
+                    className="text-purple-500"
                   />
                 </div>
               </div>
@@ -173,7 +173,7 @@ const CheckOut: React.FC = () => {
                   <ErrorMessage
                     name="zone"
                     component="div"
-                    className="text-red-500"
+                    className="text-purple-500"
                   />
                 </div>
 
@@ -194,7 +194,7 @@ const CheckOut: React.FC = () => {
                   <ErrorMessage
                     name="phoneNumber"
                     component="div"
-                    className="text-red-500"
+                    className="text-purple-500"
                   />
                 </div>
               </div>

@@ -6,9 +6,12 @@ import Search from "./pages/search/search";
 import Login from "./pages/auth/login/login";
 import Register from "./pages/auth/register/register";
 import { Toaster } from "react-hot-toast";
-import { useAppSelector } from "./hooks/hooks";
+import { useAppDispatch, useAppSelector } from "./hooks/hooks";
 import Footer from "./components/footer";
 import CheckOut from "./pages/check-out/check-out";
+import CartPage from "./pages/cart/cart";
+import { useEffect } from "react";
+import { cartSliceActions, loadCartState } from "./slices/cart-slice";
 
 const App: React.FC = () => {
   const themeState = useAppSelector((state) => {
@@ -16,6 +19,33 @@ const App: React.FC = () => {
   });
 
   const darkMode = themeState.darkMode;
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const loadMyCart = () => {
+      try {
+        const myCartState = loadCartState();
+
+        if (!myCartState) {
+          return;
+        } else {
+          console.log(myCartState);
+          dispatch(
+            cartSliceActions.setCart({
+              items: myCartState.items,
+              totalItemCount: myCartState.totalItemCount,
+              totalPrice: myCartState.totalPrice,
+            })
+          );
+        }
+      } catch (e) {
+        return;
+      }
+    };
+    loadMyCart();
+    // dispatch(cartSliceActions.clearCart());
+
+  }, [dispatch]);
   return (
     <div
       className={`${
@@ -46,6 +76,7 @@ const App: React.FC = () => {
           },
         }}
       />
+
       <TheHeader></TheHeader>
       <div className="py-4 md:py-12 w-full px-16">
         <Routes>
@@ -54,10 +85,8 @@ const App: React.FC = () => {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/home" element={<Home />}></Route>
           <Route path="/search" element={<Search></Search>}></Route>
-          <Route
-              path="/check-out"
-              element={<CheckOut />}
-            ></Route>
+          <Route path="/check-out" element={<CheckOut />}></Route>
+          <Route path="/my-cart" element={<CartPage />}></Route>
         </Routes>
       </div>
       <Footer></Footer>

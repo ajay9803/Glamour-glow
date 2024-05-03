@@ -3,8 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Rating from "@mui/material/Rating";
 import { useState } from "react";
 import ProductDetailsSidebar from "./product_details_bar";
+import { ProductType } from "./end_of_year_section";
 
-const ProductItem: React.FC = () => {
+const ProductItem: React.FC<{product: ProductType}> = (props) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
@@ -15,10 +16,10 @@ const ProductItem: React.FC = () => {
     <div className="flex flex-col justify-start w-full">
       {showMenu && (
         <div
-        style={{
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          backdropFilter: "blur(5px)",
-        }}
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backdropFilter: "blur(5px)",
+          }}
           className="fixed top-0 right-0 h-full w-screen bg-black bg-opacity-80 z-40"
           onClick={toggleMenu}
         ></div>
@@ -26,6 +27,7 @@ const ProductItem: React.FC = () => {
       <ProductDetailsSidebar
         isOpen={showMenu}
         toggleSidebar={toggleMenu}
+        product={props.product}
       ></ProductDetailsSidebar>
       <div
         onClick={toggleMenu}

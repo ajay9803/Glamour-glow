@@ -109,7 +109,7 @@ const Register: React.FC = () => {
                 <ErrorMessage
                   name="email"
                   component="div"
-                  className="text-red-500 text-sm"
+                  className="text-purple-500 text-sm"
                 />
               </div>
 

@@ -1,10 +1,14 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import Rating from "@mui/material/Rating";
+import { ProductType } from "./end_of_year_section";
+import { cartSliceActions, saveCartState } from "../../slices/cart-slice";
+import toast from "react-hot-toast";
 
 const ProductDetailsSidebar: React.FC<{
+  product: ProductType;
   isOpen: boolean;
   toggleSidebar: () => void;
 }> = (props) => {
@@ -25,6 +29,13 @@ const ProductDetailsSidebar: React.FC<{
   const errorColor = themeSlice.errorColor;
   const errorTextColor = themeSlice.errorTextColor;
   const darkMode = themeSlice.darkMode;
+
+  const dispatch = useAppDispatch();
+
+  const cartState = useAppSelector((state) => {
+    return state.cart;
+  });
+
   return (
     <div
       style={{
@@ -77,11 +88,31 @@ const ProductDetailsSidebar: React.FC<{
           {" "}
           Rs. 432,000
         </p>
-        <div className="relative w-full mt-7">
+        <div
+          onClick={() => {
+            dispatch(
+              cartSliceActions.addItemToCart({
+                item: {
+                  productItem: {
+                    id: props.product.id,
+                    type: props.product.type,
+                    image: props.product.image,
+                    name: props.product.name,
+                    price: props.product.price,
+                  },
+                  count: 1,
+                  price: props.product.price,
+                },
+              })
+            );
+            toast.success("Item added to your cart.");
+            
+          }}
+          className="relative w-full mt-7"
+        >
           <button
             className={` w-full rounded-xl bg-gray-300 text-gray-300 px-5 py-3 font-semibold tracking-wider transition-all ease-in-out `}
           >
-            {" "}
             Add to Cart
           </button>
           <button
