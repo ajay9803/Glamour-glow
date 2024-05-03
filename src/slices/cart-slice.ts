@@ -110,11 +110,9 @@ const cartSlice = createSlice({
       saveCartState(state);
     },
     clearCart(state) {
-      state = {
-        items: [],
-        totalItemCount: 0,
-        totalPrice: 0,
-      };
+      state.items = [];
+      state.totalItemCount = 0;
+      state.totalPrice = 0;
       saveCartState(state);
     },
     setCart(state, action: { payload: CartStateType }) {

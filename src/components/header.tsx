@@ -148,7 +148,7 @@ const TheHeader: React.FC = () => {
         </div>
         <div className="flex flex-row gap-x-5 items-center">
           <FontAwesomeIcon
-            className="cursor-pointer text-2xl hidden lg:flex"
+            className="cursor-pointer text-lg hidden lg:flex"
             onClick={() => {
               dispatch(themeSliceActions.toggleDarkMode());
             }}
@@ -166,7 +166,7 @@ const TheHeader: React.FC = () => {
               onClick={() => {
                 setShowAuthPopup(!showAuthPopup);
               }}
-              className="cursor-pointer  text-2xl hidden lg:flex"
+              className="cursor-pointer  text-lg hidden lg:flex"
               icon={faUser}
             ></FontAwesomeIcon>
             <HeaderAuthPopUp
@@ -181,11 +181,11 @@ const TheHeader: React.FC = () => {
             className="relative w-full flex flex-row items-center gap-x-3 border border-solid border-white px-4 py-2 rounded-md shadow-md shadow-white cursor-pointer"
           >
             <FontAwesomeIcon
-              className="text-2xl"
+              className="text-lg"
               icon={faShoppingBag}
             ></FontAwesomeIcon>
             {totalItemCount > 0 && (
-              <p className="font-semibold tracking-widest"> Rs. {totalPrice}</p>
+              <p className="font-semibold tracking-widest hidden md:flex"> Rs. {totalPrice}</p>
             )}
             {totalItemCount > 0 && (
               <p

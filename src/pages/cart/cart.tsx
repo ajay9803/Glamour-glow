@@ -1,7 +1,8 @@
-import React, { useEffect, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 import CartItem from "../../components/cart-item";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { cartSliceActions } from "../../slices/cart-slice";
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ const CartPage = () => {
   const cartState = useAppSelector((state) => {
     return state.cart;
   });
+  let totalItems = cartState.totalItemCount;
 
   let totalPrice = cartState.totalPrice;
 
@@ -16,15 +18,36 @@ const CartPage = () => {
 
   const scrollRef = useRef(0);
 
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     window.scrollTo(0, scrollRef.current);
   }, []);
 
   return (
     <div className="flex flex-col items-start justify-start px-10 md:px-36">
+      {totalItems > 0 && (
+        <p
+          onClick={() => {
+            dispatch(cartSliceActions.clearCart());
+          }}
+          className="fixed -right-10 top-1/3 text-white font-semibold hover:cursor-pointer bg-red-600 hover:bg-red-800 transition-all duration-300 px-5 py-3 rotate-90 tracking-widest rounded-b-xl"
+        >
+          {" "}
+          Clear Cart{" "}
+        </p>
+      )}
       <p className="text-lg tracking-wider font-semibold text-zinc-500 mb-5">
         {" "}
-        Home / <span> Cart </span>
+        <span
+          className="hover:text-purple-400 hover:cursor-pointer"
+          onClick={() => {
+            navigate("/home");
+          }}
+        >
+          Home
+        </span>{" "}
+        / Cart
       </p>
       <div className="flex flex-col items-start justify-start w-full">
         {items.length === 0 && (

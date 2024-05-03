@@ -4,14 +4,17 @@ import Rating from "@mui/material/Rating";
 import { useState } from "react";
 import ProductDetailsSidebar from "./product_details_bar";
 import { ProductType } from "./end_of_year_section";
+import { useNavigate } from "react-router-dom";
 
-const ProductItem: React.FC<{product: ProductType}> = (props) => {
+const ProductItem: React.FC<{ product: ProductType }> = (props) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
+
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col justify-start w-full">
       {showMenu && (
@@ -30,7 +33,9 @@ const ProductItem: React.FC<{product: ProductType}> = (props) => {
         product={props.product}
       ></ProductDetailsSidebar>
       <div
-        onClick={toggleMenu}
+        onClick={() => {
+          navigate("/product-details");
+        }}
         className="h-52 lg:h-72 w-full relative overflow-hidden rounded-xl shadow-sm shadow-black scale-95 hover:scale-100 transition-all"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -43,7 +48,10 @@ const ProductItem: React.FC<{product: ProductType}> = (props) => {
           alt="product"
         />
         <div
-          onClick={toggleMenu}
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleMenu();
+          }}
           className={`absolute h-8 w-8 rounded-full bg-gray-500 cursor-pointer ${
             isHovered ? "opacity-50 scale-100" : "opacity-0 scale-0"
           } bottom-5 right-5 flex flex-row justify-center items-center transition-all duration-300`}

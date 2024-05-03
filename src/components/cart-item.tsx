@@ -35,7 +35,7 @@ const CartItem: React.FC<{ item: CartItemType }> = (props) => {
           </p>
         </div>
       </div>
-      <div className="flex flex-row gap-x-20 items-center">
+      <div className="flex flex-row gap-x-10 items-center">
         <div className="flex flex-row items-center gap-x-4">
           <div
             onClick={() => {
@@ -91,7 +91,7 @@ const CartItem: React.FC<{ item: CartItemType }> = (props) => {
               })
             );
           }}
-          className="hover:text-orange-500 transition-all duration-150 ease-out cursor-pointer"
+          className="hover:text-red-600 transition-all duration-150 ease-out cursor-pointer"
           icon={faTrash}
         />
       </div>

@@ -12,6 +12,7 @@ import CheckOut from "./pages/check-out/check-out";
 import CartPage from "./pages/cart/cart";
 import { useEffect } from "react";
 import { cartSliceActions, loadCartState } from "./slices/cart-slice";
+import ProductDetails from "./pages/product_details/product_details";
 
 const App: React.FC = () => {
   const themeState = useAppSelector((state) => {
@@ -29,7 +30,6 @@ const App: React.FC = () => {
         if (!myCartState) {
           return;
         } else {
-          console.log(myCartState);
           dispatch(
             cartSliceActions.setCart({
               items: myCartState.items,
@@ -43,8 +43,6 @@ const App: React.FC = () => {
       }
     };
     loadMyCart();
-    // dispatch(cartSliceActions.clearCart());
-
   }, [dispatch]);
   return (
     <div
@@ -87,6 +85,7 @@ const App: React.FC = () => {
           <Route path="/search" element={<Search></Search>}></Route>
           <Route path="/check-out" element={<CheckOut />}></Route>
           <Route path="/my-cart" element={<CartPage />}></Route>
+          <Route path="/product-details" element={<ProductDetails />}></Route>
         </Routes>
       </div>
       <Footer></Footer>

@@ -3,11 +3,13 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import ThePulseLoader from "../../components/pulse-loader";
 import { useAppSelector } from "../../hooks/hooks";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle, faCircleDollarToSlot, faDotCircle } from "@fortawesome/free-solid-svg-icons";
 
 const CheckOut: React.FC = () => {
   const [selectedPm, setSelectedPm] = useState("Cash on Delivery");
 
-  // const paymentMethods = ["Cash on Delivery", "E-sewa", "Khalti"];
+  const paymentMethods = ["Cash on Delivery", "E-sewa",];
 
   const scrollRef = useRef(0);
 
@@ -205,7 +207,7 @@ const CheckOut: React.FC = () => {
               Payment Method
             </p>
 
-            {/* {paymentMethods.map((pm) => {
+            {paymentMethods.map((pm) => {
               return (
                 <div
                   onClick={() => {
@@ -218,8 +220,8 @@ const CheckOut: React.FC = () => {
                   <div className="flex flex-row items-center gap-x-4">
                     {selectedPm === pm && (
                       <FontAwesomeIcon
-                        className="text-xl text-red-800"
-                        icon={faCircleDot}
+                        className="text-xl text-purple-800"
+                        icon={faDotCircle}
                       ></FontAwesomeIcon>
                     )}
                     {selectedPm !== pm && (
@@ -232,7 +234,7 @@ const CheckOut: React.FC = () => {
                   </div>
                 </div>
               );
-            })} */}
+            })}
 
             {/* online payment
             {(selectedPm === "E-sewa" || selectedPm === "Khalti") && (
