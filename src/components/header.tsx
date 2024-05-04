@@ -16,6 +16,7 @@ import SearchItem from "../pages/home/search_item";
 import HeaderAuthPopUp from "./header_auth_popup";
 import { useNavigate } from "react-router-dom";
 import useSpeechRecognition from "../hooks/speech_recognition_hook";
+import GeneralCategories from "./general_categories";
 
 const TheHeader: React.FC = () => {
   const themeState = useAppSelector((state) => {
@@ -291,28 +292,7 @@ const TheHeader: React.FC = () => {
       )}
 
       {/* general categories */}
-      <div
-        className={`flex-row  hidden lg:flex ${
-          darkMode ? "bg-black" : "bg-slate-100"
-        }`}
-      >
-        <p className="font-semibold cursor-pointer hover:bg-purple-700 px-5 py-4 transition-all duration-200 ease-in">
-          {" "}
-          Makeup +
-        </p>
-        <p className="font-semibold cursor-pointer hover:bg-purple-700 px-5 py-4 transition-all duration-200 ease-in">
-          {" "}
-          Skincare +
-        </p>
-        <p className="font-semibold cursor-pointer hover:bg-purple-700 px-5 py-4 transition-all duration-200 ease-in">
-          {" "}
-          Body +
-        </p>
-        <p className="font-semibold cursor-pointer hover:bg-purple-700 px-5 py-4 transition-all duration-200 ease-in">
-          {" "}
-          Accessories +
-        </p>
-      </div>
+      <GeneralCategories></GeneralCategories>
     </div>
   );
 };

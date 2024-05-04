@@ -9,7 +9,10 @@ import { useDispatch } from "react-redux";
 import { FormikHelpers } from "formik";
 
 import toast from "react-hot-toast";
-import { useAppSelector } from "../../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { NewUser } from "../../../models/new_user";
+import { registerUser } from "../../../action_creators/auth_action";
+import { authSliceActions } from "../../../slices/auth";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -38,7 +41,7 @@ const initialValues = {
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const themeState = useAppSelector((state) => {
     return state.theme;
   });
@@ -51,22 +54,27 @@ const Register: React.FC = () => {
     values: FormValues,
     { setSubmitting, resetForm }: FormikHelpers<any>
   ) => {
-    // let newUser = new NewUser(
-    //   values.email,
-    //   values.username,
-    //   values.password,
-    //   values.image!,
-    //   "user",
-    // );
-    // await registerUser(newUser)
-    //   .then((user) => {
-    //     toast.success("User created successfully.");
-    //     dispatch(authSliceActions.replaceLoggedInState({ user: user }));
-    //     navigate("/home");
-    //   })
-    //   .catch((e) => {
-    //     toast.error(e.message);
-    //   });
+    let newUser = new NewUser(
+      values.email,
+      values.username,
+      values.password,
+      values.image!,
+      "user"
+    );
+    registerUser(newUser)
+      .then((data) => {
+        toast.success(data.message);
+        dispatch(
+          authSliceActions.replaceLoggedInState({
+            user: data.user,
+            token: data.token,
+          })
+        );
+        navigate("/home");
+      })
+      .catch((e) => {
+        toast.error(e.message);
+      });
     setSubmitting(false);
   };
 

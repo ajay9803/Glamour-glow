@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { useAppSelector } from "../../../hooks/hooks";
+import { loginUser } from "../../../action_creators/auth_action";
+import { authSliceActions } from "../../../slices/auth";
 // import { authSliceActions } from "../../slices/auth-slice";
 // import { signInUser } from "../../services/auth-Service";
 
@@ -46,20 +48,21 @@ const Login = () => {
     values: FormValues,
     { setSubmitting, resetForm }: FormikHelpers<any>
   ) => {
-    // await signInUser(values.email, values.password)
-    //   .then((user) => {
-    //     toast.success("Signed in successfully");
-    //     dispatch(
-    //       authSliceActions.replaceLoggedInState({
-    //         user: user,
-    //       })
-    //     );
-    //     navigate("/home");
-    //     setSubmitting(false);
-    //   })
-    //   .catch((e) => {
-    //     toast.error(e.message);
-    //   });
+    loginUser(values.email, values.password)
+      .then((data) => {
+        toast.success(data.message);
+        dispatch(
+          authSliceActions.replaceLoggedInState({
+            user: data.user,
+            token: data.token,
+          })
+        );
+        navigate("/home");
+        setSubmitting(false);
+      })
+      .catch((e) => {
+        toast.error(e.message);
+      });
     setSubmitting(false);
   };
 

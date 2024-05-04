@@ -5,10 +5,13 @@ import "slick-carousel/slick/slick-theme.css";
 import ImageViewer from "./image_viewer";
 import { Rating } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import CustomerReviews from "./customer_reviews_section";
+import { TheProductType } from "../admin_account/admin_product_item";
+import { cartSliceActions } from "../../slices/cart-slice";
+import toast from "react-hot-toast";
 
-const ProductDetailsComp: React.FC = () => {
+const ProductDetailsComp: React.FC<{ product: TheProductType }> = (props) => {
   const [isFixed, setIsFixed] = useState(true);
   const navigate = useNavigate();
 
@@ -18,6 +21,13 @@ const ProductDetailsComp: React.FC = () => {
 
   const darkMode = themeState.darkMode;
   const errorTextColor = themeState.errorTextColor;
+  const dispatch = useAppDispatch();
+
+  const authState = useAppSelector((state) => {
+    return state.auth;
+  });
+
+  const user = authState.user;
 
   useEffect(() => {
     function isElementInViewport(el: any) {
@@ -60,11 +70,14 @@ const ProductDetailsComp: React.FC = () => {
         >
           Home
         </span>{" "}
-        / Item1
+        / {props.product.name}
       </p>
       <div className="flex flex-col md:flex-row w-full gap-y-5 gap-x-5">
         <div className="w-full md:w-2/5 ">
-          <ImageViewer isFixed={isFixed}></ImageViewer>
+          <ImageViewer
+            isFixed={isFixed}
+            images={props.product.images}
+          ></ImageViewer>
         </div>
         <div className="w-full md:w-3/5 mt-5">
           <div
@@ -75,41 +88,19 @@ const ProductDetailsComp: React.FC = () => {
             <div className="flex flex-col w-full lg:w-3/5">
               <p className="text-3xl tracking-wider font-semibold">
                 {" "}
-                L.A Colors Neon Gel Liner
+                {props.product.name}
               </p>
               <Rating
                 className="mt-3"
                 name="simple-controlled"
-                value={5}
+                value={props.product.rating}
                 readOnly
                 size="medium"
               />
               <p className="text-sm"> 16 reviews </p>
               <p className="text-xl font-semibold mt-5"> Description:</p>
-              <p className="text-sm mt-2">
-                Let me introduce you to your next beauty bag essential. Gel
-                Eyeliner combines the long wear and intense color payoff of a
-                gel eyeliner with the ease of applying a pencil. The creamy
-                formula glides on without tugging or skipping to create smooth
-                lines. Easily sharpen the soft plastic pencil, for that “new
-                pencil feeling” with every application. Let’s talk versatility.
-                You can wear it like a traditional eyeliner and even wing it out
-                before the liner sets or smudge it out to create some smoky eye
-                realness. Not to mention the eyeliner comes in metallic, neon,
-                or your favorite daily wear shades to fit any mood or occasion.
-                Let me introduce you to your next beauty bag essential. Gel
-                Eyeliner combines the long wear and intense color payoff of a
-                gel eyeliner with the ease of applying a pencil. The creamy
-                formula glides on without tugging or skipping to create smooth
-                lines. Easily sharpen the soft plastic pencil, for that “new
-                pencil feeling” with every application. Let’s talk versatility.
-                You can wear it like a traditional eyeliner and even wing it out
-                before the liner sets or smudge it out to create some smoky eye
-                realness. Not to mention the eyeliner comes in metallic, neon,
-                or your favorite daily wear shades to fit any mood or occasion.
-                Let me introduce you to your next beauty bag essential. Gel
-              </p>
-              <CustomerReviews></CustomerReviews>
+              <p className="text-sm mt-2">{props.product.description}</p>
+              <CustomerReviews product={props.product}></CustomerReviews>
             </div>
             {/* the end component */}
             <div
@@ -121,11 +112,38 @@ const ProductDetailsComp: React.FC = () => {
                   : "bg-purple-50 shadow-sm shadow-gray-700"
               }`}
             >
-              <p className="tracking-wide font-semibold text-xl">LA Colors</p>
+              <p className="tracking-wide font-semibold text-xl"> {props.product.brand} </p>
               <p className="tracking-normal font-bold text-2xl mt-5">
-                Rs. 20,000
+                Rs. {props.product.price}
               </p>
-              <div onClick={() => {}} className="relative w-full mt-7">
+              <div
+                onClick={() => {
+                  if (!user) {
+                    toast.error('Please login to add items to cart.')
+                    return;
+                  } else if (user.status === 'admin') {
+                    toast.error('Action denied.');
+                    return;
+                  }
+                  dispatch(
+                    cartSliceActions.addItemToCart({
+                      item: {
+                        productItem: {
+                          id: props.product.id,
+                          type: props.product.category,
+                          image: props.product.images[0],
+                          name: props.product.name,
+                          price: props.product.price,
+                        },
+                        count: 1,
+                        price: props.product.price,
+                      },
+                    })
+                  );
+                  toast.success("Item added to your cart.");
+                }}
+                className="relative w-full mt-7"
+              >
                 <button
                   className={` w-full rounded-xl bg-gray-300 text-gray-300 px-5 py-3 font-semibold tracking-wider transition-all ease-in-out `}
                 >

@@ -13,6 +13,15 @@ import CartPage from "./pages/cart/cart";
 import { useEffect } from "react";
 import { cartSliceActions, loadCartState } from "./slices/cart-slice";
 import ProductDetails from "./pages/product_details/product_details";
+import ProductsByCategory from "./pages/products_by_category/products_by_category";
+import { getLoggedInState } from "./action_creators/auth_action";
+import AddBeautyProduct from "./pages/add_products/add_product";
+import NotFound from "./pages/not-found/not-found";
+import AdminAccountPage, {
+  AdminOrderHistoriesPage,
+} from "./pages/admin_account/admin_account";
+import AdminProductsPage from "./pages/admin_account/admin_products_page";
+import UpdateProduct from "./pages/admin_account/update_product";
 
 const App: React.FC = () => {
   const themeState = useAppSelector((state) => {
@@ -43,7 +52,15 @@ const App: React.FC = () => {
       }
     };
     loadMyCart();
+    dispatch(getLoggedInState());
   }, [dispatch]);
+
+  const authState = useAppSelector((state) => {
+    return state.auth;
+  });
+
+  const user = authState.user;
+
   return (
     <div
       className={`${
@@ -61,7 +78,7 @@ const App: React.FC = () => {
           className: "",
           duration: 5000,
           style: {
-            background: "#363636",
+            background: "#800080",
             color: "#fff",
           },
 
@@ -85,7 +102,34 @@ const App: React.FC = () => {
           <Route path="/search" element={<Search></Search>}></Route>
           <Route path="/check-out" element={<CheckOut />}></Route>
           <Route path="/my-cart" element={<CartPage />}></Route>
-          <Route path="/product-details" element={<ProductDetails />}></Route>
+          <Route
+            path="/product-details/:productId"
+            element={<ProductDetails />}
+          ></Route>
+          <Route
+            path="/products/:category"
+            element={<ProductsByCategory />}
+          ></Route>
+          {user && user.status === "admin" && (
+            <Route path="/add-product" element={<AddBeautyProduct />}></Route>
+          )}
+          {user && user.status === "admin" && (
+            <Route path="/accounts/admin" element={<AdminAccountPage />}>
+              <Route
+                path="/accounts/admin/orders"
+                element={<AdminOrderHistoriesPage />}
+              ></Route>
+              <Route
+                path="/accounts/admin/products"
+                element={<AdminProductsPage />}
+              ></Route>
+              <Route
+                path="/accounts/admin/products/:productId/update-product"
+                element={<UpdateProduct />}
+              ></Route>
+            </Route>
+          )}
+          <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </div>
       <Footer></Footer>

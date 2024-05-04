@@ -2,8 +2,9 @@ import { Rating } from "@mui/material";
 import ReviewItem from "./review_item";
 import WriteReview from "../../components/write-review";
 import { useState } from "react";
+import { TheProductType } from "../admin_account/admin_product_item";
 
-const CustomerReviews: React.FC = () => {
+const CustomerReviews: React.FC<{ product: TheProductType }> = (props) => {
   const reviews = [1, 2, 3, 4, 5, 6, 7, 8];
 
   const [showWriteReview, setShowWriteReview] = useState(false);
@@ -37,7 +38,7 @@ const CustomerReviews: React.FC = () => {
       <Rating
         className=""
         name="simple-controlled"
-        value={5}
+        value={props.product.rating}
         readOnly
         size="medium"
       />

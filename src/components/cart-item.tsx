@@ -19,12 +19,14 @@ const CartItem: React.FC<{ item: CartItemType }> = (props) => {
   return (
     <div className="flex flex-row items-center justify-between w-full mb-5">
       <div
-        onClick={() => {}}
+        onClick={() => {
+          navigate(`/product-details/${props.item.productItem.id}`);
+        }}
         className="flex flex-col items-start md:flex-row md:items-center gap-y-2 cursor-pointer"
       >
         <img
           className="h-20 w-20 rounded-md object-cover mr-4"
-          src={props.item.productItem.image}
+          src={`http://localhost:8080/images/${props.item.productItem.image}`}
           alt="paws-nepal"
         ></img>
         <div className="flex flex-col items-start justify-center text-sm tracking-wider gap-y-1">

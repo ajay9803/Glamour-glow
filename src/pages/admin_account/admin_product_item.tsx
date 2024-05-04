@@ -1,13 +1,29 @@
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSearch,
+  faEdit,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Rating from "@mui/material/Rating";
 import { useEffect, useState } from "react";
-import ProductDetailsSidebar from "./product_details_bar";
-import { useNavigate } from "react-router-dom";
-import { TheProductType } from "../admin_account/admin_product_item";
-import "../../styles/home.css";
+import ProductDetailsSidebar from "../home/product_details_bar";
 
-const ProductItem: React.FC<{ product: TheProductType }> = (props) => {
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../hooks/hooks";
+
+export type TheProductType = {
+  id: string;
+  brand: string;
+  category: string;
+  name: string;
+  images: string[];
+  price: number;
+  description: string;
+  availableQuantity: number;
+  rating: number;
+};
+
+const AdminProductItem: React.FC<{ product: TheProductType }> = (props) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
@@ -16,6 +32,11 @@ const ProductItem: React.FC<{ product: TheProductType }> = (props) => {
   };
 
   const navigate = useNavigate();
+
+  const themeState = useAppSelector((state) => {
+    return state.theme;
+  });
+  const darkMode = themeState.darkMode;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -32,6 +53,7 @@ const ProductItem: React.FC<{ product: TheProductType }> = (props) => {
     const hiddenElements = document.querySelectorAll(".header-data");
     hiddenElements.forEach((el) => observer.observe(el));
   }, []);
+
   return (
     <div>
       {showMenu && (
@@ -50,7 +72,7 @@ const ProductItem: React.FC<{ product: TheProductType }> = (props) => {
         product={props.product}
       ></ProductDetailsSidebar>
 
-      <div className="header-data  flex flex-col justify-start w-full">
+      <div className="header-data flex flex-col justify-start w-full">
         <div
           onClick={() => {
             navigate(`/product-details/${props.product.id}`);
@@ -80,6 +102,42 @@ const ProductItem: React.FC<{ product: TheProductType }> = (props) => {
               icon={faSearch}
             ></FontAwesomeIcon>
           </div>
+          {/* Edit and delete icons */}
+          {isHovered && (
+            <div className="absolute top-3 right-3 flex space-x-2">
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(
+                    `/accounts/admin/products/${props.product.id}/update-product`,
+                    {
+                      state: {
+                        product: props.product,
+                      },
+                    }
+                  );
+                }}
+                className="px-2 py-2 rounded-lg bg-black bg-opacity-50 flex justify-center items-center hover:scale-110 transition-all duration-200"
+              >
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  className="text-white cursor-pointer"
+                />
+              </div>
+
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                className="px-2 py-2 rounded-lg bg-black bg-opacity-50 flex justify-center items-center hover:scale-110 transition-all duration-200"
+              >
+                <FontAwesomeIcon
+                  icon={faTrashAlt}
+                  className="text-red-600 cursor-pointer"
+                />
+              </div>
+            </div>
+          )}
         </div>
         <p className="tracking-wider text-gray-400 mt-3 mb-2">
           {props.product.name}
@@ -92,11 +150,11 @@ const ProductItem: React.FC<{ product: TheProductType }> = (props) => {
         />
         <p className="tracking-wide font-semibold mt-1">
           {" "}
-          Rs. {props.product.price}{" "}
+          Rs. {props.product.price.toFixed(2)}
         </p>
       </div>
     </div>
   );
 };
 
-export default ProductItem;
+export default AdminProductItem;

@@ -69,21 +69,21 @@ const Footer: React.FC = () => {
         </p>
         <p
           onClick={() => {
-            navigate("");
+            navigate("/login");
           }}
           className=" transition-all hover:underline cursor-pointer hover:text-gray-400"
         >
           {" "}
-          Blog
+          Sign In{" "}
         </p>
         <p
           onClick={() => {
-            navigate("/contact-us");
+            navigate("/register");
           }}
           className=" transition-all hover:underline cursor-pointer hover:text-gray-400"
         >
           {" "}
-          Contact Us
+          Register
         </p>
       </div>
 

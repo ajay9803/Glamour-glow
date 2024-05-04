@@ -76,12 +76,14 @@
 }
 
 .header-data {
-  transition: all 2s ease;
-  opacity: 0;
+  transition: all 1s ease;
+  opacity: 0.8;
+  transform: scale(90%);
 }
 
 .header-data-active {
   opacity: 1;
+  transform: scale(100%);
 }
 
 .block1 {

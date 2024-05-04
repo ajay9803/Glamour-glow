@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppSelector } from "../../hooks/hooks";
 
-const ImageViewer: React.FC<{isFixed: boolean}> = (props) => {
+const ImageViewer: React.FC<{isFixed: boolean, images: string[]}> = (props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const sliderRef = useRef<Slider>(null);
@@ -36,17 +36,7 @@ const ImageViewer: React.FC<{isFixed: boolean}> = (props) => {
     }
   };
 
-  let images = [
-    "https://media.glamour.com/photos/65512d4c24522f9dbd630bb5/4:3/w_2035,h_1526,c_limit/Lux-Makeup-Beauty-Awards.jpg",
-    "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh-iugAQV5fmEY2kGWi7XPFpdrwRU99ackxP6KZNeHmP9uademLaY4YyIYcm8XnvaLT1OFjlGitmJXkoKp1uDAgL0c151kIoFEInsKcCcpDe8boiHWyiYnZFgF8AaXabrA2uIqwAM2Ka7Q/s640/HEADDER.jpg",
-    "https://www.lizzieinlace.com/wp-content/uploads/2020/06/2-pink-beauty-products.jpg",
-    "https://media.glamour.com/photos/65512d4c24522f9dbd630bb5/4:3/w_2035,h_1526,c_limit/Lux-Makeup-Beauty-Awards.jpg",
-    "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh-iugAQV5fmEY2kGWi7XPFpdrwRU99ackxP6KZNeHmP9uademLaY4YyIYcm8XnvaLT1OFjlGitmJXkoKp1uDAgL0c151kIoFEInsKcCcpDe8boiHWyiYnZFgF8AaXabrA2uIqwAM2Ka7Q/s640/HEADDER.jpg",
-    "https://www.lizzieinlace.com/wp-content/uploads/2020/06/2-pink-beauty-products.jpg",
-    "https://media.glamour.com/photos/65512d4c24522f9dbd630bb5/4:3/w_2035,h_1526,c_limit/Lux-Makeup-Beauty-Awards.jpg",
-    "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh-iugAQV5fmEY2kGWi7XPFpdrwRU99ackxP6KZNeHmP9uademLaY4YyIYcm8XnvaLT1OFjlGitmJXkoKp1uDAgL0c151kIoFEInsKcCcpDe8boiHWyiYnZFgF8AaXabrA2uIqwAM2Ka7Q/s640/HEADDER.jpg",
-    "https://www.lizzieinlace.com/wp-content/uploads/2020/06/2-pink-beauty-products.jpg",
-  ];
+  let images = props.images;
 
   return (
     <div className={`w-full flex flex-row ${
@@ -61,14 +51,14 @@ const ImageViewer: React.FC<{isFixed: boolean}> = (props) => {
         {images.map((image, index) => (
           <img
             key={index}
-            className={`h-20 w-full cursor-pointer rounded-xl ${
+            className={`h-20 w-full cursor-pointer object-cover rounded-xl ${
               currentIndex === index
                 ? darkMode
                   ? "border-2 border-solid border-white"
                   : "border-2 border-solid border-black"
                 : ""
             }`}
-            src={image}
+            src={`http://localhost:8080/images/${image}`}
             alt="pretty-click"
             onClick={() => goToSlide(index)} // Go to corresponding slide on click
           />
@@ -80,7 +70,7 @@ const ImageViewer: React.FC<{isFixed: boolean}> = (props) => {
             <img
               key={index}
               className="object-cover w-full h-72 rounded-xl"
-              src={image}
+              src={`http://localhost:8080/images/${image}`}
               alt="pretty-click"
             />
           ))}

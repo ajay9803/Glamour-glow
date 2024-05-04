@@ -3,14 +3,20 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import CarouselProductItem from "./carousel_product_item";
+import useFutureBuilder from "../../hooks/future_builder_hook";
+
+import ThePulseLoader from "../../components/pulse-loader";
+import LoadError from "./load-error";
 
 const NewSection: React.FC = () => {
-  const products = [1, 2, 3];
+  const { isLoading, error, data } = useFutureBuilder(
+    `http://localhost:8080/products/all-products?limit=${3}`
+  );
 
   const sliderRef = useRef<Slider>(null);
 
@@ -62,11 +68,32 @@ const NewSection: React.FC = () => {
           </div>
         </div>
       </div>
-      <Slider ref={sliderRef} {...settings}>
-        {products.map((expertise, index) => (
-          <CarouselProductItem index={index}></CarouselProductItem>
-        ))}
-      </Slider>
+      {isLoading && (
+        <div className="h-52 w-full flex flex-row items-center justify-center">
+          <ThePulseLoader></ThePulseLoader>
+        </div>
+      )}
+      {error && <LoadError message={error.message}></LoadError>}
+      {data && (
+        <Slider ref={sliderRef} {...settings}>
+          {data.products.map((product: any, index: number) => (
+            <CarouselProductItem
+              key={index}
+              product={{
+                id: product._id,
+                brand: product.brand,
+                category: product.category,
+                name: product.name,
+                images: product.images,
+                price: product.price,
+                description: product.description,
+                availableQuantity: product.quantityAvailable,
+                rating: product.rating,
+              }}
+            ></CarouselProductItem>
+          ))}
+        </Slider>
+      )}
     </div>
   );
 };

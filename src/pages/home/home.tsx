@@ -16,7 +16,6 @@ const Home = () => {
   const errorTextColor = themeState.errorTextColor;
 
   useEffect(() => {
-    // Set the scroll position when the component mounts
     window.scrollTo(0, scrollRef.current);
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -62,7 +61,7 @@ const Home = () => {
               className={` w-full rounded-xl bg-gray-300 text-gray-300 px-5 py-3 font-semibold tracking-wider transition-all ease-in-out `}
             >
               {" "}
-              SHOP NOW 
+              SHOP NOW
             </button>
             <button
               className={`diagonal-translate w-full absolute rounded-xl -top-2 -left-2 font-semibold tracking-wider  ${errorColor} ${errorTextColor} px-5 py-3 transition-all ease-in-out rounded-sm`}
@@ -81,12 +80,12 @@ const Home = () => {
           />
           <img
             className=" header-image-second flex h-96 object-cover rounded-2xl"
-            src="https://6.soompi.io/wp-content/uploads/image/c5ecb3670e48406eaa5345536444a444/dummy.jpeg?s=900x600&e=t"
+            src="https://upload.wikimedia.org/wikipedia/commons/5/54/ELLE_TAIWAN_Seo_Yea-ji_2020.jpg"
             alt="pretty-click"
           />
           <img
             className="header-image-third flex h-96 object-cover rounded-2xl"
-            src="https://6.soompi.io/wp-content/uploads/image/c5ecb3670e48406eaa5345536444a444/dummy.jpeg?s=900x600&e=t"
+            src="https://koreajoongangdaily.joins.com/data/photo/2023/10/09/b37d6ba6-a639-4674-8594-f8e96bc0587e.jpg"
             alt="pretty-click"
           />
         </div>

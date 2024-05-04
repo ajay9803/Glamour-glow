@@ -13,7 +13,7 @@ const ImageSelectors: React.FC<{ images: string[] }> = (props) => {
                 onClick={() => {
                   setSelectedImage(image);
                 }}
-                src={image}
+                src={`http://localhost:8080/images/${image}`}
                 alt="pet-accessory"
                 className="h-12 w-12 object-cover border border-solid border-white cursor-pointer"
               />
@@ -26,7 +26,7 @@ const ImageSelectors: React.FC<{ images: string[] }> = (props) => {
       </div>
       <img
         className="rounded-lg object-cover w-full h-44 md:h-96"
-        src={selectedImage}
+        src={`http://localhost:8080/images/${selectedImage}`}
         alt="paws-nepal"
       ></img>
     </div>

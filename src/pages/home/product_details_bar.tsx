@@ -3,23 +3,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import Rating from "@mui/material/Rating";
-import { ProductType } from "./end_of_year_section";
-import { cartSliceActions, saveCartState } from "../../slices/cart-slice";
+import { cartSliceActions } from "../../slices/cart-slice";
 import toast from "react-hot-toast";
+import { TheProductType } from "../admin_account/admin_product_item";
 
 const ProductDetailsSidebar: React.FC<{
-  product: ProductType;
+  product: TheProductType;
   isOpen: boolean;
   toggleSidebar: () => void;
 }> = (props) => {
-  const images = [
-    "https://media.glamour.com/photos/65512d4c24522f9dbd630bb5/4:3/w_2035,h_1526,c_limit/Lux-Makeup-Beauty-Awards.jpg",
-    "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh-iugAQV5fmEY2kGWi7XPFpdrwRU99ackxP6KZNeHmP9uademLaY4YyIYcm8XnvaLT1OFjlGitmJXkoKp1uDAgL0c151kIoFEInsKcCcpDe8boiHWyiYnZFgF8AaXabrA2uIqwAM2Ka7Q/s640/HEADDER.jpg",
-    "https://www.lizzieinlace.com/wp-content/uploads/2020/06/2-pink-beauty-products.jpg",
-    "https://media.glamour.com/photos/65512d4c24522f9dbd630bb5/4:3/w_2035,h_1526,c_limit/Lux-Makeup-Beauty-Awards.jpg",
-    "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh-iugAQV5fmEY2kGWi7XPFpdrwRU99ackxP6KZNeHmP9uademLaY4YyIYcm8XnvaLT1OFjlGitmJXkoKp1uDAgL0c151kIoFEInsKcCcpDe8boiHWyiYnZFgF8AaXabrA2uIqwAM2Ka7Q/s640/HEADDER.jpg",
-    "https://www.lizzieinlace.com/wp-content/uploads/2020/06/2-pink-beauty-products.jpg",
-  ];
+  const images = props.product.images;
 
   const themeSlice = useAppSelector((state) => {
     return state.theme;
@@ -30,6 +23,12 @@ const ProductDetailsSidebar: React.FC<{
   const errorTextColor = themeSlice.errorTextColor;
   const darkMode = themeSlice.darkMode;
 
+  const authState = useAppSelector((state) => {
+    return state.auth;
+  });
+
+  const user = authState.user;
+
   const dispatch = useAppDispatch();
 
   const cartState = useAppSelector((state) => {
@@ -39,7 +38,7 @@ const ProductDetailsSidebar: React.FC<{
   return (
     <div
       style={{
-        scrollbarWidth: "thin",
+        scrollbarWidth: props.product.images.length > 1 ? "thin" : "none",
       }}
       className={` ${primaryColor} ${
         props.isOpen ? "mx-5 my-5" : "my-5 mx-0"
@@ -56,8 +55,8 @@ const ProductDetailsSidebar: React.FC<{
         {images.map((image) => {
           return (
             <img
-              className="h-72 w-full rounded-xl border border-solid border-black"
-              src={image}
+              className="h-72 w-full rounded-xl border border-solid border-black object-cover"
+              src={`http://localhost:8080/images/${image}`}
               alt="product"
             />
           );
@@ -74,13 +73,13 @@ const ProductDetailsSidebar: React.FC<{
         </div>
         <p className="text-2xl font-semibold mb-3 tracking-widest">
           {" "}
-          L.A. Colors Color Vibe 12 Color Eyeshadow Palette{" "}
+          {props.product.name}
         </p>
-        <p className="text-gray-500 text-lg"> 707 Rose</p>
+        <p className="text-gray-500 text-lg"> {props.product.brand} </p>
         <Rating
           className="my-3"
           name="simple-controlled"
-          value={5}
+          value={props.product.rating}
           readOnly
           size="small"
         />
@@ -90,13 +89,20 @@ const ProductDetailsSidebar: React.FC<{
         </p>
         <div
           onClick={() => {
+            if (!user) {
+              toast.error("Please login to add items to cart.");
+              return;
+            } else if (user.status === "admin") {
+              toast.error("Action denied.");
+              return;
+            }
             dispatch(
               cartSliceActions.addItemToCart({
                 item: {
                   productItem: {
                     id: props.product.id,
-                    type: props.product.type,
-                    image: props.product.image,
+                    type: props.product.category,
+                    image: props.product.images[0],
                     name: props.product.name,
                     price: props.product.price,
                   },
@@ -106,7 +112,6 @@ const ProductDetailsSidebar: React.FC<{
               })
             );
             toast.success("Item added to your cart.");
-            
           }}
           className="relative w-full mt-7"
         >
