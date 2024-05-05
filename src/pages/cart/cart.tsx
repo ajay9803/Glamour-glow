@@ -7,6 +7,12 @@ import { cartSliceActions } from "../../slices/cart-slice";
 const CartPage = () => {
   const navigate = useNavigate();
 
+  const authState = useAppSelector((state) => {
+    return state.auth;
+  });
+
+  const user = authState.user;
+
   const cartState = useAppSelector((state) => {
     return state.cart;
   });
@@ -82,7 +88,7 @@ const CartPage = () => {
         <button
           disabled={items.length === 0}
           onClick={() => {
-            navigate(`/check-out`);
+            navigate(`/${user._id}/check-out`);
           }}
           className={`${
             items.length === 0 ? "cursor-not-allowed" : ""

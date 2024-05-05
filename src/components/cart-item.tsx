@@ -15,6 +15,7 @@ const CartItem: React.FC<{ item: CartItemType }> = (props) => {
   });
 
   const darkMode = themeState.darkMode;
+  console.log(props.item);
 
   return (
     <div className="flex flex-row items-center justify-between w-full mb-5">

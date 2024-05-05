@@ -97,7 +97,7 @@ const LoggedInPopup: React.FC<{ setShow: () => void }> = (props) => {
         if (user && user.status === 'admin') {
           navigate('/accounts/admin/orders');
         } else {
-
+          navigate(`/accounts/user/orders`);
         }
       }}> Account</p>
       <div className="relative w-full mt-3">

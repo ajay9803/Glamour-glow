@@ -85,7 +85,7 @@ const ProductDetailsSidebar: React.FC<{
         />
         <p className="font-semibold text-xl tracking-wider my-5">
           {" "}
-          Rs. 432,000
+          Rs. {props.product.price}
         </p>
         <div
           onClick={() => {

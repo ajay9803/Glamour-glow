@@ -22,6 +22,9 @@ import AdminAccountPage, {
 } from "./pages/admin_account/admin_account";
 import AdminProductsPage from "./pages/admin_account/admin_products_page";
 import UpdateProduct from "./pages/admin_account/update_product";
+import UserAccountPage from "./pages/user_account/user_account_page";
+import UserOrders from "./pages/user_account/user_orders";
+import OrderDetailsPage from "./pages/user_account/order_details_page";
 
 const App: React.FC = () => {
   const themeState = useAppSelector((state) => {
@@ -100,7 +103,9 @@ const App: React.FC = () => {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/home" element={<Home />}></Route>
           <Route path="/search" element={<Search></Search>}></Route>
-          <Route path="/check-out" element={<CheckOut />}></Route>
+          {user && user.status === "user" && (
+            <Route path="/:userId/check-out" element={<CheckOut />}></Route>
+          )}
           <Route path="/my-cart" element={<CartPage />}></Route>
           <Route
             path="/product-details/:productId"
@@ -128,6 +133,24 @@ const App: React.FC = () => {
                 element={<UpdateProduct />}
               ></Route>
             </Route>
+          )}
+          {user && user.status === "user" && (
+            <Route path="/accounts/user" element={<UserAccountPage />}>
+              <Route
+                path="/accounts/user/orders"
+                element={<UserOrders />}
+              ></Route>
+              {/* <Route
+                path="/accounts/user/payments"
+                element={<AdminProductsPage />}
+              ></Route> */}
+            </Route>
+          )}
+          {user && (
+            <Route
+              path="/orders/:orderId"
+              element={<OrderDetailsPage />}
+            ></Route>
           )}
           <Route path="*" element={<NotFound />}></Route>
         </Routes>

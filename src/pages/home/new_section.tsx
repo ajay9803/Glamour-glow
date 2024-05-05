@@ -74,7 +74,7 @@ const NewSection: React.FC = () => {
         </div>
       )}
       {error && <LoadError message={error.message}></LoadError>}
-      {(data && !error) &&  (
+      {data && !error && (
         <Slider ref={sliderRef} {...settings}>
           {data.products.map((product: any, index: number) => (
             <CarouselProductItem

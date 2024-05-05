@@ -2,14 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import ThePulseLoader from "../../components/pulse-loader";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle, faCircleDollarToSlot, faDotCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faDotCircle } from "@fortawesome/free-solid-svg-icons";
+import toast from "react-hot-toast";
+import { cartSliceActions } from "../../slices/cart-slice";
+import createOrder from "../../action_creators/order_action.js";
 
 const CheckOut: React.FC = () => {
   const [selectedPm, setSelectedPm] = useState("Cash on Delivery");
 
-  const paymentMethods = ["Cash on Delivery", "E-sewa",];
+  const paymentMethods = ["Cash on Delivery", "E-sewa"];
 
   const scrollRef = useRef(0);
 
@@ -18,6 +21,23 @@ const CheckOut: React.FC = () => {
   });
   const darkMode = themeState.darkMode;
   const primaryColor = themeState.primaryColor;
+
+  const cartState = useAppSelector((state) => {
+    return state.cart;
+  });
+  let totalItems = cartState.totalItemCount;
+
+  let totalPrice = cartState.totalPrice;
+
+  let items = cartState.items;
+
+  const authState = useAppSelector((state) => {
+    return state.auth;
+  });
+
+  const token = authState.token;
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     window.scrollTo(0, scrollRef.current);
@@ -33,8 +53,6 @@ const CheckOut: React.FC = () => {
           district: "",
           zone: "",
           phoneNumber: "",
-          paymentNumber: "",
-          paymentPin: "",
         }}
         validationSchema={Yup.object().shape({
           houseNumber: Yup.string().required("House Number is required"),
@@ -45,24 +63,30 @@ const CheckOut: React.FC = () => {
           phoneNumber: Yup.string()
             .required("Phone Number is required")
             .matches(/^\d{10}$/, "Phone Number must be 10 digits"),
-          paymentNumber:
-            selectedPm === "Cash on Delivery"
-              ? Yup.string()
-              : Yup.string()
-                  .required("Number is required")
-                  .matches(/^\d{10}$/, "Phone Number must be 10 digits"),
-          paymentPin:
-            selectedPm === "Cash on Delivery"
-              ? Yup.string()
-              : Yup.string()
-                  .required("MPIN is required")
-                  .matches(/^\d{4}$/, "MPIN must be 4 digits"),
         })}
         onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
+          if (totalItems === 0) {
             setSubmitting(false);
-          }, 2000);
+            return;
+          }
+          createOrder(
+            token!,
+            items,
+            { ...values, selectedPm },
+            totalPrice,
+            totalItems,
+            
+          )
+            .then((data: any) => {
+              toast.success("Order created successfully.");
+              dispatch(cartSliceActions.clearCart());
+            })
+            .catch((e: any) => {
+              toast.error(e.message);
+            })
+            .finally(() => {
+              setSubmitting(false);
+            });
         }}
       >
         {({ isSubmitting }) => (
@@ -185,7 +209,7 @@ const CheckOut: React.FC = () => {
                   </label>
                   <Field
                     placeholder="eg. 980#######"
-                    type="tel"
+                    type="number"
                     id="phoneNumber"
                     name="phoneNumber"
                     pattern="[0-9]{10}"
@@ -236,47 +260,6 @@ const CheckOut: React.FC = () => {
               );
             })}
 
-            {/* online payment
-            {(selectedPm === "E-sewa" || selectedPm === "Khalti") && (
-              <div className="flex flex-row items-start justify-between gap-x-5 w-full">
-                <div className="flex flex-col justify-between items-start gap-y-1 w-full tracking-wider my-2">
-                  <label htmlFor="paymentNumber" className="text-zinc-500">
-                    {selectedPm} Number
-                  </label>
-                  <Field
-                    placeholder="eg. 980#######"
-                    type="tel"
-                    id="paymentNumber"
-                    name="paymentNumber"
-                    className="rounded-md px-3 py-2 bg-zinc-800 w-full"
-                  />
-                  <ErrorMessage
-                    name="paymentNumber"
-                    component="div"
-                    className="text-purple-500"
-                  />
-                </div>
-
-                <div className="flex flex-col justify-between items-start gap-y-1 w-full tracking-wider my-2">
-                  <label htmlFor="paymentPin" className="text-zinc-500">
-                    MPIN
-                  </label>
-                  <Field
-                    placeholder="eg. 9803"
-                    type="tel"
-                    id="paymentPin"
-                    name="paymentPin"
-                    className="rounded-md px-3 py-2 bg-zinc-800 w-full"
-                  />
-                  <ErrorMessage
-                    name="paymentPin"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-              </div>
-            )} */}
-
             {/* order summary */}
             <p className="font-semibold text-lg tracking-wider mt-8 mb-5">
               {" "}
@@ -284,11 +267,11 @@ const CheckOut: React.FC = () => {
             </p>
             <div className="flex flex-row items-center justify-between w-full mb-3">
               <p className="text-zinc-500"> Total Items</p>
-              <p> 7 items </p>
+              <p> {totalItems} items </p>
             </div>
             <div className="flex flex-row items-center justify-between w-full mb-3">
               <p className="text-zinc-500"> Subtotal</p>
-              <p> Rs. 250 </p>
+              <p> Rs. {totalPrice} </p>
             </div>
             <div className="flex flex-row items-center justify-between w-full mb-3">
               <p className="text-zinc-500"> Shipping</p>
@@ -296,7 +279,7 @@ const CheckOut: React.FC = () => {
             </div>
             <div className="flex flex-row items-center justify-between w-full mb-3">
               <p className="text-zinc-500"> Total</p>
-              <p> Rs. 250 </p>
+              <p> Rs. {totalPrice} </p>
             </div>
 
             <div className="flex flex-row justify-end">
