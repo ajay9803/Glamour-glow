@@ -43,8 +43,10 @@ const UserOrders: React.FC = () => {
   const scrollRef = useRef(0);
 
   useEffect(() => {
+    setCurrentPage(1);
+
     window.scrollTo(0, scrollRef.current);
-  }, []);
+  }, [selectedDate]);
 
   return (
     <div className="w-full flex flex-col">
@@ -79,6 +81,7 @@ const UserOrders: React.FC = () => {
         </div>
       )}
       <ReactPaginate
+        key={selectedDate?.toISOString()}
         pageCount={Math.ceil(totalItems / 6)}
         pageRangeDisplayed={5}
         marginPagesDisplayed={2}

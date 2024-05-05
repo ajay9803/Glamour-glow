@@ -19,7 +19,6 @@ const ProductsByCategory: React.FC = () => {
   const [sortBy, setSortBy] = useState<string>("dsc");
   const [range, setRange] = useState<number[]>([0, 25000]);
   const [currentPage, setCurrentPage] = useState(1);
-
   const { category } = useParams();
 
   const { isLoading, error, data } = useFutureBuilder(
@@ -45,8 +44,9 @@ const ProductsByCategory: React.FC = () => {
   const darkMode = themeState.darkMode;
 
   useEffect(() => {
+    setCurrentPage(1);
     window.scrollTo(0, scrollRef.current);
-  }, []);
+  }, [category, range]);
 
   return (
     <div className="flex flex-row gap-x-4 ">
@@ -98,6 +98,7 @@ const ProductsByCategory: React.FC = () => {
             </div>
           )}
           <ReactPaginate
+            key={`${category}${range}`}
             pageCount={Math.ceil(totalItems / 6)}
             pageRangeDisplayed={5}
             marginPagesDisplayed={2}

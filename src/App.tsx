@@ -32,7 +32,6 @@ const App: React.FC = () => {
     return state.theme;
   });
 
-
   const cartState = useAppSelector((state) => {
     return state.cart;
   });
@@ -111,7 +110,7 @@ const App: React.FC = () => {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/home" element={<Home />}></Route>
           <Route path="/search" element={<Search></Search>}></Route>
-          {(user && user.status === "user" && totalItems !== 0) && (
+          {user && user.status === "user" && totalItems !== 0 && (
             <Route path="/:userId/check-out" element={<CheckOut />}></Route>
           )}
           <Route path="/my-cart" element={<CartPage />}></Route>
