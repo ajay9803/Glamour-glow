@@ -105,9 +105,7 @@ const ProductsByCategory: React.FC = () => {
               setCurrentPage(selectedItem.selected + 1);
               window.scrollTo(0, scrollRef.current);
             }}
-            containerClassName={
-              darkMode ? "pagination-darkmode" : "pagination"
-            }
+            containerClassName={darkMode ? "pagination-darkmode" : "pagination"}
             activeClassName={"active"}
             previousLabel={
               <FontAwesomeIcon icon={faChevronLeft}></FontAwesomeIcon>

@@ -11,22 +11,34 @@ const UserAccountPage: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, scrollRef.current);
   }, []);
+
   return (
-    <div className="flex flex-col md:flex-row w-full ">
-      <div className="w-full md:w-2/5 lg:1/5 flex-row md:flex-col">
-        <nav className="flex flex-row md:flex-col ">
+    <div className="flex flex-col md:flex-row w-full">
+      <div className="w-full md:w-2/5 lg:1/5 ">
+        <nav className="flex flex-row md:flex-col sticky top-44 w-full">
           <NavLink
             to="/accounts/user/orders"
             className={(navData) =>
               navData.isActive
-                ? "text-start w-full inline-block px-12 py-5   transition-all duration-300 ease-in-out  hover:underline hover:decoration-1 decoration-1 underline "
-                : "text-start w-full inline-block px-12 py-5   transition-all duration-300 ease-in-out"
+                ? "text-start w-full inline-block px-12 py-5 transition-all duration-300 ease-in-out  hover:underline hover:decoration-1 decoration-1 underline "
+                : "text-start w-full inline-block px-12 py-5 transition-all duration-300 ease-in-out hover:underline hover:decoration-1 "
             }
             onClick={() => {}}
           >
             Order History
           </NavLink>
-          <p
+          <NavLink
+            to="/accounts/user/payments"
+            className={(navData) =>
+              navData.isActive
+                ? "text-start w-full inline-block px-12 py-5 transition-all duration-300 ease-in-out  hover:underline hover:decoration-1 decoration-1 underline "
+                : "text-start w-full inline-block px-12 py-5 transition-all duration-300 ease-in-out hover:underline hover:decoration-1 "
+            }
+            onClick={() => {}}
+          >
+            Payments
+          </NavLink>
+          {/* <p
             className={
               "hover: cursor-pointer text-start w-full inline-block px-12 py-5   transition-all duration-300 ease-in-out  hover:underline hover:decoration-1 "
             }
@@ -36,7 +48,7 @@ const UserAccountPage: React.FC = () => {
             }}
           >
             Log Out
-          </p>
+          </p> */}
         </nav>
       </div>
 

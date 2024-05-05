@@ -7,7 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle, faDotCircle } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
 import { cartSliceActions } from "../../slices/cart-slice";
-import createOrder from "../../action_creators/order_action.js";
+import createOrder from "../../action_creators/order_action";
+import { useNavigate } from "react-router-dom";
 
 const CheckOut: React.FC = () => {
   const [selectedPm, setSelectedPm] = useState("Cash on Delivery");
@@ -38,6 +39,8 @@ const CheckOut: React.FC = () => {
   const token = authState.token;
 
   const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, scrollRef.current);
@@ -79,6 +82,9 @@ const CheckOut: React.FC = () => {
           )
             .then((data: any) => {
               toast.success("Order created successfully.");
+              if (selectedPm !== "E-sewa") {
+                navigate('/accounts/user/orders');
+              }
               dispatch(cartSliceActions.clearCart());
             })
             .catch((e: any) => {

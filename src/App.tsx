@@ -25,11 +25,19 @@ import UpdateProduct from "./pages/admin_account/update_product";
 import UserAccountPage from "./pages/user_account/user_account_page";
 import UserOrders from "./pages/user_account/user_orders";
 import OrderDetailsPage from "./pages/user_account/order_details_page";
+import PaymentSuccessPage from "./pages/payment_success/payment_success";
 
 const App: React.FC = () => {
   const themeState = useAppSelector((state) => {
     return state.theme;
   });
+
+
+  const cartState = useAppSelector((state) => {
+    return state.cart;
+  });
+
+  const totalItems = cartState.totalItemCount;
 
   const darkMode = themeState.darkMode;
   const dispatch = useAppDispatch();
@@ -103,7 +111,7 @@ const App: React.FC = () => {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/home" element={<Home />}></Route>
           <Route path="/search" element={<Search></Search>}></Route>
-          {user && user.status === "user" && (
+          {(user && user.status === "user" && totalItems !== 0) && (
             <Route path="/:userId/check-out" element={<CheckOut />}></Route>
           )}
           <Route path="/my-cart" element={<CartPage />}></Route>
@@ -152,6 +160,11 @@ const App: React.FC = () => {
               element={<OrderDetailsPage />}
             ></Route>
           )}
+          <Route
+            path="/order/payment-success"
+            element={<PaymentSuccessPage />}
+          ></Route>
+          <Route></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </div>

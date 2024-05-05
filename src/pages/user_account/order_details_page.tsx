@@ -4,6 +4,7 @@ import { useAuthorizedFutureBuilder } from "../../hooks/future_builder_hook";
 import LoadError from "../home/load-error";
 import ThePulseLoader from "../../components/pulse-loader";
 import { useEffect, useRef } from "react";
+import { makePayment } from "../../action_creators/order_action";
 
 const OrderDetailsPage: React.FC = () => {
   const themeState = useAppSelector((state) => {
@@ -83,6 +84,16 @@ const OrderDetailsPage: React.FC = () => {
               Rs. {data.order.totalPrice}
             </p>
           </div>
+          {(!data.order.paid && data.order.paymentMethod !== "E-sewa") && (
+            <div onClick={() => {
+              makePayment(data.order._id, data.order.totalPrice);
+            }} className="flex flex-row justify-start mt-10">
+              <button className=" px-5 py-2 rounded-md bg-purple-700 text-white transition-all hover:bg-purple-800 duration-500 hover:translate-x-3">
+                {" "}
+                Make Payment
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

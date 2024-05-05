@@ -1,21 +1,44 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ThePulseLoader from "../../components/pulse-loader";
 import { useAuthorizedFutureBuilder } from "../../hooks/future_builder_hook";
 import { useAppSelector } from "../../hooks/hooks";
 import Order from "../../models/order";
 import LoadError from "../home/load-error";
 import { useNavigate } from "react-router-dom";
+import ReactPaginate from "react-paginate";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 export type OrderType = {};
 
 const UserOrders: React.FC = () => {
+  const themeState = useAppSelector((state) => {
+    return state.theme;
+  });
+
+  const darkMode = themeState.darkMode;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+
+  const handleDateChange = (date: Date | null) => {
+    setSelectedDate(date);
+  };
+
   const authState = useAppSelector((state) => {
     return state.auth;
   });
   const { isLoading, error, data } = useAuthorizedFutureBuilder(
-    `http://localhost:8080/orders/my-orders`,
+    `http://localhost:8080/orders/my-orders?filterBy=dsc&page=${currentPage}&date=${selectedDate}`,
     authState.token!
   );
+
+  const totalItems = data ? data.totalItems : 0;
 
   const scrollRef = useRef(0);
 
@@ -25,7 +48,20 @@ const UserOrders: React.FC = () => {
 
   return (
     <div className="w-full flex flex-col">
-      <p className="tracking-wider font-semibold mb-5"> My Orders </p>
+      <div className="flex flex-col w-full items-start mb-3">
+        <p className="tracking-wider font-semibold mb-5"> My Orders </p>
+        <DatePicker
+          selected={selectedDate}
+          onChange={handleDateChange}
+          dateFormat="MMMM d, yyyy"
+          placeholderText="Select date"
+          className={`shadow-sm ${
+            darkMode
+              ? "text-white bg-zinc-800 shadow-slate-200"
+              : "text-black bg-purple-50 shadow-black"
+          } px-3 py-2`}
+        />
+      </div>
       {isLoading && (
         <div className="h-52 w-full flex flex-row items-center justify-center">
           <ThePulseLoader></ThePulseLoader>
@@ -36,10 +72,34 @@ const UserOrders: React.FC = () => {
         <div className="w-full flex flex-col gap-y-4">
           {" "}
           {data.orders.map((order: any) => {
-            return <OrderItem order={new Order(order)}></OrderItem>;
+            return (
+              <OrderItem key={order._id} order={new Order(order)}></OrderItem>
+            );
           })}{" "}
         </div>
       )}
+      <ReactPaginate
+        pageCount={Math.ceil(totalItems / 6)}
+        pageRangeDisplayed={5}
+        marginPagesDisplayed={2}
+        onPageChange={(selectedItem) => {
+          setCurrentPage(selectedItem.selected + 1);
+          window.scrollTo(0, scrollRef.current);
+        }}
+        containerClassName={darkMode ? "pagination-darkmode" : "pagination"}
+        activeClassName={"active"}
+        previousLabel={<FontAwesomeIcon icon={faChevronLeft}></FontAwesomeIcon>}
+        nextLabel={<FontAwesomeIcon icon={faChevronRight}></FontAwesomeIcon>}
+        breakLabel={"..."}
+        disabledClassName={"disabled"}
+        pageClassName={""}
+        pageLinkClassName={""}
+        previousClassName={"previous"}
+        nextClassName={"next"}
+        previousLinkClassName={""}
+        nextLinkClassName={""}
+        breakClassName={"ellipsis"}
+      />
     </div>
   );
 };
@@ -52,27 +112,6 @@ const OrderItem: React.FC<{ order: Order }> = (props) => {
     return state.theme;
   });
   const darkMode = themeState.darkMode;
-
-  useEffect(() => {
-    const fetchOrderPaidStatus = async () => {
-      const url = `https://uat.esewa.com.np/api/epay/transaction/status/?product_code=EPAYTEST&total_amount=${props.order.totalPrice}&transaction_uuid=${props.order._id}`;
-      try {
-        const response = await fetch(url);
-        const jsonData = await response.json();
-        console.log(jsonData);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    if (props.order.paymentMethod === "E-sewa" && props.order.paid === false) {
-      fetchOrderPaidStatus();
-    }
-  }, [
-    props.order._id,
-    props.order.totalPrice,
-    props.order.paid,
-    props.order.paymentMethod,
-  ]);
 
   return (
     <div

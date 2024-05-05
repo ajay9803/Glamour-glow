@@ -46,13 +46,13 @@ const createOrder = async (
 
     const formData = {
       amount: `${jsonData.order.totalPrice}`,
-      failure_url: "http://localhost:3000/order/payment-success",
+      failure_url: "http://localhost:3000/home",
       product_delivery_charge: "0",
       product_service_charge: "0",
       product_code: "EPAYTEST",
       signature: signature,
       signed_field_names: "total_amount,transaction_uuid,product_code",
-      success_url: "http://localhost:3000/accounts/user/orders",
+      success_url: "http://localhost:3000/order/payment-success",
       tax_amount: "0",
       total_amount: `${jsonData.order.totalPrice}`,
       transaction_uuid: tid,
@@ -74,10 +74,59 @@ const createOrder = async (
 
     document.body.appendChild(form);
     form.submit();
-  } catch (e) {}
+  } catch (e) {
+    throw e;
+  }
 };
 
 export default createOrder;
+
+export const makePayment = (orderId, amount) => {
+  try {
+    const tid = orderId;
+    console.log(tid);
+    console.log(tid);
+    const signature = createSignature(
+      `total_amount=${amount},transaction_uuid=${tid},product_code=EPAYTEST`
+    );
+
+    console.log(signature);
+    console.log("here");
+
+    const formData = {
+      amount: `${amount}`,
+      failure_url: "http://localhost:3000/home",
+      product_delivery_charge: "0",
+      product_service_charge: "0",
+      product_code: "EPAYTEST",
+      signature: signature,
+      signed_field_names: "total_amount,transaction_uuid,product_code",
+      success_url: "http://localhost:3000/order/payment-success",
+      tax_amount: "0",
+      total_amount: `${amount}`,
+      transaction_uuid: tid,
+    };
+
+    var path = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
+
+    var form = document.createElement("form");
+    form.setAttribute("method", "POST");
+    form.setAttribute("action", path);
+
+    for (var key in formData) {
+      var hiddenField = document.createElement("input");
+      hiddenField.setAttribute("type", "hidden");
+      hiddenField.setAttribute("name", key);
+      hiddenField.setAttribute("value", formData[key]);
+      form.appendChild(hiddenField);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+  } catch (e) {
+    throw e;
+  }
+};
 
 export const createSignature = (message) => {
   const secret = "8gBm/:&EnhH.1/q";
