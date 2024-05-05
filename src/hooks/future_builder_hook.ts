@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 
 const useFutureBuilder = (url: string) => {
-  console.log(url);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
   const [data, setData] = useState<any>(null);
-
-  
 
   useEffect(() => {
     const fetchData = async () => {

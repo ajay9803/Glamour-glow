@@ -4,6 +4,7 @@ import "../../styles/diagonal-transition.css";
 import "../../styles/home.css";
 import NewSection from "./new_section";
 import EndOfYearSection from "./end_of_year_section";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const scrollRef = useRef(0);
@@ -49,6 +50,8 @@ const Home = () => {
     };
   }, []);
 
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col">
       <div className="flex  w-full gap-x-10 flex-col gap-y-10 md:flex-row py-12">
@@ -56,7 +59,11 @@ const Home = () => {
           <p className="text-5xl font-semibold tracking-wider leading-snug">
             PRETTY CLICK LIPCREAM
           </p>
-          <div className="relative w-full">
+          <div onClick={() => {
+            navigate('/products/Skincare')
+          }
+            
+          } className="relative w-full">
             <button
               className={` w-full rounded-xl bg-gray-300 text-gray-300 px-5 py-3 font-semibold tracking-wider transition-all ease-in-out `}
             >

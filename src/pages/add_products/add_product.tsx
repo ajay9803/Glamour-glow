@@ -108,7 +108,7 @@ const AddBeautyProduct = () => {
 
   return (
     <div className="flex flex-col items-start w-full">
-      <h2 className="text-2xl font-bold mb-4">Add Beauty Product</h2>
+      <h2 className="text-2xl font-bold mb-4">Add Product</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -331,7 +331,7 @@ const AddBeautyProduct = () => {
                 {isSubmitting ? (
                   <ThePulseLoader></ThePulseLoader>
                 ) : (
-                  "Add Beauty Product"
+                  "Add Product"
                 )}
               </button>
             </div>

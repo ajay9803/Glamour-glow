@@ -27,23 +27,25 @@ const EndOfYearSection: React.FC = () => {
         </div>
       )}
       {error && <LoadError message={error.message}></LoadError>}
-      {data && (
-        <div className="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-5 justify-center">
-          {data.products.map((product: any) => (
-            <ProductItem
-              key={product.id}
-              product={{
-                id: product._id,
-                brand: product.brand,
-                category: product.category,
-                name: product.name,
-                images: product.images,
-                price: product.price,
-                description: product.description,
-                availableQuantity: product.quantityAvailable,
-                rating: product.rating,
-              }}
-            />
+      {data && !error && (
+        <div className="w-full  flex flex-row flex-wrap justify-center gap-y-4">
+          {data.products.map((product: any, index: number) => (
+            <div className="w-1/2 md:w-1/3 lg:w-1/5">
+              <ProductItem
+                key={product.id}
+                product={{
+                  id: product._id,
+                  brand: product.brand,
+                  category: product.category,
+                  name: product.name,
+                  images: product.images,
+                  price: product.price,
+                  description: product.description,
+                  availableQuantity: product.quantityAvailable,
+                  rating: product.rating,
+                }}
+              />
+            </div>
           ))}
         </div>
       )}

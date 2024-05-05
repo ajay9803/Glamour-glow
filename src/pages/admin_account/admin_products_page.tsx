@@ -2,7 +2,6 @@ import React from "react";
 import AdminProductItem from "./admin_product_item";
 import useFutureBuilder from "../../hooks/future_builder_hook";
 import ThePulseLoader from "../../components/pulse-loader";
-import NotFound from "../not-found/not-found";
 import LoadError from "../home/load-error";
 
 const AdminProductsPage: React.FC = () => {
@@ -18,7 +17,7 @@ const AdminProductsPage: React.FC = () => {
         </div>
       )}
       {error && <LoadError message={error.message}></LoadError>}
-      {data && (
+      {data && !error && (
         <div className="grid grid-cols-2 md:grid-cols-3  gap-6">
           {data.products.map((product: any) => (
             <AdminProductItem
