@@ -8,7 +8,7 @@ class Order {
   zone: string;
   contactNumber: string;
   paymentMethod: string;
-  orderItems: any[]; // You can replace 'any[]' with a more specific type if needed
+  orderItems: any[];
   totalPrice: number;
   totalItems: number;
   paid: boolean;

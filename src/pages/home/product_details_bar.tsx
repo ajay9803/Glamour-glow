@@ -95,6 +95,9 @@ const ProductDetailsSidebar: React.FC<{
             } else if (user.status === "admin") {
               toast.error("Action denied.");
               return;
+            } else if (props.product.availableQuantity === 0) {
+              toast.error(`${props.product.name} has been sold out.`)
+              return;
             }
             dispatch(
               cartSliceActions.addItemToCart({

@@ -1,10 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 
-export const AdminOrderHistoriesPage: React.FC = () => {
-  return <div>Order Histories</div>;
-};
-
 const AdminAccountPage: React.FC = () => {
   const navigate = useNavigate();
   const scrollRef = useRef(0);

@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 import ImageViewer from "./image_viewer";
 import { Rating } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import CustomerReviews from "./customer_reviews_section";
 import { TheProductType } from "../admin_account/admin_product_item";
@@ -12,7 +12,6 @@ import { cartSliceActions } from "../../slices/cart-slice";
 import toast from "react-hot-toast";
 
 const ProductDetailsComp: React.FC<{ product: TheProductType }> = (props) => {
-  const [isFixed, setIsFixed] = useState(true);
   const navigate = useNavigate();
 
   const themeState = useAppSelector((state) => {
@@ -29,35 +28,6 @@ const ProductDetailsComp: React.FC<{ product: TheProductType }> = (props) => {
 
   const user = authState.user;
 
-  useEffect(() => {
-    function isElementInViewport(el: any) {
-      var rect = el.getBoundingClientRect();
-
-      return (
-        rect.bottom - 90 > 0 &&
-        rect.top - 90 <=
-          (window.innerHeight || document.documentElement.clientHeight)
-      );
-    }
-
-    const handleScroll = () => {
-      const redDivElement = document.getElementById("div-red");
-
-      if (isElementInViewport(redDivElement)) {
-        console.log("Element is in the viewport");
-        setIsFixed(true);
-      } else {
-        console.log("Element is not in the viewport");
-        setIsFixed(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
   return (
     <div className="flex flex-col w-full my-8">
       <p className="text-lg tracking-wider font-semibold text-zinc-500 mb-5">
@@ -75,7 +45,7 @@ const ProductDetailsComp: React.FC<{ product: TheProductType }> = (props) => {
       <div className="flex flex-col md:flex-row w-full gap-y-5 gap-x-5">
         <div className="w-full md:w-2/5 ">
           <ImageViewer
-            isFixed={isFixed}
+            isFixed={true}
             images={props.product.images}
           ></ImageViewer>
         </div>
@@ -105,24 +75,30 @@ const ProductDetailsComp: React.FC<{ product: TheProductType }> = (props) => {
             {/* the end component */}
             <div
               className={`${
-                isFixed ? "sticky top-44" : "static"
+                true ? "sticky top-44" : "static"
               } px-5 py-6 flex flex-col w-full justify-start h-auto lg:w-2/5 ${
                 darkMode
                   ? "bg-zinc-800 shadow-sm shadow-gray-500"
                   : "bg-purple-50 shadow-sm shadow-gray-700"
               }`}
             >
-              <p className="tracking-wide font-semibold text-xl"> {props.product.brand} </p>
+              <p className="tracking-wide font-semibold text-xl">
+                {" "}
+                {props.product.brand}{" "}
+              </p>
               <p className="tracking-normal font-bold text-2xl mt-5">
                 Rs. {props.product.price}
               </p>
               <div
                 onClick={() => {
                   if (!user) {
-                    toast.error('Please login to add items to cart.')
+                    toast.error("Please login to add items to cart.");
                     return;
-                  } else if (user.status === 'admin') {
-                    toast.error('Action denied.');
+                  } else if (user.status === "admin") {
+                    toast.error("Action denied.");
+                    return;
+                  } else if (props.product.availableQuantity === 0) {
+                    toast.error(`${props.product.name} has been sold out.`);
                     return;
                   }
                   dispatch(

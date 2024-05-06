@@ -79,9 +79,11 @@ const CartPage = () => {
           onClick={() => {
             navigate("/home");
           }}
-          className=" text-white bg-zinc-600 font-semibold rounded-lg px-4 py-2 cursor-pointer hover:bg-cyan-800 transition-all ease-out duration-700"
+          className="text-white font-semibold rounded-lg px-4 py-2 cursor-pointer hover:bg-pink-gradient transition-all ease-out duration-700 hover:scale-105"
+          style={{
+            backgroundImage: "linear-gradient(to right, #ff7eb9, #ff758c)",
+          }}
         >
-          {" "}
           Continue Shopping
         </div>
 
@@ -91,10 +93,12 @@ const CartPage = () => {
             navigate(`/${user._id}/check-out`);
           }}
           className={`${
-            items.length === 0 ? "cursor-not-allowed" : ""
-          }  text-white bg-purple-600 font-semibold rounded-lg px-4 py-2 cursor-pointer hover:bg-purple-800 transition-all ease-out duration-700`}
+            items.length === 0 ? "cursor-not-allowed" : "cursor-pointer"
+          } text-white font-semibold rounded-lg px-4 py-2  hover:bg-purple-800 transition-all ease-out duration-700 hover:scale-105 `}
+          style={{
+            background: "linear-gradient(to right,  #9932CC, #9B30FF, #8A2BE2)",
+          }}
         >
-          {" "}
           Proceed to Checkout
         </button>
       </div>

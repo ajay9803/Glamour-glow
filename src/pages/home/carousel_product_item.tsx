@@ -15,6 +15,12 @@ const CarouselProductItem: React.FC<{ product: TheProductType }> = (props) => {
   const darkMode = themeState.darkMode;
   const errorTextColor = themeState.errorTextColor;
 
+  const authState = useAppSelector((state) => {
+    return state.auth;
+  });
+
+  const user = authState.user;
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -68,24 +74,37 @@ const CarouselProductItem: React.FC<{ product: TheProductType }> = (props) => {
             calculated at checkout.
           </p>
 
-          <div onClick={() => {
-            dispatch(
-              cartSliceActions.addItemToCart({
-                item: {
-                  productItem: {
-                    id: props.product.id,
-                    type: props.product.category,
-                    image: props.product.images[0],
-                    name: props.product.name,
+          <div
+            onClick={() => {
+              if (!user) {
+                toast.error("Please login to add items to cart.");
+                return;
+              } else if (user.status === "admin") {
+                toast.error("Action denied.");
+                return;
+              } else if (props.product.availableQuantity === 0) {
+                toast.error(`${props.product.name} has been sold out.`);
+                return;
+              }
+              dispatch(
+                cartSliceActions.addItemToCart({
+                  item: {
+                    productItem: {
+                      id: props.product.id,
+                      type: props.product.category,
+                      image: props.product.images[0],
+                      name: props.product.name,
+                      price: props.product.price,
+                    },
+                    count: 1,
                     price: props.product.price,
                   },
-                  count: 1,
-                  price: props.product.price,
-                },
-              })
-            );
-            toast.success("Item added to your cart.");
-          }} className="header-image-first relative w-full mt-7">
+                })
+              );
+              toast.success("Item added to your cart.");
+            }}
+            className="header-image-first relative w-full mt-7"
+          >
             <button
               className={` w-full rounded-xl bg-gray-300 text-gray-300 px-5 py-3 font-semibold tracking-wider transition-all ease-in-out `}
             >
@@ -94,7 +113,7 @@ const CarouselProductItem: React.FC<{ product: TheProductType }> = (props) => {
             </button>
             <button
               className={`diagonal-translate w-full absolute rounded-xl -top-2 -left-2 font-semibold tracking-wider  ${
-                darkMode ? "bg-purple-500" : "bg-black"
+                darkMode ? "bg-purple-500 " : "bg-black "
               } ${errorTextColor} px-5 py-3 transition-all ease-in-out rounded-sm`}
             >
               {" "}

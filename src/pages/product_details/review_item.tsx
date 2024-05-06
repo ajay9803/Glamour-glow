@@ -2,13 +2,22 @@ import React from "react";
 import { useAppSelector } from "../../hooks/hooks";
 import { Rating } from "@mui/material";
 
-const ReviewItem: React.FC = () => {
+const ReviewItem: React.FC<{reviewData: any}> = (props) => {
   const themeState = useAppSelector((state) => {
     return state.theme;
   });
 
   const darkMode = themeState.darkMode;
   const errorColor = themeState.errorColor;
+
+  const getFormattedDate = (date: Date) => {
+    return new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      
+    });
+  };
 
   return (
     <div className={`w-full flex flex-col `}>
@@ -21,23 +30,23 @@ const ReviewItem: React.FC = () => {
           }`}
         >
           {" "}
-          <p> P</p>
+          <p> {props.reviewData.user.username.split('')[0].toUpperCase()} </p>
         </div>
         <div className="flex flex-col">
-          <p> Alisha</p>
+          <p> {props.reviewData.user.username} </p>
           <div className="flex flex-row items-center gap-x-7">
             <Rating
               className=""
               name="simple-controlled"
-              value={5}
+              value={props.reviewData.review.rating}
               readOnly
               size="small"
             />
-            <p className="text-sm text-gray-600 tracking-wider"> 16 March, 2024 </p>
+            <p className="text-sm text-gray-600 tracking-wider">   {getFormattedDate(props.reviewData.review.createdAt)} </p>
           </div>
         </div>
       </div>
-      <p className="my-3"> This is my comment. 😊</p>
+      <p className="my-3"> {props.reviewData.review.feedback} </p>
       <div style={{
         height: "0.5px"
       }} className={`${errorColor}`}></div>

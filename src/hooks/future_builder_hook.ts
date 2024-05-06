@@ -14,10 +14,11 @@ const useFutureBuilder = (url: string) => {
         const data = await response.json();
 
         if (response.status === 200) {
-          console.log('Data fetched.');
+          console.log("Data fetched.");
+          console.log(data);
           setData(data);
         } else {
-          console.log('Error while fetching.');
+          console.log("Error while fetching.");
           const error = new Error(data.message);
           setError(error);
         }
@@ -29,7 +30,7 @@ const useFutureBuilder = (url: string) => {
     };
 
     fetchData();
-  }, [url,]);
+  }, [url]);
 
   return {
     isLoading,
@@ -40,8 +41,7 @@ const useFutureBuilder = (url: string) => {
 
 export default useFutureBuilder;
 
-
-export const useAuthorizedFutureBuilder = (url: string, token:string) => {
+export const useAuthorizedFutureBuilder = (url: string, token: string) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
   const [data, setData] = useState<any>(null);
@@ -53,19 +53,19 @@ export const useAuthorizedFutureBuilder = (url: string, token:string) => {
       try {
         const response = await fetch(url, {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
         const data = await response.json();
-        
+
         console.log(response.status);
         console.log(data);
 
         if (response.status === 200) {
-          console.log('Data fetched.');
+          console.log("Data fetched.");
           setData(data);
         } else {
-          console.log('Error while fetching.');
+          console.log("Error while fetching.");
           const error = new Error(data.message);
           setError(error);
         }
@@ -77,7 +77,7 @@ export const useAuthorizedFutureBuilder = (url: string, token:string) => {
     };
 
     fetchData();
-  }, [url,token]);
+  }, [url, token]);
 
   return {
     isLoading,

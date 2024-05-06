@@ -17,7 +17,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export type OrderType = {};
 
-const UserOrders: React.FC = () => {
+const AdminOrderHistory: React.FC = () => {
   const themeState = useAppSelector((state) => {
     return state.theme;
   });
@@ -34,7 +34,7 @@ const UserOrders: React.FC = () => {
     return state.auth;
   });
   const { isLoading, error, data } = useAuthorizedFutureBuilder(
-    `http://localhost:8080/orders/my-orders?filterBy=dsc&page=${currentPage}&date=${selectedDate}`,
+    `http://localhost:8080/orders/order-history?filterBy=dsc&page=${currentPage}&date=${selectedDate}`,
     authState.token!
   );
 
@@ -75,7 +75,10 @@ const UserOrders: React.FC = () => {
           {" "}
           {data.orders.map((order: any) => {
             return (
-              <OrderItem key={order._id} order={new Order(order)}></OrderItem>
+              <OrderItem
+                key={order._id}
+                order={new Order(order.order)}
+              ></OrderItem>
             );
           })}{" "}
         </div>
@@ -107,7 +110,7 @@ const UserOrders: React.FC = () => {
   );
 };
 
-export default UserOrders;
+export default AdminOrderHistory;
 
 const OrderItem: React.FC<{ order: Order }> = (props) => {
   const navigate = useNavigate();

@@ -49,7 +49,7 @@ const OrderDetailsPage: React.FC = () => {
       {error && <LoadError message={error.message}></LoadError>}
       {data && !error && (
         <div
-          className={`flex flex-col w-full shadow-sm rounded-xl px-5 py-4 ${
+          className={`flex flex-col items-start w-full shadow-sm rounded-xl px-5 py-4 ${
             darkMode ? "shadow-gray-700" : "shadow-black"
           }`}
         >
@@ -72,22 +72,137 @@ const OrderDetailsPage: React.FC = () => {
               {getFormattedDate(data.order.createdAt)}{" "}
             </p>
           </div>
+          <div className="flex flex-col lg:flex-row gap-x-4 w-full">
+            <div
+              className={`${
+                darkMode ? "border-white" : "border-black"
+              } flex flex-col border border-dashed  px-5 py-3 mb-5 rounded-xl gap-y-1 w-full lg:w-2/3`}
+            >
+              <p className="text-xl font-mono mb-2"> Shipping Details </p>
+              <div className="flex flex-row w-full">
+                <div className="flex flex-row w-full  justify-between ">
+                  <p className="font-light text-sm tracking-wider">
+                    {" "}
+                    House Number
+                  </p>
+                  <p className="font-semibold text-sm tracking-wider">
+                    {" "}
+                    {data.order.houseNumber}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-row  w-full">
+                <div className="flex flex-row w-full  justify-between ">
+                  <p className="font-light text-sm tracking-wider">
+                    {" "}
+                    Street Name
+                  </p>
+                  <p className="font-semibold text-sm tracking-wider">
+                    {" "}
+                    {data.order.streetName}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-row w-full">
+                <div className="flex flex-row w-full  justify-between ">
+                  <p className="font-light text-sm tracking-wider"> City</p>
+                  <p className="font-semibold text-sm tracking-wider">
+                    {" "}
+                    {data.order.city}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-row  w-full">
+                <div className="flex flex-row w-full  justify-between ">
+                  <p className="font-light text-sm tracking-wider"> District</p>
+                  <p className="font-semibold text-sm tracking-wider">
+                    {" "}
+                    {data.order.district}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-row  w-full">
+                <div className="flex flex-row w-full  justify-between ">
+                  <p className="font-light text-sm tracking-wider"> Zone</p>
+                  <p className="font-semibold text-sm tracking-wider">
+                    {" "}
+                    {data.order.zone}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-row  w-full">
+                <div className="flex flex-row w-full  justify-between ">
+                  <p className="font-light text-sm tracking-wider">
+                    {" "}
+                    Contact Number
+                  </p>
+                  <p className="font-semibold text-sm tracking-wider text-purple-600">
+                    {" "}
+                    {data.order.contactNumber}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div
+              className={` border border-dashed ${
+                darkMode ? "border-white" : "border-black"
+              } flex flex-col w-full lg:w-1/3 justify-between px-5 py-3 mb-5 rounded-xl`}
+            >
+              <p className="text-xl font-mono mb-2">Customer Information</p>
+              <p className="font-light text-sm tracking-wider">
+                Customer Name:
+              </p>
+              <p className="font-semibold text-sm tracking-wider mb-2 font-mono">
+                {data.user.username}
+              </p>
+              <p className="font-light text-sm tracking-wider">
+                Customer Email:
+              </p>
+              <p className="font-semibold text-sm tracking-wider font-mono">
+                {data.user.email}
+              </p>
+            </div>
+          </div>
+
           <div className="flex flex-col w-full gap-y-4">
             {data.orderItems.map((orderItem: any) => {
               return <OrderItem order={orderItem}></OrderItem>;
             })}
           </div>
-          <div className="flex flex-row w-full mt-5 justify-end gap-x-7">
-            <p className="font-light text-lg tracking-wider"> Order Total: </p>
-            <p className="font-semibold text-lg tracking-wider">
-              {" "}
-              Rs. {data.order.totalPrice}
-            </p>
+          <div className="flex flex-row justify-end w-full">
+            <div className="flex flex-row w-full mt-5 justify-between md:w-1/3">
+              <p className="font-light text-lg tracking-wider">
+                Payment Status:
+              </p>
+              <p
+                className={`${
+                  data.order.paid ? "text-green-500" : "text-red-500"
+                } font-semibold text-lg tracking-wider`}
+              >
+                {" "}
+                {data.order.paid ? "Paid" : "Not Paid"}
+              </p>
+            </div>
           </div>
-          {(!data.order.paid && data.order.paymentMethod !== "E-sewa") && (
-            <div onClick={() => {
-              makePayment(data.order._id, data.order.totalPrice);
-            }} className="flex flex-row justify-start mt-10">
+          <div className="flex flex-row justify-end w-full">
+            <div className="flex flex-row w-full mt-5 justify-between md:w-1/3">
+              <p className="font-light text-lg tracking-wider">
+                {" "}
+                Order Total:{" "}
+              </p>
+              <p className="font-semibold text-lg tracking-wider">
+                {" "}
+                Rs. {data.order.totalPrice}
+              </p>
+            </div>
+          </div>
+          {!data.order.paid && data.order.paymentMethod !== "E-sewa" && (
+            <div
+              onClick={() => {
+                makePayment(data.order._id, data.order.totalPrice);
+              }}
+              className="flex flex-row justify-start mt-10"
+            >
               <button className=" px-5 py-2 rounded-md bg-purple-700 text-white transition-all hover:bg-purple-800 duration-500 hover:translate-x-3">
                 {" "}
                 Make Payment

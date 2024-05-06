@@ -3,15 +3,28 @@ import { useAppSelector } from "../../hooks/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import Slider from "rc-slider";
+import "../../styles/check_box.css";
 
 const FilterBar: React.FC<{
   setSort: (sortBy: string) => void;
   onRangeChange: (range: number[]) => void;
+  instockFilter: string;
+  changeInstockFilter: (filter: string) => void;
 }> = (props) => {
   const themeState = useAppSelector((state) => state.theme);
   const darkMode = themeState.darkMode;
 
   const [sortBy, setSortBy] = useState("dsc");
+  const [instock, setInstock] = useState(
+    props.instockFilter === "all" || props.instockFilter === "instock"
+      ? true
+      : false
+  );
+  const [outofstock, setOutofstock] = useState(
+    props.instockFilter === "all" || props.instockFilter === "outofstock"
+      ? true
+      : false
+  );
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSortBy(event.target.value);
@@ -92,6 +105,71 @@ const FilterBar: React.FC<{
           <div className="flex flex-col items-start">
             <p className="text-sm tracking-wider font-semibold"> To </p>
             <p className="tracking-wider">Rs. {range[1]} </p>
+          </div>
+        </div>
+      </div>
+      <div className="mb-4">
+        <p className="mb-2">Availability</p>
+        <div className="mb-4 flex flex-col items-start gap-y-2">
+          <div className="w-full relative flex flex-row items-center ">
+            <input
+              checked={instock}
+              onChange={(event) => {
+                const isChecked = event.target.checked;
+                setInstock(isChecked);
+                if (isChecked && outofstock) {
+                  props.changeInstockFilter("all");
+                } else if (isChecked && !outofstock) {
+                  props.changeInstockFilter("instock");
+                } else if (!isChecked && outofstock) {
+                  props.changeInstockFilter("outofstock");
+                } else {
+                  props.changeInstockFilter("all");
+                }
+                console.log(instock);
+              }}
+              type="checkbox"
+              id="myCheckbox1"
+              name="myCheckbox1"
+              className="mr-3 h-7 w-7  checked:bg-purple-500 checked:border-white border border-solid"
+            />
+            <span className="text tracking-wider">In stock</span>
+            {/* {instock && (
+              <span className="absolute left-1.5 top-0.5 ">
+                <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
+              </span>
+            )} */}
+          </div>
+          <div className="w-full relative flex flex-row items-center">
+            <input
+              checked={outofstock}
+              onChange={(event) => {
+                const isChecked = event.target.checked;
+                setOutofstock(isChecked);
+                if (isChecked && instock) {
+                  props.changeInstockFilter("all");
+                } else if (isChecked && !instock) {
+                  props.changeInstockFilter("outofstock");
+                } else if (!isChecked && instock) {
+                  props.changeInstockFilter("instock");
+                } else {
+                  props.changeInstockFilter("all");
+                }
+
+                console.log(instock);
+                console.log(outofstock);
+              }}
+              type="checkbox"
+              id="myCheckbox"
+              name="myCheckbox"
+              className="mr-3 h-7 w-7  checked:bg-purple-500 checked:border-white border border-solid"
+            />
+            <span className="text tracking-wider">Out of stock</span>
+            {/* {outofstock && (
+              <span className="absolute left-1.5 top-0.5 ">
+                <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
+              </span>
+            )} */}
           </div>
         </div>
       </div>

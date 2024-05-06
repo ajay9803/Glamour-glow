@@ -19,16 +19,21 @@ const ProductsByCategory: React.FC = () => {
   const [sortBy, setSortBy] = useState<string>("dsc");
   const [range, setRange] = useState<number[]>([0, 25000]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [instockFilter, setInstockFilter] = useState<string>("all");
   const { category } = useParams();
 
   const { isLoading, error, data } = useFutureBuilder(
-    `http://localhost:8080/products/all-products/${category}?filterBy=${sortBy}&minPrice=${range[0]}&maxPrice=${range[1]}&page=${currentPage}`
+    `http://localhost:8080/products/all-products/${category}?filterBy=${sortBy}&minPrice=${range[0]}&maxPrice=${range[1]}&page=${currentPage}&instockFilter=${instockFilter}`
   );
 
   const totalItems = data ? data.totalItems : 0;
 
   const handleRangeChange = (newRange: number[]) => {
     setRange(newRange);
+  };
+
+  const handleFilterChange = (filter: string) => {
+    setInstockFilter(filter);
   };
 
   const toggleSortBy = (sortByOption: string) => {
@@ -46,7 +51,7 @@ const ProductsByCategory: React.FC = () => {
   useEffect(() => {
     setCurrentPage(1);
     window.scrollTo(0, scrollRef.current);
-  }, [category, range]);
+  }, [category, range, instockFilter]);
 
   return (
     <div className="flex flex-row gap-x-4 ">
@@ -55,6 +60,8 @@ const ProductsByCategory: React.FC = () => {
           <FilterBar
             setSort={toggleSortBy}
             onRangeChange={handleRangeChange}
+            instockFilter={instockFilter}
+            changeInstockFilter={handleFilterChange}
           ></FilterBar>
         </div>
       </div>
@@ -98,7 +105,7 @@ const ProductsByCategory: React.FC = () => {
             </div>
           )}
           <ReactPaginate
-            key={`${category}${range}`}
+            key={`${category}${range}${instockFilter}`}
             pageCount={Math.ceil(totalItems / 6)}
             pageRangeDisplayed={5}
             marginPagesDisplayed={2}

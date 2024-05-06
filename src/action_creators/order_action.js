@@ -30,10 +30,15 @@ const createOrder = async (
     });
     const jsonData = await response.json();
     console.log(jsonData);
-
-    if (jsonData.order.paymentMethod !== "E-sewa") {
-      return jsonData;
+    if (response.status === 200 || response.status === 201) {
+      if (jsonData.order.paymentMethod !== "E-sewa") {
+        return jsonData;
+      }
+    } else {
+      const error = new Error(jsonData.message);
+      throw error;
     }
+
     const tid = jsonData.order._id;
     console.log(tid);
     console.log(tid);

@@ -17,15 +17,16 @@ import ProductsByCategory from "./pages/products_by_category/products_by_categor
 import { getLoggedInState } from "./action_creators/auth_action";
 import AddBeautyProduct from "./pages/add_products/add_product";
 import NotFound from "./pages/not-found/not-found";
-import AdminAccountPage, {
-  AdminOrderHistoriesPage,
-} from "./pages/admin_account/admin_account";
+import AdminAccountPage from "./pages/admin_account/admin_account";
 import AdminProductsPage from "./pages/admin_account/admin_products_page";
 import UpdateProduct from "./pages/admin_account/update_product";
 import UserAccountPage from "./pages/user_account/user_account_page";
 import UserOrders from "./pages/user_account/user_orders";
 import OrderDetailsPage from "./pages/user_account/order_details_page";
 import PaymentSuccessPage from "./pages/payment_success/payment_success";
+import UserPayments from "./pages/user_account/user_payments";
+import { retrieveThemeData, themeSliceActions } from "./slices/theme_slice";
+import AdminOrderHistory from "./pages/admin_account/admin_order_history";
 
 const App: React.FC = () => {
   const themeState = useAppSelector((state) => {
@@ -61,8 +62,23 @@ const App: React.FC = () => {
         return;
       }
     };
+
+    const loadThemeData = () => {
+      try {
+        const themeData = retrieveThemeData();
+
+        if (!themeData) {
+          return;
+        } else {
+          dispatch(themeSliceActions.setTheme(themeData));
+        }
+      } catch (e) {
+        return;
+      }
+    };
     loadMyCart();
     dispatch(getLoggedInState());
+    loadThemeData();
   }, [dispatch]);
 
   const authState = useAppSelector((state) => {
@@ -129,7 +145,7 @@ const App: React.FC = () => {
             <Route path="/accounts/admin" element={<AdminAccountPage />}>
               <Route
                 path="/accounts/admin/orders"
-                element={<AdminOrderHistoriesPage />}
+                element={<AdminOrderHistory />}
               ></Route>
               <Route
                 path="/accounts/admin/products"
@@ -147,10 +163,10 @@ const App: React.FC = () => {
                 path="/accounts/user/orders"
                 element={<UserOrders />}
               ></Route>
-              {/* <Route
+              <Route
                 path="/accounts/user/payments"
-                element={<AdminProductsPage />}
-              ></Route> */}
+                element={<UserPayments />}
+              ></Route>
             </Route>
           )}
           {user && (

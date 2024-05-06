@@ -19,7 +19,7 @@ const GeneralCategories: React.FC = () => {
   return (
     <div
       className={`flex-row  hidden lg:flex ${
-        darkMode ? "bg-black" : "bg-slate-100"
+        darkMode ? "bg-black text-white" : "bg-slate-100 text-black"
       }`}
     >
       <div
@@ -37,7 +37,9 @@ const GeneralCategories: React.FC = () => {
         </p>
         {isMakeupHovered && (
           <div
-            className={` ${primaryColor} ${
+            className={` ${
+              darkMode ? "bg-black text-white" : "bg-white text-black"
+            } ${
               darkMode ? "shadow-sm shadow-gray-800" : "shadow-sm shadow-black"
             } z-30 fixed top-40 left-0 right-0 w-full flex flex-row  gap-x-5 py-9 px-4 justify-evenly`}
           >
@@ -182,7 +184,9 @@ const GeneralCategories: React.FC = () => {
         </p>
         {isBodyHovered && (
           <div
-            className={` ${primaryColor} ${
+            className={` ${
+              darkMode ? "bg-black text-white" : "bg-white text-black"
+            } ${
               darkMode ? "shadow-sm shadow-gray-800" : "shadow-sm shadow-black"
             } z-30 absolute top-14 left-0 w-80 flex flex-row  gap-x-5 py-9 px-4 justify-between`}
           >
@@ -223,7 +227,9 @@ const GeneralCategories: React.FC = () => {
         </p>
         {isAccessoriesHovered && (
           <div
-            className={` ${primaryColor} ${
+            className={` ${
+              darkMode ? "bg-black text-white" : "bg-white text-black"
+            } ${
               darkMode ? "shadow-sm shadow-gray-800" : "shadow-sm shadow-black"
             } z-30 absolute top-14 left-0 w-80 flex flex-row  gap-x-5 py-9 px-4 justify-between`}
           >

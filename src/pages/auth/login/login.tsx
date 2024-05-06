@@ -10,8 +10,6 @@ import toast from "react-hot-toast";
 import { useAppSelector } from "../../../hooks/hooks";
 import { loginUser } from "../../../action_creators/auth_action";
 import { authSliceActions } from "../../../slices/auth";
-// import { authSliceActions } from "../../slices/auth-slice";
-// import { signInUser } from "../../services/auth-Service";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required."),

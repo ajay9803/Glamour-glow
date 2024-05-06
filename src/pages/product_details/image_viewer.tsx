@@ -9,7 +9,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppSelector } from "../../hooks/hooks";
 
-const ImageViewer: React.FC<{isFixed: boolean, images: string[]}> = (props) => {
+const ImageViewer: React.FC<{ isFixed: boolean; images: string[] }> = (
+  props
+) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const sliderRef = useRef<Slider>(null);
@@ -39,9 +41,11 @@ const ImageViewer: React.FC<{isFixed: boolean, images: string[]}> = (props) => {
   let images = props.images;
 
   return (
-    <div className={`w-full flex flex-row ${
-      props.isFixed ? "sticky top-44" : "static"
-    }`}>
+    <div
+      className={`w-full flex flex-row ${
+        props.isFixed ? "sticky top-44" : "static"
+      }`}
+    >
       <div
         style={{
           scrollbarWidth: "none",
@@ -78,7 +82,10 @@ const ImageViewer: React.FC<{isFixed: boolean, images: string[]}> = (props) => {
         <div
           onClick={() => {
             if (currentIndex >= 0 && currentIndex < images.length) {
-              window.open(images[currentIndex], "_blank");
+              window.open(
+                `http://localhost:8080/images/${images[currentIndex]}`,
+                "_blank"
+              );
             }
           }}
           className="absolute top-5 right-5 flex flex-row items-center justify-center rounded-full h-10 w-10 border border-solid border-black bg-purple-50 shadow-md shadow-black hover:cursor-pointer"

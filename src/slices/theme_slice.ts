@@ -1,5 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const updateThemeData = (themeState: ThemeState) => {
+  localStorage.setItem("themeData", JSON.stringify(themeState));
+};
+
+export const retrieveThemeData = (): undefined | ThemeState => {
+  try {
+    const themeData = localStorage.getItem("themeData");
+    if (themeData === null) {
+      return undefined;
+    }
+    return JSON.parse(themeData);
+  } catch (e) {
+    return undefined;
+  }
+};
+
 export type ThemeState = {
   darkMode: boolean;
   primaryColor: string;
@@ -9,7 +25,7 @@ export type ThemeState = {
 };
 
 const initialThemeState = {
-  darkMode: true,
+  darkMode: false,
   primaryColor: "bg-zinc-900",
   errorColor: "bg-white",
   primaryTextColor: "text-white",
@@ -33,6 +49,14 @@ const themeSlice = createSlice({
         state.primaryTextColor = "text-black";
         state.errorTextColor = "text-white";
       }
+      updateThemeData(state);
+    },
+    setTheme(state, action: { payload: ThemeState }) {
+      state.darkMode = action.payload.darkMode;
+      state.primaryColor = action.payload.primaryColor;
+      state.errorColor = action.payload.errorColor;
+      state.primaryTextColor = action.payload.primaryTextColor;
+      state.errorTextColor = action.payload.errorTextColor;
     },
   },
 });

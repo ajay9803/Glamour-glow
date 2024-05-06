@@ -13,7 +13,7 @@ export const addProduct = async (product: NewBeautyProduct, token: string) => {
   formData.append("price", product.price.toString());
   formData.append("quantityAvailable", product.quantity.toString());
   formData.append("description", product.description);
-  formData.append("rating", "0");
+  formData.append("rating", "1");
   for (let i = 0; i < product.images.length; i++) {
     formData.append("images", product.images[i]);
   }

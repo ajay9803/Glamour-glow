@@ -20,8 +20,8 @@ const PaymentSuccessPage: React.FC = () => {
         const response = await fetch(url, {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${authState.token}`
-          }
+            Authorization: `Bearer ${authState.token}`,
+          },
         });
         const jsonData = await response.json();
         console.log(jsonData);
@@ -29,14 +29,50 @@ const PaymentSuccessPage: React.FC = () => {
         console.log(e);
       }
     };
+
+    const storePayment = async (paymentData: any) => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/payments/create-payment`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authState.token}`,
+            },
+            body: JSON.stringify({
+              orderId: paymentData.transaction_uuid,
+              totalAmount: parseInt(paymentData.total_amount),
+              transactionCode: paymentData.transaction_code,
+              transactionUUID: paymentData.transaction_uuid,
+              productCode: paymentData.product_code,
+              status: paymentData.status,
+              signature: paymentData.signature,
+              signedFieldNames: paymentData.signed_field_names,
+            }),
+          }
+        );
+        const jsonData = await response.json();
+        console.log(jsonData);
+      } catch (error) {
+        console.error("Error storing payment:", error);
+      }
+    };
+
     if (data) {
       const decodedData = atob(data);
       const dataObject = JSON.parse(decodedData);
-      console.log(dataObject.status);
+      console.log(dataObject);
       if (dataObject.status === "COMPLETE") {
         makePayment(dataObject.transaction_uuid)
           .then(() => {
-            navigate("/home");
+            storePayment(dataObject)
+              .then(() => {
+                navigate("/accounts/user/payments");
+              })
+              .catch((error) => {
+                console.error("Error storing payment:", error);
+              });
           })
           .catch((e) => {
             console.log(e);
