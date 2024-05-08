@@ -2,19 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import ThePulseLoader from "../../components/pulse-loader";
 import { useAuthorizedFutureBuilder } from "../../hooks/future_builder_hook";
 import { useAppSelector } from "../../hooks/hooks";
-import Order from "../../models/order";
 import LoadError from "../home/load-error";
-import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
   faShoppingBag,
-  faShoppingBasket,
 } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
-
+import "../../styles/home.css";
 import "react-datepicker/dist/react-datepicker.css";
 import Payment from "../../models/payment";
 
@@ -132,9 +129,30 @@ const PaymentItem: React.FC<{ payment: Payment; index: number }> = (props) => {
     });
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(
+              "header-data-active",
+              "header-image-3-active"
+            );
+          } else {
+          }
+        });
+      },
+      { threshold: 0.8, root: null }
+    );
+    const hiddenElements = document.querySelectorAll(
+      ".header-data, .header-image-3"
+    );
+    hiddenElements.forEach((el) => observer.observe(el));
+  }, []);
+
   return (
     <div
-      className={` border border-solid ${
+      className={`header-image-3 border border-solid ${
         darkMode ? "border-white" : "border-black"
       } w-full flex flex-col items-start lg:flex-row gap-y-2 justify-between lg:items-center px-4 py-4 hover:scale-105 transition-all duration-300 ease-in-out hover:cursor-pointer`}
     >

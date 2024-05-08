@@ -57,7 +57,7 @@ const Home = () => {
       <div className="flex  w-full gap-x-10 flex-col gap-y-10 md:flex-row py-12">
         <div className="flex-col  w-full md:w-2/5 lg:w-2/5 flex gap-y-6">
           <p className="text-5xl font-semibold tracking-wider leading-snug">
-            PRETTY CLICK LIPCREAM
+            GLAMOUR GLOW COSMETIC
           </p>
           <div onClick={() => {
             navigate('/products/Skincare')

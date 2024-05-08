@@ -32,6 +32,7 @@ const AdminProductsPage: React.FC = () => {
                 description: product.description,
                 availableQuantity: product.quantityAvailable,
                 rating: product.rating,
+                totalReviews: product.totalReviews,
               }}
             />
           ))}

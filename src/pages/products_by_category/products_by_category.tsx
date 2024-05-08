@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ProductItem from "../home/product_item";
 import useFutureBuilder from "../../hooks/future_builder_hook";
 import ThePulseLoader from "../../components/pulse-loader";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import LoadError from "../home/load-error";
 import "rc-slider/assets/index.css";
 import ReactPaginate from "react-paginate";
@@ -16,60 +16,48 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const ProductsByCategory: React.FC = () => {
-  const [sortBy, setSortBy] = useState<string>("dsc");
-  const [range, setRange] = useState<number[]>([0, 25000]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [instockFilter, setInstockFilter] = useState<string>("all");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+
+  const filterBy = queryParams.get("filterBy") || "dsc";
+  const minPrice = parseInt(queryParams.get("minPrice") || "0") || 0;
+  const maxPrice = parseInt(queryParams.get("maxPrice") || "25000") || 25000;
+  const page = parseInt(queryParams.get("page") || "1") || 1;
+  console.log("page", page);
+  console.log("filterby", filterBy);
+  const instockFilter = queryParams.get("instockFilter") || "all";
+
   const { category } = useParams();
 
   const { isLoading, error, data } = useFutureBuilder(
-    `http://localhost:8080/products/all-products/${category}?filterBy=${sortBy}&minPrice=${range[0]}&maxPrice=${range[1]}&page=${currentPage}&instockFilter=${instockFilter}`
+    `http://localhost:8080/products/all-products/${category}?filterBy=${filterBy}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page}&instockFilter=${instockFilter}`
   );
-
-  const totalItems = data ? data.totalItems : 0;
-
-  const handleRangeChange = (newRange: number[]) => {
-    setRange(newRange);
-  };
-
-  const handleFilterChange = (filter: string) => {
-    setInstockFilter(filter);
-  };
-
-  const toggleSortBy = (sortByOption: string) => {
-    setSortBy(sortByOption);
-  };
 
   const scrollRef = useRef(0);
 
-  const themeState = useAppSelector((state) => {
-    return state.theme;
-  });
-
-  const darkMode = themeState.darkMode;
-
   useEffect(() => {
-    setCurrentPage(1);
     window.scrollTo(0, scrollRef.current);
-  }, [category, range, instockFilter]);
+  }, []);
 
   return (
     <div className="flex flex-row gap-x-4 ">
       <div className="flex-col w-2/5 lg:w-2/6 hidden md:flex md:flex-col md:justify-start">
         <div className="sticky top-44 w-full">
           <FilterBar
-            setSort={toggleSortBy}
-            onRangeChange={handleRangeChange}
+            currentPage={page}
+            category={category!}
+            filterBy={filterBy}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
             instockFilter={instockFilter}
-            changeInstockFilter={handleFilterChange}
           ></FilterBar>
         </div>
       </div>
 
       <div className="div-red flex flex-col w-full">
         <p className="tracking-wider font-semibold mb-3 text-purple-700">
-          {" "}
-          {category}{" "}
+          {category}
         </p>
         {data && (
           <p className="font-semibold tracking-wider text-xl mb-5">
@@ -99,38 +87,23 @@ const ProductsByCategory: React.FC = () => {
                     description: product.description,
                     availableQuantity: product.quantityAvailable,
                     rating: product.rating,
+                    totalReviews: product.totalReviews,
                   }}
                 />
               ))}
             </div>
           )}
-          <ReactPaginate
-            key={`${category}${range}${instockFilter}`}
-            pageCount={Math.ceil(totalItems / 6)}
-            pageRangeDisplayed={5}
-            marginPagesDisplayed={2}
-            onPageChange={(selectedItem) => {
-              setCurrentPage(selectedItem.selected + 1);
-              window.scrollTo(0, scrollRef.current);
-            }}
-            containerClassName={darkMode ? "pagination-darkmode" : "pagination"}
-            activeClassName={"active"}
-            previousLabel={
-              <FontAwesomeIcon icon={faChevronLeft}></FontAwesomeIcon>
-            }
-            nextLabel={
-              <FontAwesomeIcon icon={faChevronRight}></FontAwesomeIcon>
-            }
-            breakLabel={"..."}
-            disabledClassName={"disabled"}
-            pageClassName={""}
-            pageLinkClassName={""}
-            previousClassName={"previous"}
-            nextClassName={"next"}
-            previousLinkClassName={""}
-            nextLinkClassName={""}
-            breakClassName={"ellipsis"}
-          />
+          {data && data.totalItems > 6 && (
+            <PaginatorComponent
+              page={page}
+              totalItems={data.totalItems}
+              category={category!}
+              filterBy={filterBy}
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              instockFilter={instockFilter}
+            ></PaginatorComponent>
+          )}
         </div>
       </div>
     </div>
@@ -138,3 +111,56 @@ const ProductsByCategory: React.FC = () => {
 };
 
 export default ProductsByCategory;
+
+const PaginatorComponent: React.FC<{
+  page: number;
+  totalItems: number;
+  category: string;
+  filterBy: string;
+  minPrice: number;
+  maxPrice: number;
+  instockFilter: string;
+}> = (props) => {
+  const scrollRef = useRef(0);
+
+  const navigate = useNavigate();
+
+  const themeState = useAppSelector((state) => {
+    return state.theme;
+  });
+
+  const darkMode = themeState.darkMode;
+
+  return (
+    <ReactPaginate
+      forcePage={props.page - 1}
+      pageCount={Math.ceil(props.totalItems / 6)}
+      pageRangeDisplayed={5}
+      marginPagesDisplayed={2}
+      onPageChange={(selectedItem) => {
+        console.log("on page change in pagine", selectedItem.selected);
+        navigate(
+          `/products/${props.category}?filterBy=${props.filterBy}&minPrice=${
+            props.minPrice
+          }&maxPrice=${props.maxPrice}&page=${
+            selectedItem.selected + 1
+          }&instockFilter=${props.instockFilter}`
+        );
+        window.scrollTo(0, scrollRef.current);
+      }}
+      containerClassName={darkMode ? "pagination-darkmode" : "pagination"}
+      activeClassName={"active"}
+      previousLabel={<FontAwesomeIcon icon={faChevronLeft}></FontAwesomeIcon>}
+      nextLabel={<FontAwesomeIcon icon={faChevronRight}></FontAwesomeIcon>}
+      breakLabel={"..."}
+      disabledClassName={"disabled"}
+      pageClassName={""}
+      pageLinkClassName={""}
+      previousClassName={"previous"}
+      nextClassName={"next"}
+      previousLinkClassName={""}
+      nextLinkClassName={""}
+      breakClassName={"ellipsis"}
+    />
+  );
+};

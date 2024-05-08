@@ -6,10 +6,13 @@ import NewBeautyProduct from "../../models/product";
 import toast from "react-hot-toast";
 import { addProduct } from "../../action_creators/admin_product_action";
 import { useAppSelector } from "../../hooks/hooks";
+import { useNavigate } from "react-router-dom";
 
 const AddBeautyProduct = () => {
   const [images, setImages] = useState<string[]>([]);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
+
+  const navigate = useNavigate();
 
   const handleImageChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -82,16 +85,7 @@ const AddBeautyProduct = () => {
     )
       .then((data) => {
         toast.success(data.message);
-        resetForm({
-          values: {
-            ...initialValues,
-            quantity: null,
-            images: [],
-            price: null,
-          },
-        });
-        setImageFiles([]);
-        setImages([]);
+        navigate(-1);
       })
       .catch((e) => {
         toast.error(e.message);

@@ -42,6 +42,8 @@ const UserOrders: React.FC = () => {
 
   const scrollRef = useRef(0);
 
+  
+
   useEffect(() => {
     setCurrentPage(1);
 
@@ -116,12 +118,33 @@ const OrderItem: React.FC<{ order: Order }> = (props) => {
   });
   const darkMode = themeState.darkMode;
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(
+              "header-data-active",
+              "header-image-3-active"
+            );
+          } else {
+          }
+        });
+      },
+      { threshold: 0.8, root: null }
+    );
+    const hiddenElements = document.querySelectorAll(
+      ".header-data, .header-image-3"
+    );
+    hiddenElements.forEach((el) => observer.observe(el));
+  }, []);
+
   return (
     <div
       onClick={() => {
         navigate(`/orders/${props.order._id}`);
       }}
-      className={`relative overflow-hidden w-full flex flex-row justify-between border border-solid rounded-md px-4 py-3 hover:cursor-pointer hover:scale-105 transition-all ease-out duration-500 ${
+      className={`header-image-3 relative overflow-hidden w-full flex flex-row justify-between border border-solid rounded-md px-4 py-3 hover:cursor-pointer hover:scale-105 transition-all ease-out duration-500 ${
         darkMode
           ? "border-white bg-zinc-900 shadow-sm shadow-slate-600"
           : "border-black bg-slate-50 shadow-sm shadow-black"

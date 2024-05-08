@@ -162,7 +162,9 @@ const GeneralCategories: React.FC = () => {
       </div>
       <p
         onClick={() => {
-          navigate("/products/Skincare");
+          navigate(
+            "/products/Skincare?filterBy=dsc&minPrice=0&maxPrice=25000&page=1&instockFilter=all"
+          );
         }}
         className="font-semibold cursor-pointer hover:bg-purple-600 px-5 py-4 transition-all duration-200 ease-in"
       >

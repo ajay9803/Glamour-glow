@@ -12,8 +12,7 @@ const HeaderAuthPopUp: React.FC<{ show: boolean; setShow: () => void }> = (
     return state.theme;
   });
 
-  const primaryColor = themeState.primaryColor;
-  const primaryTextColor = themeState.primaryTextColor;
+  const darkMode = themeState.darkMode;
 
   const [showPopupType, setShowLoginPopup] = useState<string>("login");
 
@@ -47,9 +46,9 @@ const HeaderAuthPopUp: React.FC<{ show: boolean; setShow: () => void }> = (
             : "390px"
           : "0px",
       }}
-      className={`${primaryTextColor} ${
-        props.show ? "py-5" : "py-0"
-      } ${primaryColor} z-30 overflow-hidden  w-80 flex flex-col gap-y-3 justify-start items-start   absolute top-16 -right-10 shadow-md shadow-black  px-5  rounded-md transition-all duration-200 ease-in-out`}
+      className={`$ ${props.show ? "py-5" : "py-0"} ${
+        darkMode ? "bg-zinc-800 text-white" : "bg-slate-100 text-black"
+      } z-30 overflow-hidden  w-80 flex flex-col gap-y-3 justify-start items-start   absolute top-16 -right-10 shadow-md shadow-black  px-5  rounded-md transition-all duration-200 ease-in-out`}
     >
       {showPopupType === "login" && (
         <LoginPopup
@@ -78,7 +77,6 @@ const LoggedInPopup: React.FC<{ setShow: () => void }> = (props) => {
   });
 
   const darkMode = themeState.darkMode;
-  const errorTextColor = themeState.errorTextColor;
 
   const authState = useAppSelector((state) => {
     return state.auth;
@@ -92,14 +90,20 @@ const LoggedInPopup: React.FC<{ setShow: () => void }> = (props) => {
   return (
     <div className="flex flex-col w-full gap-y-3">
       {user && <p> {user.username} </p>}
-      <p className="text-lg text-purple-600 cursor-pointer" onClick={() => {
-        props.setShow();
-        if (user && user.status === 'admin') {
-          navigate('/accounts/admin/orders');
-        } else {
-          navigate(`/accounts/user/orders`);
-        }
-      }}> Account</p>
+      <p
+        className="text-lg text-purple-600 cursor-pointer"
+        onClick={() => {
+          props.setShow();
+          if (user && user.status === "admin") {
+            navigate("/accounts/admin/orders");
+          } else {
+            navigate(`/accounts/user/orders`);
+          }
+        }}
+      >
+        {" "}
+        Account
+      </p>
       <div className="relative w-full mt-3">
         <button
           className={` w-full rounded-xl bg-gray-300 text-gray-300 px-4 py-2 font-semibold tracking-wider transition-all ease-in-out `}
@@ -114,8 +118,8 @@ const LoggedInPopup: React.FC<{ setShow: () => void }> = (props) => {
             navigate("/home");
           }}
           className={`diagonal-translate w-full absolute rounded-xl -top-2 -left-2 font-semibold tracking-wider  ${
-            darkMode ? "bg-purple-500" : "bg-black"
-          } ${errorTextColor} px-4 py-2 transition-all ease-in-out rounded-sm`}
+            darkMode ? "bg-purple-500 text-white" : "bg-black text-white"
+          }  px-4 py-2 transition-all ease-in-out rounded-sm`}
         >
           {" "}
           Log Out

@@ -96,7 +96,7 @@ const Login = () => {
                   type="email"
                   id="email"
                   name="email"
-                  className={`${primaryColor} ${
+                  className={`${darkMode ? "bg-zinc-900" : "bg-white"} ${
                     darkMode ? "border border-solid border-gray" : ""
                   } mt-1 px-4 pr-10 py-3 w-full rounded-md shadow-sm shadow-black`}
                 />
@@ -120,7 +120,7 @@ const Login = () => {
                     type={showPassword ? "text" : "password"}
                     id="password"
                     name="password"
-                    className={`${primaryColor} ${
+                    className={`${darkMode ? "bg-zinc-900" : "bg-white"} ${
                       darkMode ? "border border-solid border-gray" : ""
                     } mt-1 px-4 pr-10 py-3 w-full rounded-md shadow-sm shadow-black`}
                   />

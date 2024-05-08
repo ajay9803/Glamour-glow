@@ -21,6 +21,7 @@ export type TheProductType = {
   description: string;
   availableQuantity: number;
   rating: number;
+  totalReviews: number;
 };
 
 const AdminProductItem: React.FC<{ product: TheProductType }> = (props) => {

@@ -6,6 +6,7 @@ import "../../styles/home.css";
 import { TheProductType } from "../admin_account/admin_product_item";
 import { cartSliceActions } from "../../slices/cart-slice";
 import toast from "react-hot-toast";
+import "../../styles/animated_button.css";
 
 const CarouselProductItem: React.FC<{ product: TheProductType }> = (props) => {
   const themeState = useAppSelector((state) => {
@@ -13,7 +14,6 @@ const CarouselProductItem: React.FC<{ product: TheProductType }> = (props) => {
   });
 
   const darkMode = themeState.darkMode;
-  const errorTextColor = themeState.errorTextColor;
 
   const authState = useAppSelector((state) => {
     return state.auth;
@@ -106,18 +106,17 @@ const CarouselProductItem: React.FC<{ product: TheProductType }> = (props) => {
             className="header-image-first relative w-full mt-7"
           >
             <button
-              className={` w-full rounded-xl bg-gray-300 text-gray-300 px-5 py-3 font-semibold tracking-wider transition-all ease-in-out `}
+              className={`w-full rounded-xl bg-gray-300 text-gray-300 px-5 py-3 font-semibold tracking-wider transition-all ease-in-out `}
             >
               {" "}
-              Add to Cart
+              Add to Cart{" "}
             </button>
             <button
-              className={`diagonal-translate w-full absolute rounded-xl -top-2 -left-2 font-semibold tracking-wider  ${
+              className={`text-white button diagonal-translate w-full absolute rounded-xl  font-semibold tracking-wider  ${
                 darkMode ? "bg-purple-500 " : "bg-black "
-              } ${errorTextColor} px-5 py-3 transition-all ease-in-out rounded-sm`}
+              }  px-5 py-3 transition-all ease-in-out rounded-sm`}
             >
-              {" "}
-              Add to Cart
+              <p className="button-content ">Add to Cart</p>
             </button>
           </div>
         </div>

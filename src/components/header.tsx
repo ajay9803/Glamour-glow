@@ -95,7 +95,7 @@ const TheHeader: React.FC = () => {
           className="font-semibold text-xl tracking-wider cursor-pointer"
         >
           {" "}
-          PRETTYCLICK
+          GLAMOURGLOW
         </p>
         <div className="relative hidden lg:flex w-2/4">
           <input

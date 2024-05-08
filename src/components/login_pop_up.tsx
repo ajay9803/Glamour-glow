@@ -38,7 +38,7 @@ const LoginPopup: React.FC<{
           })
         );
         props.setShow();
-        
+
         navigate("/home");
       })
       .catch((e) => {
@@ -79,9 +79,9 @@ const LoginPopup: React.FC<{
           Login
         </button>
         <button
-          className={`diagonal-translate w-full absolute rounded-xl -top-2 -left-2 font-semibold tracking-wider  ${
+          className={`diagonal-translate w-full absolute rounded-xl text-white -top-2 -left-2 font-semibold tracking-wider  ${
             darkMode ? "bg-purple-500" : "bg-black"
-          } ${errorTextColor} px-4 py-2 transition-all ease-in-out rounded-sm`}
+          }  px-4 py-2 transition-all ease-in-out rounded-sm`}
         >
           {" "}
           Login

@@ -35,6 +35,7 @@ const ProductDetails: React.FC = () => {
               description: data.product.description,
               availableQuantity: data.product.quantityAvailable,
               rating: data.product.rating,
+              totalReviews: data.product.totalReviews,
             }}
           ></ProductDetailsComp>
         </div>

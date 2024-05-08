@@ -4,7 +4,6 @@ import { cartSliceActions } from "../slices/cart-slice";
 import { AppDispatch } from "../store";
 
 export const registerUser = async (newUser: NewUser) => {
-  console.log(newUser);
   const url = "http://localhost:8080/auth/signup";
 
   const formData = new FormData();
@@ -20,9 +19,7 @@ export const registerUser = async (newUser: NewUser) => {
       method: "POST",
       body: formData,
     });
-    console.log(response.status);
     const jsonData = await response.json();
-    console.log(jsonData);
 
     if (response.status === 201) {
       localStorage.setItem("token", jsonData.token);
@@ -81,11 +78,8 @@ export const getLoggedInState = () => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
 
-    console.log("token", token);
-    console.log("userdata", userData);
 
     if (userData) {
-      console.log(userData);
       const user = JSON.parse(userData);
       if (!token) {
         dispatch(
@@ -95,8 +89,6 @@ export const getLoggedInState = () => {
           })
         );
       } else {
-        console.log("auth state all good");
-        console.log(user);
         dispatch(
           authSliceActions.replaceLoggedInState({
             user: user,

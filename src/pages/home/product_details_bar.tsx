@@ -6,6 +6,7 @@ import Rating from "@mui/material/Rating";
 import { cartSliceActions } from "../../slices/cart-slice";
 import toast from "react-hot-toast";
 import { TheProductType } from "../admin_account/admin_product_item";
+import '../../styles/animated_button.css';
 
 const ProductDetailsSidebar: React.FC<{
   product: TheProductType;
@@ -31,16 +32,13 @@ const ProductDetailsSidebar: React.FC<{
 
   const dispatch = useAppDispatch();
 
-  const cartState = useAppSelector((state) => {
-    return state.cart;
-  });
 
   return (
     <div
       style={{
         scrollbarWidth: props.product.images.length > 1 ? "thin" : "none",
       }}
-      className={` ${primaryColor} ${
+      className={` ${darkMode ? "bg-zinc-900" : "bg-slate-50"} ${
         props.isOpen ? "mx-5 my-5" : "my-5 mx-0"
       } fixed flex flex-row gap-x-5 z-50  w-full md:w-3/4 lg:w-4/6 top-0 bottom-0  right-0 transition-transform duration-1000 ${
         props.isOpen ? "translate-x-0" : "translate-x-full"
@@ -124,12 +122,12 @@ const ProductDetailsSidebar: React.FC<{
             Add to Cart
           </button>
           <button
-            className={`diagonal-translate w-full absolute rounded-xl -top-2 -left-2 font-semibold tracking-wider  ${
+            className={`text-white diagonal-translate w-full absolute rounded-xl button font-semibold tracking-wider  ${
               darkMode ? "bg-purple-500" : "bg-black"
-            } ${errorTextColor} px-5 py-3 transition-all ease-in-out rounded-sm`}
+            }  px-5 py-3 transition-all ease-in-out rounded-sm`}
           >
             {" "}
-            Add to Cart
+            <p className="button-content">Add to Cart</p>
           </button>
         </div>
       </div>

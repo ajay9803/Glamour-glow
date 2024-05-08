@@ -10,6 +10,7 @@ import CustomerReviews from "./customer_reviews_section";
 import { TheProductType } from "../admin_account/admin_product_item";
 import { cartSliceActions } from "../../slices/cart-slice";
 import toast from "react-hot-toast";
+import "../../styles/animated_button.css";
 
 const ProductDetailsComp: React.FC<{ product: TheProductType }> = (props) => {
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ const ProductDetailsComp: React.FC<{ product: TheProductType }> = (props) => {
                 readOnly
                 size="medium"
               />
-              <p className="text-sm"> 16 reviews </p>
+              <p className="text-sm"> {props.product.totalReviews} reviews </p>
               <p className="text-xl font-semibold mt-5"> Description:</p>
               <p className="text-sm mt-2">{props.product.description}</p>
               <CustomerReviews product={props.product}></CustomerReviews>
@@ -126,12 +127,12 @@ const ProductDetailsComp: React.FC<{ product: TheProductType }> = (props) => {
                   Add to Cart
                 </button>
                 <button
-                  className={`diagonal-translate w-full absolute rounded-xl -top-2 -left-2 font-semibold tracking-wider  ${
+                  className={`text-white button diagonal-translate w-full absolute rounded-xl font-semibold tracking-wider  ${
                     darkMode ? "bg-purple-500" : "bg-black"
-                  } ${errorTextColor} px-5 py-3 transition-all ease-in-out rounded-sm`}
+                  }  px-5 py-3 transition-all ease-in-out rounded-sm`}
                 >
                   {" "}
-                  Add to Cart
+                  <p className="button-content">Add to Cart</p>
                 </button>
               </div>
             </div>

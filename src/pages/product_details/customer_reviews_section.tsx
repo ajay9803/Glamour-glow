@@ -7,6 +7,13 @@ import { useAppSelector } from "../../hooks/hooks";
 import toast from "react-hot-toast";
 import useFutureBuilder from "../../hooks/future_builder_hook";
 import ThePulseLoader from "../../components/pulse-loader";
+import { useNavigate } from "react-router-dom";
+import ReactPaginate from "react-paginate";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 const CustomerReviews: React.FC<{ product: TheProductType }> = (props) => {
   const [showWriteReview, setShowWriteReview] = useState(false);
@@ -20,10 +27,22 @@ const CustomerReviews: React.FC<{ product: TheProductType }> = (props) => {
   const toggleShowWriteReview = () => {
     setShowWriteReview(!showWriteReview);
   };
+  const [page, setPage] = useState(1);
 
   const { isLoading, error, data } = useFutureBuilder(
-    `http://localhost:8080/reviews/${props.product.id}`
+    `http://localhost:8080/reviews/${props.product.id}?page=${page}`
   );
+
+  const themeState = useAppSelector((state) => {
+    return state.theme;
+  });
+
+  const darkMode = themeState.darkMode;
+
+  const navigate = useNavigate();
+
+  const totalReviews = data ? data.totalReviews : 0;
+
   return (
     <div className="mt-10 flex flex-col w-full">
       {showWriteReview && (
@@ -54,9 +73,14 @@ const CustomerReviews: React.FC<{ product: TheProductType }> = (props) => {
         readOnly
         size="medium"
       />
-      {/* <p className="text-sm"> Based on {props.product.totalReviews} reviews </p> */}
+      <p className="text-sm"> Based on {props.product.totalReviews} reviews </p>
       <button
         onClick={() => {
+          if (!user) {
+            toast.success("Login to continue.");
+            navigate("/login");
+            return;
+          }
           const productIdExists = user.orderedItems.some(
             (item: any) => item.productId === props.product.id
           );
@@ -66,7 +90,7 @@ const CustomerReviews: React.FC<{ product: TheProductType }> = (props) => {
           }
           toggleShowWriteReview();
         }}
-        className="bg-purple-600 text-white px-4 py-2 mt-3 rounded-lg hover:bg-purple-800 transition-all duration-300 ease-in-out"
+        className="bg-purple-600 text-white px-4 py-2 mt-3 rounded-lg hover:bg-purple-800 transition-all duration-300 hover:translate-x-2 ease-in-out"
       >
         Add a Review
       </button>
@@ -85,6 +109,28 @@ const CustomerReviews: React.FC<{ product: TheProductType }> = (props) => {
           })}
         </div>
       )}
+      <ReactPaginate
+        // key={selectedDate?.toISOString()}
+        pageCount={Math.ceil(totalReviews / 5)}
+        pageRangeDisplayed={5}
+        marginPagesDisplayed={2}
+        onPageChange={(selectedItem) => {
+          setPage(selectedItem.selected + 1);
+        }}
+        containerClassName={darkMode ? "pagination-darkmode" : "pagination"}
+        activeClassName={"active"}
+        previousLabel={<FontAwesomeIcon icon={faChevronLeft}></FontAwesomeIcon>}
+        nextLabel={<FontAwesomeIcon icon={faChevronRight}></FontAwesomeIcon>}
+        breakLabel={"..."}
+        disabledClassName={"disabled"}
+        pageClassName={""}
+        pageLinkClassName={""}
+        previousClassName={"previous"}
+        nextClassName={"next"}
+        previousLinkClassName={""}
+        nextLinkClassName={""}
+        breakClassName={"ellipsis"}
+      />
     </div>
   );
 };

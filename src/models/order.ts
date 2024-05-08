@@ -8,13 +8,20 @@ class Order {
   zone: string;
   contactNumber: string;
   paymentMethod: string;
-  orderItems: any[];
+  orderItems: any[]; // You might want to define a type/interface for order items
   totalPrice: number;
   totalItems: number;
   paid: boolean;
   createdAt: Date;
   updatedAt: Date;
   __v: number;
+  status: number;
+  statusDetails: {
+    delivered: { value: boolean; date: Date };
+    paymentMade: { value: boolean; date: Date };
+    processing: { value: boolean; date: Date };
+    shipped: { value: boolean; date: Date };
+  };
 
   constructor({
     _id,
@@ -33,6 +40,8 @@ class Order {
     createdAt,
     updatedAt,
     __v,
+    status,
+    statusDetails,
   }: {
     _id: string;
     userId: string;
@@ -47,9 +56,16 @@ class Order {
     totalPrice: number;
     totalItems: number;
     paid: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
     __v: number;
+    status: number;
+    statusDetails: {
+      delivered: { value: boolean; date: string };
+      paymentMade: { value: boolean; date: string };
+      processing: { value: boolean; date: string };
+      shipped: { value: boolean; date: string };
+    };
   }) {
     this._id = _id;
     this.userId = userId;
@@ -64,9 +80,28 @@ class Order {
     this.totalPrice = totalPrice;
     this.totalItems = totalItems;
     this.paid = paid;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    this.createdAt = new Date(createdAt);
+    this.updatedAt = new Date(updatedAt);
     this.__v = __v;
+    this.status = status;
+    this.statusDetails = {
+      delivered: {
+        value: statusDetails.delivered.value,
+        date: new Date(statusDetails.delivered.date),
+      },
+      paymentMade: {
+        value: statusDetails.paymentMade.value,
+        date: new Date(statusDetails.paymentMade.date),
+      },
+      processing: {
+        value: statusDetails.processing.value,
+        date: new Date(statusDetails.processing.date),
+      },
+      shipped: {
+        value: statusDetails.shipped.value,
+        date: new Date(statusDetails.shipped.date),
+      },
+    };
   }
 }
 

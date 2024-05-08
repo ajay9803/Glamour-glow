@@ -19,6 +19,7 @@ const PaymentSuccessPage: React.FC = () => {
       try {
         const response = await fetch(url, {
           method: "PUT",
+
           headers: {
             Authorization: `Bearer ${authState.token}`,
           },
