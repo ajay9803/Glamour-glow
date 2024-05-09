@@ -43,6 +43,7 @@ const CheckOut: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = "Account - Checkout";
     window.scrollTo(0, scrollRef.current);
   }, []);
 

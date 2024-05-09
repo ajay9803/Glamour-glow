@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import ProductItem from "../home/product_item";
 import useFutureBuilder from "../../hooks/future_builder_hook";
 import ThePulseLoader from "../../components/pulse-loader";
@@ -17,7 +17,6 @@ import {
 
 const ProductsByCategory: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
 
   const filterBy = queryParams.get("filterBy") || "dsc";
@@ -29,6 +28,7 @@ const ProductsByCategory: React.FC = () => {
   const instockFilter = queryParams.get("instockFilter") || "all";
 
   const { category } = useParams();
+  
 
   const { isLoading, error, data } = useFutureBuilder(
     `http://localhost:8080/products/all-products/${category}?filterBy=${filterBy}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page}&instockFilter=${instockFilter}`
@@ -37,8 +37,9 @@ const ProductsByCategory: React.FC = () => {
   const scrollRef = useRef(0);
 
   useEffect(() => {
+    document.title = category || 'Glamour Glow Cosmetic';
     window.scrollTo(0, scrollRef.current);
-  }, []);
+  }, [category]);
 
   return (
     <div className="flex flex-row gap-x-4 ">
@@ -73,7 +74,7 @@ const ProductsByCategory: React.FC = () => {
           {error && <LoadError message={error.message}></LoadError>}
           <div className="div-red"></div>
           {data && !error && (
-            <div className=" grid grid-cols-2 md:grid-cols-3  gap-x-3 gap-y-4">
+            <div className=" grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-4">
               {data.products.map((product: any) => (
                 <ProductItem
                   key={product.id}
@@ -134,7 +135,7 @@ const PaginatorComponent: React.FC<{
   return (
     <ReactPaginate
       forcePage={props.page - 1}
-      pageCount={Math.ceil(props.totalItems / 6)}
+      pageCount={Math.ceil(props.totalItems / 12)}
       pageRangeDisplayed={5}
       marginPagesDisplayed={2}
       onPageChange={(selectedItem) => {

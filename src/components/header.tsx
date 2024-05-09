@@ -8,7 +8,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { themeSliceActions } from "../slices/theme_slice";
 import ThePulseLoader from "./pulse-loader";
@@ -34,9 +34,11 @@ const TheHeader: React.FC = () => {
   let totalPrice = cartState.totalPrice;
 
   const [showMenu, setShowMenu] = useState<boolean>(false);
-  const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showAuthPopup, setShowAuthPopup] = useState<boolean>(false);
+
+  const toggleSearchBar = () => {
+    setShowSearchBar(!showSearchBar);
+  };
 
   const toggleAuthPopup = () => {
     setShowAuthPopup(!showAuthPopup);
@@ -47,17 +49,45 @@ const TheHeader: React.FC = () => {
   };
 
   const dispatch = useAppDispatch();
-  let products = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
   const navigate = useNavigate();
 
   const {
+    isLoading,
+    error,
+    data,
     text,
     startListening,
     isListening,
     hasRecognitionSupport,
     setTextValue,
   } = useSpeechRecognition();
+
+  const [showSearchBar, setShowSearchBar] = useState<boolean>(text.length > 0);
+
+  // const searchBarRef = useRef<HTMLDivElement>(null);
+  const authPopupRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setShowSearchBar(text.length > 0);
+  }, [text]);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      authPopupRef.current &&
+      !authPopupRef.current.contains(event.target as Node)
+    ) {
+      setShowAuthPopup(false);
+    } else {
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col sticky top-0 z-30">
@@ -71,10 +101,16 @@ const TheHeader: React.FC = () => {
           onClick={() => {
             setShowSearchBar(false);
             setShowAuthPopup(false);
+            setTextValue("");
           }}
         ></div>
       )}
-      <div className="w-full flex flex-row items-center justify-between px-10 py-8 bg-zinc-950 text-white gap-x-6">
+      <div
+        onClick={() => {
+          setShowSearchBar(false);
+        }}
+        className="w-full flex flex-row items-center justify-between px-10 py-8 bg-zinc-950 text-white gap-x-6"
+      >
         <div className="flex lg:hidden mt-1.5 pr-4 ">
           <FontAwesomeIcon
             icon={faBars}
@@ -99,15 +135,8 @@ const TheHeader: React.FC = () => {
         </p>
         <div className="relative hidden lg:flex w-2/4">
           <input
-            onClick={() => {
-              setShowSearchBar(true);
-            }}
             onChange={(e) => {
               setTextValue(e.target.value);
-              setIsLoading(true);
-              setTimeout(() => {
-                setIsLoading(false);
-              }, 3000);
             }}
             value={text}
             placeholder="What are you looking for ?"
@@ -150,14 +179,44 @@ const TheHeader: React.FC = () => {
                   <ThePulseLoader color="purple" />
                 </div>
               )}
-              {!isLoading && (
+              {error && (
+                <p className="text-center font-semibold tracking-wider">
+                  {" "}
+                  {error.message}{" "}
+                </p>
+              )}
+              {text.length === 0 && (
+                <p className="text-center font-semibold tracking-wider">
+                  {" "}
+                  Search for products.{" "}
+                </p>
+              )}
+              {text.length > 0 && data && data.products.length > 0 && (
                 <div className="flex flex-col px-6">
                   <p className="mb-3 text-sm font-semibold tracking-wider">
                     Products
                   </p>
                   <div className=" grid grid-cols-1 md:grid-cols-2  gap-3">
-                    {products.map((product) => (
-                      <SearchItem></SearchItem>
+                    {data.products.map((product: any) => (
+                      <SearchItem
+                        key={product.id}
+                        toggleShow={toggleSearchBar}
+                        toggleText={() => {
+                          setTextValue("");
+                        }}
+                        product={{
+                          id: product._id,
+                          brand: product.brand,
+                          category: product.category,
+                          name: product.name,
+                          images: product.images,
+                          price: product.price,
+                          description: product.description,
+                          availableQuantity: product.quantityAvailable,
+                          rating: product.rating,
+                          totalReviews: product.totalReviews,
+                        }}
+                      ></SearchItem>
                     ))}
                   </div>
                 </div>
@@ -170,6 +229,7 @@ const TheHeader: React.FC = () => {
             className="cursor-pointer text-lg hidden lg:flex"
             onClick={() => {
               dispatch(themeSliceActions.toggleDarkMode());
+              setShowSearchBar(false);
             }}
             icon={darkMode ? faSun : faMoon}
           ></FontAwesomeIcon>
@@ -184,14 +244,18 @@ const TheHeader: React.FC = () => {
             <FontAwesomeIcon
               onClick={() => {
                 setShowAuthPopup(!showAuthPopup);
+                setShowSearchBar(false);
               }}
               className="cursor-pointer  text-lg hidden lg:flex"
               icon={faUser}
             ></FontAwesomeIcon>
-            <HeaderAuthPopUp
-              show={showAuthPopup}
-              setShow={toggleAuthPopup}
-            ></HeaderAuthPopUp>
+            <div ref={authPopupRef}>
+              {" "}
+              <HeaderAuthPopUp
+                show={showAuthPopup}
+                setShow={toggleAuthPopup}
+              ></HeaderAuthPopUp>
+            </div>
           </div>
           <div
             onClick={() => {
@@ -236,10 +300,6 @@ const TheHeader: React.FC = () => {
               value={text}
               onChange={(e) => {
                 setTextValue(e.target.value);
-                setIsLoading(true);
-                setTimeout(() => {
-                  setIsLoading(false);
-                }, 3000);
               }}
               placeholder="What are you looking for ?"
               className={`px-3 py-3 rounded-sm  w-full pl-10 pr-16  ${primaryColor} ${primaryTextColor}`}
@@ -275,14 +335,44 @@ const TheHeader: React.FC = () => {
               <ThePulseLoader color="purple" />
             </div>
           )}
-          {!isLoading && (
+          {error && (
+            <p className="text-center font-semibold tracking-wider">
+              {" "}
+              {error.message}{" "}
+            </p>
+          )}
+          {text.length === 0 && (
+            <p className="text-center font-semibold tracking-wider">
+              {" "}
+              Search for products.{" "}
+            </p>
+          )}
+          {text.length > 0 && data && data.products.length > 0 && (
             <div className="flex flex-col px-6">
               <p className="mb-3 text-sm font-semibold tracking-wider">
                 Products
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {products.map((product) => (
-                  <SearchItem></SearchItem>
+              <div className=" grid grid-cols-1 md:grid-cols-2  gap-3">
+                {data.products.map((product: any) => (
+                  <SearchItem
+                    key={product.id}
+                    toggleShow={toggleSearchBar}
+                    toggleText={() => {
+                      setTextValue("");
+                    }}
+                    product={{
+                      id: product._id,
+                      brand: product.brand,
+                      category: product.category,
+                      name: product.name,
+                      images: product.images,
+                      price: product.price,
+                      description: product.description,
+                      availableQuantity: product.quantityAvailable,
+                      rating: product.rating,
+                      totalReviews: product.totalReviews,
+                    }}
+                  ></SearchItem>
                 ))}
               </div>
             </div>

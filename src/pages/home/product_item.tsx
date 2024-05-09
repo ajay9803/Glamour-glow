@@ -55,7 +55,7 @@ const ProductItem: React.FC<{ product: TheProductType }> = (props) => {
           onClick={() => {
             navigate(`/product-details/${props.product.id}`);
           }}
-          className="h-52 lg:h-72 w-full relative overflow-hidden rounded-xl shadow-sm shadow-black scale-95 hover:scale-100 transition-all"
+          className="h-60 md:h-52 lg:h-56 w-full relative overflow-hidden rounded-xl shadow-sm shadow-black scale-95 hover:scale-100 transition-all"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >

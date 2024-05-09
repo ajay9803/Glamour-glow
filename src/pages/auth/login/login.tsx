@@ -67,6 +67,7 @@ const Login = () => {
   const scrollRef = useRef(0);
 
   useEffect(() => {
+    document.title = "Account - Glamour Glow Cosmetic";
     window.scrollTo(0, scrollRef.current);
   });
 

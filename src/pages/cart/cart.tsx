@@ -27,6 +27,7 @@ const CartPage = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    document.title = "Account - My Cart";
     window.scrollTo(0, scrollRef.current);
   }, []);
 

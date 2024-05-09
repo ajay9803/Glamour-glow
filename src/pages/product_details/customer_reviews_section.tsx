@@ -184,7 +184,7 @@ const ReviewFilter: React.FC<{ setSortBy: (sortBy: string) => void }> = (
     };
   }, []);
 
-  const themeState = useAppSelector((state) => {
+  const themeState = useAppSelector((state) => {  
     return state.theme;
   });
 

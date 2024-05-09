@@ -5,9 +5,10 @@ import RegisterPopup from "./register_pop_up";
 import { logOut } from "../action_creators/auth_action";
 import { useNavigate } from "react-router-dom";
 
-const HeaderAuthPopUp: React.FC<{ show: boolean; setShow: () => void }> = (
-  props
-) => {
+const HeaderAuthPopUp: React.FC<{
+  show: boolean;
+  setShow: () => void;
+}> = (props) => {
   const themeState = useAppSelector((state) => {
     return state.theme;
   });

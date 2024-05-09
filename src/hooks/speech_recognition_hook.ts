@@ -8,6 +8,9 @@ if ("webkitSpeechRecognition" in window) {
 }
 
 const useSpeechRecognition = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [data, setData] = useState<any>(null);
+  const [error, setError] = useState<any>(null);
   const [text, setText] = useState<string>("");
   const [isListening, setIsListening] = useState<boolean>(false);
 
@@ -35,7 +38,46 @@ const useSpeechRecognition = () => {
     setText(typedText);
   };
 
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      setError(null);
+      setData(null);
+      try {
+        const response = await fetch(
+          `http://localhost:8080/products/products-by-search?name=${text}`
+        );
+        const data = await response.json();
+
+        console.log(response.status);
+        console.log(data);
+
+        if (response.status === 200) {
+          console.log("Data fetched.");
+          setData(data);
+        } else {
+          console.log("Error while fetching.");
+          const error = new Error(data.message);
+          setError(error);
+        }
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    // if (text.length === 0) {
+    //   setData(null);
+    //   return;
+    // }
+
+    fetchSearchResults();
+  }, [text]);
+
   return {
+    isLoading,
+    error,
+    data,
     text,
     isListening,
     startListening,

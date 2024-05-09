@@ -5,6 +5,7 @@ import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import Slider from "rc-slider";
 import "../../styles/check_box.css";
 import { useNavigate } from "react-router-dom";
+import "../../styles/slider.css";
 
 const FilterBar: React.FC<{
   currentPage: number;
@@ -43,12 +44,16 @@ const FilterBar: React.FC<{
 
     setRange([props.minPrice, props.maxPrice]);
     setInstockFilter(props.instockFilter);
-    setInstock(props.instockFilter === "all" || props.instockFilter === "instock"
-    ? true
-    : false);
-    setOutofstock(props.instockFilter === "all" || props.instockFilter === "outofstock"
-    ? true
-    : false);
+    setInstock(
+      props.instockFilter === "all" || props.instockFilter === "instock"
+        ? true
+        : false
+    );
+    setOutofstock(
+      props.instockFilter === "all" || props.instockFilter === "outofstock"
+        ? true
+        : false
+    );
   }, [
     props.filterBy,
     props.minPrice,
@@ -71,9 +76,7 @@ const FilterBar: React.FC<{
         onChange={(e) => {
           setFilterBy(e.target.value);
           navigate(
-            `/products/${category}?filterBy=${e.target.value}&minPrice=${
-              range[0]
-            }&maxPrice=${range[1]}&page=1&instockFilter=${instockFilter}`
+            `/products/${category}?filterBy=${e.target.value}&minPrice=${range[0]}&maxPrice=${range[1]}&page=1&instockFilter=${instockFilter}`
           );
           window.scrollTo(0, scrollRef.current);
         }}
@@ -112,7 +115,7 @@ const FilterBar: React.FC<{
         <p> Price </p>
         <Slider
           key={`${props.minPrice}${props.maxPrice}`}
-          className="my-3"
+          className="my-3 custom-slider"
           range={true}
           defaultValue={range}
           count={1}
@@ -122,11 +125,7 @@ const FilterBar: React.FC<{
           onChange={handleRangeChange}
           onChangeComplete={(newRange: any) => {
             navigate(
-              `/products/${category}?filterBy=${filterBy}&minPrice=${
-                newRange[0]
-              }&maxPrice=${
-                newRange[1]
-              }&page=1&instockFilter=${instockFilter}`
+              `/products/${category}?filterBy=${filterBy}&minPrice=${newRange[0]}&maxPrice=${newRange[1]}&page=1&instockFilter=${instockFilter}`
             );
             window.scrollTo(0, scrollRef.current);
           }}
@@ -155,19 +154,27 @@ const FilterBar: React.FC<{
                 setInstock(isChecked);
                 if (isChecked && outofstock) {
                   navigate(
-                    `/products/${category}?filterBy=${filterBy}&minPrice=${range[0]}&maxPrice=${range[1]}&page=${1}&instockFilter=all`
+                    `/products/${category}?filterBy=${filterBy}&minPrice=${
+                      range[0]
+                    }&maxPrice=${range[1]}&page=${1}&instockFilter=all`
                   );
                 } else if (isChecked && !outofstock) {
                   navigate(
-                    `/products/${category}?filterBy=${filterBy}&minPrice=${range[0]}&maxPrice=${range[1]}&page=${1}&instockFilter=instock`
+                    `/products/${category}?filterBy=${filterBy}&minPrice=${
+                      range[0]
+                    }&maxPrice=${range[1]}&page=${1}&instockFilter=instock`
                   );
                 } else if (!isChecked && outofstock) {
                   navigate(
-                    `/products/${category}?filterBy=${filterBy}&minPrice=${range[0]}&maxPrice=${range[1]}&page=${1}&instockFilter=outofstock`
+                    `/products/${category}?filterBy=${filterBy}&minPrice=${
+                      range[0]
+                    }&maxPrice=${range[1]}&page=${1}&instockFilter=outofstock`
                   );
                 } else {
                   navigate(
-                    `/products/${category}?filterBy=${filterBy}&minPrice=${range[0]}&maxPrice=${range[1]}&page=${1}&instockFilter=all`
+                    `/products/${category}?filterBy=${filterBy}&minPrice=${
+                      range[0]
+                    }&maxPrice=${range[1]}&page=${1}&instockFilter=all`
                   );
                 }
                 window.scrollTo(0, scrollRef.current);
@@ -178,11 +185,7 @@ const FilterBar: React.FC<{
               className="mr-3 h-7 w-7  checked:bg-purple-500 checked:border-white border border-solid"
             />
             <span className="text tracking-wider">In stock</span>
-            {/* {instock && (
-              <span className="absolute left-1.5 top-0.5 ">
-                <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
-              </span>
-            )} */}
+            
           </div>
           <div className="w-full relative flex flex-row items-center">
             <input
@@ -192,23 +195,30 @@ const FilterBar: React.FC<{
                 setOutofstock(isChecked);
                 if (isChecked && instock) {
                   navigate(
-                    `/products/${category}?filterBy=${filterBy}&minPrice=${range[0]}&maxPrice=${range[1]}&page=${1}&instockFilter=all`
+                    `/products/${category}?filterBy=${filterBy}&minPrice=${
+                      range[0]
+                    }&maxPrice=${range[1]}&page=${1}&instockFilter=all`
                   );
                 } else if (isChecked && !instock) {
                   navigate(
-                    `/products/${category}?filterBy=${filterBy}&minPrice=${range[0]}&maxPrice=${range[1]}&page=${1}&instockFilter=outofstock`
+                    `/products/${category}?filterBy=${filterBy}&minPrice=${
+                      range[0]
+                    }&maxPrice=${range[1]}&page=${1}&instockFilter=outofstock`
                   );
                 } else if (!isChecked && instock) {
                   navigate(
-                    `/products/${category}?filterBy=${filterBy}&minPrice=${range[0]}&maxPrice=${range[1]}&page=${1}&instockFilter=instock`
+                    `/products/${category}?filterBy=${filterBy}&minPrice=${
+                      range[0]
+                    }&maxPrice=${range[1]}&page=${1}&instockFilter=instock`
                   );
                 } else {
                   navigate(
-                    `/products/${category}?filterBy=${filterBy}&minPrice=${range[0]}&maxPrice=${range[1]}&page=${1}&instockFilter=all`
+                    `/products/${category}?filterBy=${filterBy}&minPrice=${
+                      range[0]
+                    }&maxPrice=${range[1]}&page=${1}&instockFilter=all`
                   );
                 }
                 window.scrollTo(0, scrollRef.current);
-
               }}
               type="checkbox"
               id="myCheckbox"

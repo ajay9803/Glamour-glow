@@ -16,6 +16,7 @@ const Home = () => {
   const darkMode = themeState.darkMode;
 
   useEffect(() => {
+    document.title = 'Glamour Glow Cosmetic';
     window.scrollTo(0, scrollRef.current);
 
     const observer = new IntersectionObserver(

@@ -14,6 +14,7 @@ const PaymentSuccessPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = "Checkout - Payment Success";
     const makePayment = async (orderId: string) => {
       const url = `http://localhost:8080/orders/make-payment/${orderId}`;
       try {
