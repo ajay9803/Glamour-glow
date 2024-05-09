@@ -78,7 +78,7 @@ const OrderStatusDetails: React.FC<{ order: Order }> = (props) => {
           value={1}
           icon={<FontAwesomeIcon icon={faWallet}></FontAwesomeIcon>}
           event="Payment Made"
-          date={new Date()}
+          date={new Date(props.order.statusDetails.paymentMade.date)}
         />
         <TimelineEvent
           status={orderStatus}
@@ -86,7 +86,7 @@ const OrderStatusDetails: React.FC<{ order: Order }> = (props) => {
           value={2}
           icon={<FontAwesomeIcon icon={faTruck}></FontAwesomeIcon>}
           event="Order Processed"
-          date={new Date()}
+          date={new Date(props.order.statusDetails.processing.date)}
         />
         <TimelineEvent
           status={orderStatus}
@@ -94,7 +94,7 @@ const OrderStatusDetails: React.FC<{ order: Order }> = (props) => {
           value={3}
           icon={<FontAwesomeIcon icon={faTruckFast}></FontAwesomeIcon>}
           event="Order Shipped"
-          date={new Date()}
+          date={new Date(props.order.statusDetails.shipped.date)}
         />
         <TimelineEvent
           status={orderStatus}
@@ -102,7 +102,7 @@ const OrderStatusDetails: React.FC<{ order: Order }> = (props) => {
           value={4}
           icon={<FontAwesomeIcon icon={faShoppingBag}></FontAwesomeIcon>}
           event="Order Delivered"
-          date={new Date()}
+          date={new Date(props.order.statusDetails.delivered.date)}
         />
       </div>
       {user.status === "admin" && orderStatus !== 4 && orderStatus !== 0 && (

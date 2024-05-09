@@ -21,7 +21,7 @@ const CheckOut: React.FC = () => {
     return state.theme;
   });
   const darkMode = themeState.darkMode;
-  const primaryColor = themeState.primaryColor;
+  // const primaryColor = themeState.primaryColor;
 
   const cartState = useAppSelector((state) => {
     return state.cart;
@@ -116,7 +116,7 @@ const CheckOut: React.FC = () => {
                     type="text"
                     id="houseNumber"
                     name="houseNumber"
-                    className={`${primaryColor} ${
+                    className={`${darkMode ? "bg-zinc-900" : "bg-white"} ${
                       darkMode ? "border border-solid border-gray" : ""
                     } shadow-sm shadow-black rounded-md px-3 py-2  w-full`}
                   />
@@ -136,7 +136,7 @@ const CheckOut: React.FC = () => {
                     type="text"
                     id="streetName"
                     name="streetName"
-                    className={`${primaryColor} ${
+                    className={`${darkMode ? "bg-zinc-900" : "bg-white"} ${
                       darkMode ? "border border-solid border-gray" : ""
                     } shadow-sm shadow-black rounded-md px-3 py-2  w-full`}
                   />
@@ -157,7 +157,7 @@ const CheckOut: React.FC = () => {
                     type="text"
                     id="city"
                     name="city"
-                    className={`${primaryColor} ${
+                    className={`${darkMode ? "bg-zinc-900" : "bg-white"} ${
                       darkMode ? "border border-solid border-gray" : ""
                     } shadow-sm shadow-black rounded-md px-3 py-2  w-full`}
                   />
@@ -177,7 +177,7 @@ const CheckOut: React.FC = () => {
                     type="text"
                     id="district"
                     name="district"
-                    className={`${primaryColor} ${
+                    className={`${darkMode ? "bg-zinc-900" : "bg-white"} ${
                       darkMode ? "border border-solid border-gray" : ""
                     } shadow-sm shadow-black rounded-md px-3 py-2  w-full`}
                   />
@@ -198,7 +198,7 @@ const CheckOut: React.FC = () => {
                     type="text"
                     id="zone"
                     name="zone"
-                    className={`${primaryColor} ${
+                    className={`${darkMode ? "bg-zinc-900" : "bg-white"} ${
                       darkMode ? "border border-solid border-gray" : ""
                     } shadow-sm shadow-black rounded-md px-3 py-2  w-full`}
                   />
@@ -219,7 +219,7 @@ const CheckOut: React.FC = () => {
                     id="phoneNumber"
                     name="phoneNumber"
                     pattern="[0-9]{10}"
-                    className={`${primaryColor} ${
+                    className={`${darkMode ? "bg-zinc-900" : "bg-white"} ${
                       darkMode ? "border border-solid border-gray" : ""
                     } shadow-sm shadow-black rounded-md px-3 py-2  w-full`}
                   />
@@ -295,7 +295,7 @@ const CheckOut: React.FC = () => {
                 className="h-10 w-44 tracking-wider bg-purple-500 hover:bg-purple-700 text-white font-semibold rounded mt-4 transition-all duration-700 ease-in"
               >
                 {isSubmitting ? (
-                  <ThePulseLoader></ThePulseLoader>
+                  <ThePulseLoader color="white"></ThePulseLoader>
                 ) : (
                   "Place Order"
                 )}

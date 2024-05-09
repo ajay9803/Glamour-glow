@@ -13,7 +13,7 @@ const AdminProductsPage: React.FC = () => {
     <div className="w-full">
       {isLoading && (
         <div className="h-44 flex flex-row justify-center items-center">
-          <ThePulseLoader></ThePulseLoader>
+          <ThePulseLoader color="purple"></ThePulseLoader>
         </div>
       )}
       {error && <LoadError message={error.message}></LoadError>}

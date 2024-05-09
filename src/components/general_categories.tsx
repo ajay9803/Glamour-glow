@@ -16,6 +16,11 @@ const GeneralCategories: React.FC = () => {
 
   const navigate = useNavigate();
 
+  const navigateToACategory = (category: string) => {
+    navigate(
+      `/products/${category}?filterBy=dsc&minPrice=0&maxPrice=25000&page=1&instockFilter=all`
+    );
+  };
   return (
     <div
       className={`flex-row  hidden lg:flex ${
@@ -46,7 +51,7 @@ const GeneralCategories: React.FC = () => {
             <div className="flex flex-col gap-y-4">
               <p
                 onClick={() => {
-                  navigate("/products/Foundation");
+                  navigateToACategory("Foundation");
                 }}
                 className="hover:underline hover:decoration-1 text-sm font-semibold tracking-wider cursor-pointer"
               >
@@ -55,7 +60,7 @@ const GeneralCategories: React.FC = () => {
               </p>
               <p
                 onClick={() => {
-                  navigate("/products/Blush");
+                  navigateToACategory("Blush");
                 }}
                 className="hover:underline hover:decoration-1 text-sm font-semibold tracking-wider cursor-pointer"
               >
@@ -64,7 +69,7 @@ const GeneralCategories: React.FC = () => {
               </p>
               <p
                 onClick={() => {
-                  navigate("/products/Concealer");
+                  navigateToACategory("Concealer");
                 }}
                 className="hover:underline hover:decoration-1 text-sm font-semibold tracking-wider cursor-pointer"
               >
@@ -73,7 +78,7 @@ const GeneralCategories: React.FC = () => {
               </p>
               <p
                 onClick={() => {
-                  navigate("/products/Bronzer");
+                  navigateToACategory("Bronzer");
                 }}
                 className="hover:underline hover:decoration-1 text-sm font-semibold tracking-wider cursor-pointer"
               >
@@ -82,7 +87,7 @@ const GeneralCategories: React.FC = () => {
               </p>
               <p
                 onClick={() => {
-                  navigate("/products/Primer");
+                  navigateToACategory("Primer");
                 }}
                 className="hover:underline hover:decoration-1 text-sm font-semibold tracking-wider cursor-pointer"
               >
@@ -93,7 +98,7 @@ const GeneralCategories: React.FC = () => {
             <div className="flex flex-col gap-y-4">
               <p
                 onClick={() => {
-                  navigate("/products/Mascara");
+                  navigateToACategory("Mascara");
                 }}
                 className="hover:underline hover:decoration-1 text-sm font-semibold tracking-wider cursor-pointer"
               >
@@ -102,7 +107,7 @@ const GeneralCategories: React.FC = () => {
               </p>
               <p
                 onClick={() => {
-                  navigate("/products/Eyeliner");
+                  navigateToACategory("Eyeliner");
                 }}
                 className="hover:underline hover:decoration-1 text-sm font-semibold tracking-wider cursor-pointer"
               >
@@ -111,7 +116,7 @@ const GeneralCategories: React.FC = () => {
               </p>
               <p
                 onClick={() => {
-                  navigate("/products/Eyeshadow");
+                  navigateToACategory("Eyeshadow");
                 }}
                 className="hover:underline hover:decoration-1 text-sm font-semibold tracking-wider cursor-pointer"
               >
@@ -122,7 +127,7 @@ const GeneralCategories: React.FC = () => {
             <div className="flex flex-col gap-y-4">
               <p
                 onClick={() => {
-                  navigate("/products/Liquid Lipstick");
+                  navigateToACategory("Liquid Lipstick");
                 }}
                 className="hover:underline hover:decoration-1 text-sm font-semibold tracking-wider cursor-pointer"
               >
@@ -131,7 +136,7 @@ const GeneralCategories: React.FC = () => {
               </p>
               <p
                 onClick={() => {
-                  navigate("/products/Lip Liner");
+                  navigateToACategory("Lip Liner");
                 }}
                 className="hover:underline hover:decoration-1 text-sm font-semibold tracking-wider cursor-pointer"
               >
@@ -140,7 +145,7 @@ const GeneralCategories: React.FC = () => {
               </p>
               <p
                 onClick={() => {
-                  navigate("/products/Lip Balm");
+                  navigateToACategory("Lip Balm");
                 }}
                 className="hover:underline hover:decoration-1 text-sm font-semibold tracking-wider cursor-pointer"
               >
@@ -149,7 +154,7 @@ const GeneralCategories: React.FC = () => {
               </p>
               <p
                 onClick={() => {
-                  navigate("/products/Lipstick");
+                  navigateToACategory("Lipstick");
                 }}
                 className="hover:underline hover:decoration-1 text-sm font-semibold tracking-wider cursor-pointer"
               >
@@ -162,9 +167,7 @@ const GeneralCategories: React.FC = () => {
       </div>
       <p
         onClick={() => {
-          navigate(
-            "/products/Skincare?filterBy=dsc&minPrice=0&maxPrice=25000&page=1&instockFilter=all"
-          );
+          navigateToACategory("Skincare");
         }}
         className="font-semibold cursor-pointer hover:bg-purple-600 px-5 py-4 transition-all duration-200 ease-in"
       >
@@ -194,7 +197,7 @@ const GeneralCategories: React.FC = () => {
           >
             <p
               onClick={() => {
-                navigate("/products/Deodorant");
+                navigateToACategory("Deodorant");
               }}
               className="hover:underline hover:decoration-1 cursor-pointer text-sm font-semibold tracking-wider"
             >
@@ -203,7 +206,7 @@ const GeneralCategories: React.FC = () => {
             </p>
             <p
               onClick={() => {
-                navigate("/products/Body Wash");
+                navigateToACategory("Body Wash");
               }}
               className=" hover:underline hover:decoration-1 cursor-pointer text-sm font-semibold tracking-wider"
             >
@@ -237,7 +240,7 @@ const GeneralCategories: React.FC = () => {
           >
             <p
               onClick={() => {
-                navigate("/products/Blending Sponge");
+                navigateToACategory("Blending Sponge");
               }}
               className="hover:underline hover:decoration-1 cursor-pointer text-sm font-semibold tracking-wider"
             >
@@ -246,7 +249,7 @@ const GeneralCategories: React.FC = () => {
             </p>
             <p
               onClick={() => {
-                navigate("/products/Makeup Brush");
+                navigateToACategory("Makeup Brush");
               }}
               className="hover:underline hover:decoration-1 cursor-pointer text-sm font-semibold tracking-wider"
             >

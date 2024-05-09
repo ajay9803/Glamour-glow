@@ -1,7 +1,7 @@
 import { Rating } from "@mui/material";
 import ReviewItem from "./review_item";
 import WriteReview from "../../components/write-review";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TheProductType } from "../admin_account/admin_product_item";
 import { useAppSelector } from "../../hooks/hooks";
 import toast from "react-hot-toast";
@@ -13,10 +13,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
+  faFilter,
 } from "@fortawesome/free-solid-svg-icons";
 
 const CustomerReviews: React.FC<{ product: TheProductType }> = (props) => {
   const [showWriteReview, setShowWriteReview] = useState(false);
+  const [sortBy, setSortBy] = useState("recent");
 
   const authState = useAppSelector((state) => {
     return state.auth;
@@ -30,7 +32,7 @@ const CustomerReviews: React.FC<{ product: TheProductType }> = (props) => {
   const [page, setPage] = useState(1);
 
   const { isLoading, error, data } = useFutureBuilder(
-    `http://localhost:8080/reviews/${props.product.id}?page=${page}`
+    `http://localhost:8080/reviews/${props.product.id}?page=${page}&sortBy=${sortBy}`
   );
 
   const themeState = useAppSelector((state) => {
@@ -95,10 +97,14 @@ const CustomerReviews: React.FC<{ product: TheProductType }> = (props) => {
         Add a Review
       </button>
 
-      <p className="mt-5 mb-3 text-xl font-semibold"> Reviews</p>
+      <div className="flex flex-row w-full justify-between items-center">
+        <p className="mt-5 mb-3 text-xl font-semibold"> Reviews</p>
+
+        <ReviewFilter setSortBy={setSortBy}></ReviewFilter>
+      </div>
       {isLoading && (
         <div className="h-52 w-full flex flex-row items-center justify-center">
-          <ThePulseLoader></ThePulseLoader>
+          <ThePulseLoader color="purple"></ThePulseLoader>
         </div>
       )}
       {error && <p> {error.message} </p>}
@@ -136,3 +142,108 @@ const CustomerReviews: React.FC<{ product: TheProductType }> = (props) => {
 };
 
 export default CustomerReviews;
+
+const ReviewFilter: React.FC<{ setSortBy: (sortBy: string) => void }> = (
+  props
+) => {
+  const [selectedFilter, setSelectedFilter] = useState<string>("Most Recent");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleFilterChange = (filter: string) => {
+    switch (filter) {
+      case "highest":
+        setSelectedFilter("Highest Rating");
+        break;
+      case "lowest":
+        setSelectedFilter("Lowest Rating");
+        break;
+      case "recent":
+        setSelectedFilter("Most Recent");
+        break;
+      default:
+        break;
+    }
+    props.setSortBy(filter);
+    setIsOpen(false);
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const themeState = useAppSelector((state) => {
+    return state.theme;
+  });
+
+  const darkMode = themeState.darkMode;
+
+  return (
+    <div className="flex flex-row items-center gap-x-2">
+      <p className="font-light"> {selectedFilter} </p>
+      <div className="relative inline-block text-center" ref={dropdownRef}>
+        <div
+          onClick={() => setIsOpen(!isOpen)}
+          className="cursor-pointer flex flex-row justify-center items-center px-1.5 py-1.5 border border-solid border-gray-700 rounded-sm"
+        >
+          <FontAwesomeIcon
+            aria-haspopup="true"
+            aria-expanded={isOpen}
+            icon={faFilter}
+            className={`${darkMode ? "text-white" : "text-black"} text-sm`}
+          ></FontAwesomeIcon>
+        </div>
+        {isOpen && (
+          <div
+            className={`${
+              darkMode ? "bg-zinc-800 text-white" : "bg-white text-black"
+            } absolute right-0 mt-2 w-32 flex flex-col items-center rounded-md shadow-lg ring-1 ring-black ring-opacity-5`}
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="options-menu"
+          >
+            <button
+              onClick={() => handleFilterChange("highest")}
+              className={`${
+                darkMode ? "hover:bg-slate-500" : "hover:bg-slate-200"
+              } block px-4 py-2 text-sm  hover:rounded-md  w-full`}
+              role="menuitem"
+            >
+              Highest Rating
+            </button>
+            <button
+              onClick={() => handleFilterChange("lowest")}
+              className={`${
+                darkMode ? "hover:bg-slate-500" : "hover:bg-slate-200"
+              } block px-4 py-2 text-sm  hover:rounded-md  w-full`}
+              role="menuitem"
+            >
+              Lowest Rating
+            </button>
+            <button
+              onClick={() => handleFilterChange("recent")}
+              className={`${
+                darkMode ? "hover:bg-slate-500" : "hover:bg-slate-200"
+              } block px-4 py-2 text-sm  hover:rounded-md  w-full`}
+              role="menuitem"
+            >
+              Most Recent
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};

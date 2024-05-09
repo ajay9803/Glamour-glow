@@ -44,7 +44,7 @@ const OrderDetailsPage: React.FC = () => {
     <div className="w-full flex flex-col">
       {isLoading && (
         <div className="h-52 w-full flex flex-row items-center justify-center">
-          <ThePulseLoader></ThePulseLoader>
+          <ThePulseLoader color="purple"></ThePulseLoader>
         </div>
       )}
       {error && <LoadError message={error.message}></LoadError>}
@@ -170,7 +170,7 @@ const OrderDetailsPage: React.FC = () => {
             </div>
 
             <div className="flex flex-col w-full gap-y-4">
-              {data.orderItems.map((orderItem: any) => {
+              {data.order.orderItems.map((orderItem: any) => {
                 return <OrderItem order={orderItem}></OrderItem>;
               })}
             </div>
@@ -247,17 +247,17 @@ const OrderItem: React.FC<{ order: any }> = (props) => {
           className={` h-20 w-20 border border-solid object-cover ${
             darkMode ? "border-white bg-zinc-900" : "border-black bg-slate-50"
           }`}
-          src={`http://localhost:8080/images/${props.order.product.images[0]}`}
+          src={`http://localhost:8080/images/${props.order.productId.images[0]}`}
           alt="order-product"
         ></img>
         <div className="flex flex-col">
           <p className="text-xl font-semibold tracking-wider">
             {" "}
-            {props.order.product.name}{" "}
+            {props.order.productId.name}{" "}
           </p>
           <p className="text-sm font-light tracking-wider">
             {" "}
-            {props.order.product.brand}{" "}
+            {props.order.productId.brand}{" "}
           </p>
         </div>
       </div>

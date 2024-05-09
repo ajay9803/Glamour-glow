@@ -147,7 +147,7 @@ const TheHeader: React.FC = () => {
             >
               {isLoading && (
                 <div className="flex flex-row justify-center">
-                  <ThePulseLoader />
+                  <ThePulseLoader color="purple" />
                 </div>
               )}
               {!isLoading && (
@@ -272,7 +272,7 @@ const TheHeader: React.FC = () => {
           </div>
           {isLoading && (
             <div className="flex flex-row justify-center">
-              <ThePulseLoader />
+              <ThePulseLoader color="purple" />
             </div>
           )}
           {!isLoading && (

@@ -87,7 +87,13 @@ const LoginPopup: React.FC<{
           Login
         </button>
       </div>
-      <p className="text-sm underline decoration-1 w-full text-center">
+      <p
+        onClick={() => {
+          navigate("/forgot-password");
+          props.setShow();
+        }}
+        className="text-sm hover:underline hover:decoration-1 w-full text-center cursor-pointer"
+      >
         {" "}
         Forgot your password ?
       </p>
@@ -95,7 +101,7 @@ const LoginPopup: React.FC<{
         onClick={() => {
           props.toggleLoginPopup("register");
         }}
-        className="text-sm underline decoration-1 w-full text-center cursor-pointer"
+        className="text-sm hover:underline hover:decoration-1 w-full text-center cursor-pointer"
       >
         {" "}
         Create Account

@@ -67,7 +67,7 @@ const AdminOrderHistory: React.FC = () => {
       </div>
       {isLoading && (
         <div className="h-52 w-full flex flex-row items-center justify-center">
-          <ThePulseLoader></ThePulseLoader>
+          <ThePulseLoader color="purple"></ThePulseLoader>
         </div>
       )}
       {error && <LoadError message={error.message}></LoadError>}
@@ -76,7 +76,7 @@ const AdminOrderHistory: React.FC = () => {
           {" "}
           {data.orders.map((order: any) => {
             return (
-              <OrderItem key={order.order._id} order={new Order(order.order)}></OrderItem>
+              <OrderItem key={order._id} order={new Order(order)}></OrderItem>
             );
           })}{" "}
         </div>

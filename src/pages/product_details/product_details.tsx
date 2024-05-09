@@ -19,7 +19,7 @@ const ProductDetails: React.FC = () => {
   }, []);
   return (
     <div className="flex flex-col w-full my-10">
-      {isLoading && <PetDetailsShimmer></PetDetailsShimmer>}
+      {isLoading && <PetDetailsShimmer ></PetDetailsShimmer>}
       {error && <LoadError message={error.message}></LoadError>}
       {data && (
         <div className="flex flex-col">

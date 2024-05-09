@@ -68,7 +68,7 @@ const UserOrders: React.FC = () => {
       </div>
       {isLoading && (
         <div className="h-52 w-full flex flex-row items-center justify-center">
-          <ThePulseLoader></ThePulseLoader>
+          <ThePulseLoader color="purple"></ThePulseLoader>
         </div>
       )}
       {error && <LoadError message={error.message}></LoadError>}

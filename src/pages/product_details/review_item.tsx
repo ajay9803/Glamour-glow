@@ -2,7 +2,7 @@ import React from "react";
 import { useAppSelector } from "../../hooks/hooks";
 import { Rating } from "@mui/material";
 
-const ReviewItem: React.FC<{reviewData: any}> = (props) => {
+const ReviewItem: React.FC<{ reviewData: any }> = (props) => {
   const themeState = useAppSelector((state) => {
     return state.theme;
   });
@@ -15,7 +15,6 @@ const ReviewItem: React.FC<{reviewData: any}> = (props) => {
       year: "numeric",
       month: "long",
       day: "numeric",
-      
     });
   };
 
@@ -30,26 +29,32 @@ const ReviewItem: React.FC<{reviewData: any}> = (props) => {
           }`}
         >
           {" "}
-          <p> {props.reviewData.user.username.split('')[0].toUpperCase()} </p>
+          <p> {props.reviewData.userId.username.split("")[0].toUpperCase()} </p>
         </div>
         <div className="flex flex-col">
-          <p> {props.reviewData.user.username} </p>
+          <p> {props.reviewData.userId.username} </p>
           <div className="flex flex-row items-center gap-x-7">
             <Rating
               className=""
               name="simple-controlled"
-              value={props.reviewData.review.rating}
+              value={props.reviewData.rating}
               readOnly
               size="small"
             />
-            <p className="text-sm text-gray-600 tracking-wider">   {getFormattedDate(props.reviewData.review.createdAt)} </p>
+            <p className="text-sm text-gray-600 tracking-wider">
+              {" "}
+              {getFormattedDate(props.reviewData.createdAt)}{" "}
+            </p>
           </div>
         </div>
       </div>
-      <p className="my-3"> {props.reviewData.review.feedback} </p>
-      <div style={{
-        height: "0.5px"
-      }} className={`${errorColor}`}></div>
+      <p className="my-3"> {props.reviewData.feedback} </p>
+      <div
+        style={{
+          height: "0.5px",
+        }}
+        className={`${errorColor}`}
+      ></div>
     </div>
   );
 };

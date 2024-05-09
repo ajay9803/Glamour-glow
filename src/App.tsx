@@ -27,6 +27,8 @@ import PaymentSuccessPage from "./pages/payment_success/payment_success";
 import UserPayments from "./pages/user_account/user_payments";
 import { retrieveThemeData, themeSliceActions } from "./slices/theme_slice";
 import AdminOrderHistory from "./pages/admin_account/admin_order_history";
+import ForgotPasswordPage from "./pages/forgot_password/forgot_password";
+import ResetPasswordPage from "./pages/forgot_password/reset_password";
 
 const App: React.FC = () => {
   const themeState = useAppSelector((state) => {
@@ -179,7 +181,11 @@ const App: React.FC = () => {
             path="/order/payment-success"
             element={<PaymentSuccessPage />}
           ></Route>
-          <Route></Route>
+          <Route
+            path="/forgot-password"
+            element={<ForgotPasswordPage />}
+          ></Route>
+          <Route path="/reset-password" element={<ResetPasswordPage />}></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </div>

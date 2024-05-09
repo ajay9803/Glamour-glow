@@ -329,7 +329,7 @@ const UpdateProduct = () => {
                 className="bg-purple-600 text-white rounded mt-8 h-10 w-44"
               >
                 {isSubmitting ? (
-                  <ThePulseLoader></ThePulseLoader>
+                  <ThePulseLoader color="white"></ThePulseLoader>
                 ) : (
                   "Update Product"
                 )}

@@ -1,10 +1,10 @@
 import React from "react";
 import { PulseLoader } from "react-spinners";
 
-const ThePulseLoader: React.FC = () => {
+const ThePulseLoader: React.FC<{color: string}> = ({color}) => {
   return (
     <PulseLoader
-      color={"purple"}
+      color={color}
       
       //   cssOverride={override}
       size={12}

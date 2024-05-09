@@ -224,7 +224,7 @@ const Register: React.FC = () => {
                 type="submit"
                 className="bg-purple-500 w-full text-white p-2 rounded-lg hover:bg-purple-600 focus:outline-none focus:shadow-outline-blue"
               >
-                {isSubmitting ? <ThePulseLoader></ThePulseLoader> : "Register"}
+                {isSubmitting ? <ThePulseLoader color="white"></ThePulseLoader> : "Register"}
               </button>
             </Form>
           )}

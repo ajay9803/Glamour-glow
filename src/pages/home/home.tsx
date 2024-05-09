@@ -1,27 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef} from "react";
 import { useAppSelector } from "../../hooks/hooks";
 import "../../styles/diagonal-transition.css";
 import "../../styles/home.css";
 import NewSection from "./new_section";
 import EndOfYearSection from "./end_of_year_section";
 import { useNavigate } from "react-router-dom";
+import "../../styles/animated_button.css";
 
 const Home = () => {
   const scrollRef = useRef(0);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const themeState = useAppSelector((state) => {
     return state.theme;
   });
 
-  const errorColor = themeState.errorColor;
-  const errorTextColor = themeState.errorTextColor;
+  const darkMode = themeState.darkMode;
 
   useEffect(() => {
     window.scrollTo(0, scrollRef.current);
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -45,9 +40,6 @@ const Home = () => {
       ".heading-text-1, .heading-text-2, .header-image-first, .header-image-second, .header-image-third, .header-data"
     );
     hiddenElements.forEach((el) => observer.observe(el));
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   }, []);
 
   const navigate = useNavigate();
@@ -59,22 +51,25 @@ const Home = () => {
           <p className="text-5xl font-semibold tracking-wider leading-snug">
             GLAMOUR GLOW COSMETIC
           </p>
-          <div onClick={() => {
-            navigate('/products/Skincare')
-          }
-            
-          } className="relative w-full">
+          <div
+            onClick={() => {
+              navigate("/products/Skincare");
+            }}
+            className="relative w-full"
+          >
             <button
-              className={` w-full rounded-xl bg-gray-300 text-gray-300 px-5 py-3 font-semibold tracking-wider transition-all ease-in-out `}
+              className={`w-full rounded-xl bg-gray-300 text-gray-300 px-5 py-3 font-semibold tracking-wider transition-all ease-in-out `}
             >
               {" "}
               SHOP NOW
             </button>
             <button
-              className={`diagonal-translate w-full absolute rounded-xl -top-2 -left-2 font-semibold tracking-wider  ${errorColor} ${errorTextColor} px-5 py-3 transition-all ease-in-out rounded-sm`}
+              className={`button diagonal-translate w-full absolute rounded-xl -top-2 -left-2 font-semibold tracking-wider  ${
+                darkMode ? "bg-purple-700" : "bg-black"
+              } text-white px-5 py-3 transition-all ease-in-out rounded-sm`}
             >
               {" "}
-              SHOP NOW
+              <p className="button-content"> SHOP NOW</p>
             </button>
           </div>
         </div>

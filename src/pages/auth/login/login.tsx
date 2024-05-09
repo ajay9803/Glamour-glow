@@ -161,12 +161,17 @@ const Login = () => {
                 type="submit"
                 className="bg-purple-500 w-full text-white p-2 rounded-lg hover:bg-purple-600 focus:outline-none focus:shadow-outline-blue"
               >
-                {isSubmitting ? <ThePulseLoader></ThePulseLoader> : "Sign In"}
+                {isSubmitting ? <ThePulseLoader color="white"></ThePulseLoader> : "Sign In"}
               </button>
             </Form>
           )}
         </Formik>
-        <p className="text-sm my-5 text-zinc-600 tracking-wider">
+        <p
+          onClick={() => {
+            navigate("/forgot-password");
+          }}
+          className="cursor-pointer text-sm my-5 text-zinc-600 tracking-wider hover:underline hover:decoration-1"
+        >
           {" "}
           Forgot your password?
         </p>
