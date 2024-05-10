@@ -44,7 +44,7 @@ const useSpeechRecognition = () => {
       setData(null);
       try {
         const response = await fetch(
-          `http://localhost:8080/products/products-by-search?name=${text}`
+          `http://localhost:8080/products/products-by-search?name=${text}&filterBy=dsc&minPrice=${0}&maxPrice=${25000}&page=${1}&instockFilter=all`
         );
         const data = await response.json();
 
@@ -65,11 +65,6 @@ const useSpeechRecognition = () => {
         setIsLoading(false);
       }
     };
-
-    // if (text.length === 0) {
-    //   setData(null);
-    //   return;
-    // }
 
     fetchSearchResults();
   }, [text]);

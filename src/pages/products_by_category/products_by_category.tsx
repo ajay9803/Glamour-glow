@@ -28,7 +28,6 @@ const ProductsByCategory: React.FC = () => {
   const instockFilter = queryParams.get("instockFilter") || "all";
 
   const { category } = useParams();
-  
 
   const { isLoading, error, data } = useFutureBuilder(
     `http://localhost:8080/products/all-products/${category}?filterBy=${filterBy}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page}&instockFilter=${instockFilter}`
@@ -37,7 +36,7 @@ const ProductsByCategory: React.FC = () => {
   const scrollRef = useRef(0);
 
   useEffect(() => {
-    document.title = category || 'Glamour Glow Cosmetic';
+    document.title = category || "Glamour Glow Cosmetic";
     window.scrollTo(0, scrollRef.current);
   }, [category]);
 
@@ -96,6 +95,7 @@ const ProductsByCategory: React.FC = () => {
           )}
           {data && data.totalItems > 6 && (
             <PaginatorComponent
+              urlKey="category"
               page={page}
               totalItems={data.totalItems}
               category={category!}
@@ -113,7 +113,8 @@ const ProductsByCategory: React.FC = () => {
 
 export default ProductsByCategory;
 
-const PaginatorComponent: React.FC<{
+export const PaginatorComponent: React.FC<{
+  urlKey: string;
   page: number;
   totalItems: number;
   category: string;
@@ -140,13 +141,25 @@ const PaginatorComponent: React.FC<{
       marginPagesDisplayed={2}
       onPageChange={(selectedItem) => {
         console.log("on page change in pagine", selectedItem.selected);
-        navigate(
-          `/products/${props.category}?filterBy=${props.filterBy}&minPrice=${
-            props.minPrice
-          }&maxPrice=${props.maxPrice}&page=${
-            selectedItem.selected + 1
-          }&instockFilter=${props.instockFilter}`
-        );
+        if (props.urlKey === "category") {
+          navigate(
+            `/products/${props.category}?filterBy=${props.filterBy}&minPrice=${
+              props.minPrice
+            }&maxPrice=${props.maxPrice}&page=${
+              selectedItem.selected + 1
+            }&instockFilter=${props.instockFilter}`
+          );
+        } else if (props.urlKey === "search") {
+          navigate(
+            `/search/${props.category}?filterBy=${props.filterBy}&minPrice=${
+              props.minPrice
+            }&maxPrice=${props.maxPrice}&page=${
+              selectedItem.selected + 1
+            }&instockFilter=${props.instockFilter}`
+          );
+        } else {
+        }
+
         window.scrollTo(0, scrollRef.current);
       }}
       containerClassName={darkMode ? "pagination-darkmode" : "pagination"}

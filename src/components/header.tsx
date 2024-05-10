@@ -219,6 +219,19 @@ const TheHeader: React.FC = () => {
                       ></SearchItem>
                     ))}
                   </div>
+                  {data.totalCount > 12 && (
+                    <p
+                      onClick={() => {
+                        navigate(
+                          `/search/${text}?filterBy=dsc&minPrice=0&maxPrice=25000&page=1&instockFilter=all`
+                        );
+                      }}
+                      className="text-sm hover:underline hover:decoration-1 mt-3 cursor-pointer"
+                    >
+                      {" "}
+                      Show more results
+                    </p>
+                  )}
                 </div>
               )}
             </div>
@@ -275,6 +288,7 @@ const TheHeader: React.FC = () => {
             )}
             {totalItemCount > 0 && (
               <p
+                onClick={() => {}}
                 style={{
                   fontSize: "11px",
                 }}
@@ -375,8 +389,22 @@ const TheHeader: React.FC = () => {
                   ></SearchItem>
                 ))}
               </div>
+              {data.totalCount > 12 && (
+                <p
+                  onClick={() => {
+                    navigate(
+                      `/search/${text}?filterBy=dsc&minPrice=0&maxPrice=25000&page=1&instockFilter=all`
+                    );
+                  }}
+                  className="text-sm hover:underline hover:decoration-1 mt-3 cursor-pointer"
+                >
+                  {" "}
+                  Show more results
+                </p>
+              )}
             </div>
           )}
+
           <div className="h-10"></div>
         </div>
       )}

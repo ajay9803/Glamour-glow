@@ -1,48 +1,139 @@
 import React, { useState, useEffect, useRef } from "react";
 import ProductItemShimmer from "../../utilities/shimmers/product-item-shimmer";
+import { useAppSelector } from "../../hooks/hooks";
+import { PaginatorComponent } from "../products_by_category/products_by_category";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import useFutureBuilder from "../../hooks/future_builder_hook";
+import ThePulseLoader from "../../components/pulse-loader";
+import LoadError from "../home/load-error";
+import ProductItem from "../home/product_item";
+import SearchFilterBar from "../products_by_category/search_filter_bar";
 
 const Search = () => {
-  const [searchValue, setSearchValue] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState("Pet");
+  const { keyword } = useParams();
+  const [searchText, setSearchText] = useState(keyword ?? "");
+  const [theKeyword, setTheKeyword] = useState(keyword ?? "");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  // const [searchResults, setSearchResults] = useState<
-  //   (Pet | PetFood | PetAccessory)[]
-  // >([]);
+  const filterBy = queryParams.get("filterBy") || "dsc";
+  const minPrice = parseInt(queryParams.get("minPrice") || "0") || 0;
+  const maxPrice = parseInt(queryParams.get("maxPrice") || "25000") || 25000;
+  const page = parseInt(queryParams.get("page") || "1") || 1;
+  console.log("page", page);
+  console.log("filterby", filterBy);
+  const instockFilter = queryParams.get("instockFilter") || "all";
+
+  const { isLoading, error, data } = useFutureBuilder(
+    `http://localhost:8080/products/products-by-search?name=${searchText}&filterBy=${filterBy}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page}&instockFilter=${instockFilter}`
+  );
+
+  useEffect(() => {
+    document.title = `${data ? data.totalCount : ""} Search Results`;
+    window.scrollTo(0, scrollRef.current);
+    window.scrollTo(0, scrollRef.current);
+    setSearchText(keyword || "");
+  }, [keyword, data, searchText]);
 
   const scrollRef = useRef(0);
 
-  useEffect(() => {
-    window.scrollTo(0, scrollRef.current);
+  const themeState = useAppSelector((state) => {
+    return state.theme;
   });
+  const darkMode = themeState.darkMode;
 
+  const navigate = useNavigate();
   return (
-    <div className="flex flex-col items-start px-10 md:px-36 w-full py-4 md:py-12">
+    <div className="flex flex-col items-start  w-full py-4 md:py-12">
       <p className="tracking-wider text-2xl font-semibold mb-3">Search</p>
       <div className="flex mb-3 w-full">
         <input
+          value={theKeyword}
           onChange={(e) => {
-            setSearchValue(e.target.value);
-            setTimeout(() => {
-              setIsLoading(false);
-              setError("Wifi went down");
-            }, 2000);
+            setTheKeyword(e.target.value);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              if (theKeyword.trim().length === 0) {
+                return;
+              } else {
+                navigate(
+                  `/search/${theKeyword}?filterBy=${filterBy}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=1&instockFilter=${instockFilter}`
+                );
+              }
+            }
           }}
           placeholder="Start searching ..."
-          className="px-3 py-2 rounded-sm border border-solid bg-zinc-900 border-zinc-600 w-full md:w-2/3 lg:w-1/3 mr-2"
+          className={`px-3 py-2 rounded-sm border border-solid ${
+            darkMode ? "bg-zinc-800" : "bg-white"
+          } border-zinc-600 w-full mr-2`}
         />
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="px-3 py-2 rounded-sm border border-solid bg-zinc-900 border-zinc-600"
-        >
-          <option value="Pet">Pet</option>
-          <option value="Pet Food">Pet Food</option>
-          <option value="Pet Accessory">Pet Accessory</option>
-        </select>
       </div>
-      {}
+      <div className="flex flex-row w-full gap-x-4 ">
+        <div className="flex-col w-2/5 lg:w-2/6 hidden md:flex md:flex-col md:justify-start">
+          <div className="sticky top-44 w-full">
+            <SearchFilterBar
+              currentPage={page}
+              search={searchText!}
+              filterBy={filterBy}
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              instockFilter={instockFilter}
+            ></SearchFilterBar>
+          </div>
+        </div>
+
+        <div className="div-red flex flex-col w-full">
+          {data && searchText?.length > 0 && (
+            <p className="font-semibold tracking-wider text-xl mb-5">
+              {data.totalCount} results found for "{searchText}"
+            </p>
+          )}
+          <div className="w-full">
+            {searchText?.length === 0 && <p> Search for products.</p>}
+            {isLoading && (
+              <div className="h-44 flex flex-row justify-center items-center">
+                <ThePulseLoader color="purple"></ThePulseLoader>
+              </div>
+            )}
+            {error && <LoadError message={error.message}></LoadError>}
+            <div className="div-red"></div>
+            {data && searchText?.length > 0 && !error && (
+              <div className=" grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-4">
+                {data.products.map((product: any) => (
+                  <ProductItem
+                    key={product.id}
+                    product={{
+                      id: product._id,
+                      brand: product.brand,
+                      category: product.category,
+                      name: product.name,
+                      images: product.images,
+                      price: product.price,
+                      description: product.description,
+                      availableQuantity: product.quantityAvailable,
+                      rating: product.rating,
+                      totalReviews: product.totalReviews,
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+            {data && data.totalCount > 12 && searchText?.length > 0 && (
+              <PaginatorComponent
+                urlKey="search"
+                page={page}
+                totalItems={data.totalCount}
+                category={searchText!}
+                filterBy={filterBy}
+                minPrice={minPrice}
+                maxPrice={maxPrice}
+                instockFilter={instockFilter}
+              ></PaginatorComponent>
+            )}
+          </div>
+        </div>
+      </div>
       {isLoading && error === null && (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6 w-full">
           {[...Array(8)].map((_, index) => (
@@ -50,14 +141,6 @@ const Search = () => {
           ))}
         </div>
       )}
-      {/* {!isLoading && error === null && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6 w-full">
-          {[...Array(6)].map((_, index) => (
-            <PetItem key={index} />
-          ))}
-        </div>
-      )}
-      {!isLoading && error !== null && <LoadError />} */}
     </div>
   );
 };

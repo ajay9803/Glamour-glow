@@ -127,7 +127,7 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/home" element={<Home />}></Route>
-          <Route path="/search" element={<Search></Search>}></Route>
+          <Route path="/search/:keyword" element={<Search></Search>}></Route>
           {user && user.status === "user" && totalItems !== 0 && (
             <Route path="/:userId/check-out" element={<CheckOut />}></Route>
           )}
