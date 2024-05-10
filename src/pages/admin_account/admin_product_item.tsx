@@ -10,6 +10,7 @@ import ProductDetailsSidebar from "../home/product_details_bar";
 
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks/hooks";
+import toast from "react-hot-toast";
 
 export type TheProductType = {
   id: string;
@@ -27,6 +28,50 @@ export type TheProductType = {
 const AdminProductItem: React.FC<{ product: TheProductType }> = (props) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [showMenu, setShowMenu] = useState<boolean>(false);
+
+  const authState = useAppSelector((state) => {
+    return state.auth;
+  });
+
+  const token = authState.token;
+
+  const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
+
+  const deleteProduct = async (productId: string) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/products/delete-product/${productId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      if (!response.ok) {
+        const error = new Error("Failed to delete product.");
+        throw error;
+      }
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const handleDelete = async () => {
+    deleteProduct(props.product.id)
+      .then((data) => {
+        toast.success(data.message);
+      })
+      .catch((e) => {
+        toast.error(e.message);
+      })
+      .finally(() => {
+        setShowConfirmationDialog(false);
+      });
+  };
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -57,6 +102,13 @@ const AdminProductItem: React.FC<{ product: TheProductType }> = (props) => {
 
   return (
     <div>
+      {showConfirmationDialog && (
+        <ConfirmationDialog
+          onConfirm={handleDelete}
+          darkMode={darkMode}
+          onCancel={() => setShowConfirmationDialog(false)}
+        />
+      )}
       {showMenu && (
         <div
           style={{
@@ -78,7 +130,7 @@ const AdminProductItem: React.FC<{ product: TheProductType }> = (props) => {
           onClick={() => {
             navigate(`/product-details/${props.product.id}`);
           }}
-          className="h-52 lg:h-72 w-full relative overflow-hidden rounded-xl shadow-sm shadow-black scale-95 hover:scale-100 transition-all"
+          className="h-52 lg:h-56 w-full relative overflow-hidden rounded-xl shadow-sm shadow-black scale-95 hover:scale-100 transition-all"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
@@ -129,6 +181,7 @@ const AdminProductItem: React.FC<{ product: TheProductType }> = (props) => {
               <div
                 onClick={(e) => {
                   e.stopPropagation();
+                  setShowConfirmationDialog(true);
                 }}
                 className="px-2 py-2 rounded-lg bg-black bg-opacity-50 flex justify-center items-center hover:scale-110 transition-all duration-200"
               >
@@ -159,3 +212,46 @@ const AdminProductItem: React.FC<{ product: TheProductType }> = (props) => {
 };
 
 export default AdminProductItem;
+
+const ConfirmationDialog: React.FC<{
+  onConfirm: () => void;
+  onCancel: () => void;
+  darkMode: boolean;
+}> = (props) => {
+  return (
+    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center z-30">
+      <div
+        className={`bg-white p-4 rounded shadow-sm py-8 px-10 ${
+          props.darkMode
+            ? "bg-zinc-800 text-white shadow-slate-500"
+            : "bg-white text-black shadow-black"
+        }`}
+        style={{ opacity: 1 }}
+      >
+        <p>Do you want to delete the item?</p>
+        <div className="flex justify-end mt-4">
+          <button
+            className={`mr-2 px-4 py-1 rounded-sm   ${
+              props.darkMode
+                ? "bg-zinc-500 hover:bg-zinc-600 text-white"
+                : "bg-gray-200 hover:bg-gray-300 text-gray-800"
+            }`}
+            onClick={props.onConfirm}
+          >
+            Yes
+          </button>
+          <button
+            className={` px-4 py-1 rounded-sm  ${
+              props.darkMode
+                ? "bg-zinc-500 hover:bg-zinc-600 text-white"
+                : "bg-gray-200 hover:bg-gray-300 text-gray-800"
+            }`}
+            onClick={props.onCancel}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

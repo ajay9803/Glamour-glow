@@ -10,11 +10,10 @@ const SearchItem: React.FC<{
   return (
     <div
       onClick={() => {
-        console.log('search item');
+        console.log("search item");
         props.toggleShow();
         navigate(`/product-details/${props.product.id}`);
         props.toggleText();
-        // props.toggleShow();
       }}
       className="flex flex-row gap-x-5 border border-solid border-gray-700 p-2 rounded-xl cursor-pointer hover:scale-105 transition-all duration-500 ease-in-out"
     >

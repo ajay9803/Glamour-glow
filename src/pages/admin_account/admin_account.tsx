@@ -32,7 +32,7 @@ const AdminAccountPage: React.FC = () => {
             Order History
           </NavLink>
           <NavLink
-            to="/accounts/admin/products"
+            to="/accounts/admin/products?keyword=''"
             className={(navData) =>
               navData.isActive
                 ? "text-start w-full inline-block px-12 py-5   transition-all duration-300 ease-in-out  hover:underline hover:decoration-1 decoration-1 underline"

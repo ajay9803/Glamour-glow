@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { logOut } from "../action_creators/auth_action";
 import { themeSliceActions } from "../slices/theme_slice";
 
-const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({
+const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void, }> = ({
   isOpen,
   toggleSidebar,
 }) => {

@@ -64,46 +64,48 @@ const TheHeader: React.FC = () => {
     setTextValue,
   } = useSpeechRecognition();
 
-  const [showSearchBar, setShowSearchBar] = useState<boolean>(text.length > 0);
+  const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
 
   // const searchBarRef = useRef<HTMLDivElement>(null);
   const authPopupRef = useRef<HTMLDivElement>(null);
   const lgSearchBarRef = useRef<HTMLDivElement>(null);
+  const smSearchBarRef = useRef<HTMLDivElement>(null);
   const sideBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setShowSearchBar(text.length > 0);
   }, [text]);
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      authPopupRef.current &&
-      !authPopupRef.current.contains(event.target as Node)
-    ) {
-      setShowAuthPopup(false);
-    }
-  };
-
-  const handleClickOutsideSearchBar = (event: MouseEvent) => {
-    if (
-      lgSearchBarRef.current &&
-      !lgSearchBarRef.current.contains(event.target as Node) &&
-      showSearchBar
-    ) {
-      setShowSearchBar(false);
-    }
-  };
-
-  const handleClickOutsideSideBar = (event: MouseEvent) => {
-    if (
-      sideBarRef.current &&
-      !sideBarRef.current.contains(event.target as Node)
-    ) {
-      setShowMenu(false);
-    }
-  };
-
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        authPopupRef.current &&
+        !authPopupRef.current.contains(event.target as Node)
+      ) {
+        setShowAuthPopup(false);
+      }
+    };
+
+    const handleClickOutsideSearchBar = (event: MouseEvent) => {
+      if (
+        lgSearchBarRef.current &&
+        !lgSearchBarRef.current.contains(event.target as Node) &&
+        smSearchBarRef.current &&
+        !smSearchBarRef.current.contains(event.target as Node)
+      ) {
+        setShowSearchBar(false);
+      }
+    };
+
+    const handleClickOutsideSideBar = (event: MouseEvent) => {
+      if (
+        sideBarRef.current &&
+        !sideBarRef.current.contains(event.target as Node)
+      ) {
+        setShowMenu(false);
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("mousedown", handleClickOutsideSearchBar);
     document.addEventListener("mousedown", handleClickOutsideSideBar);
@@ -112,7 +114,7 @@ const TheHeader: React.FC = () => {
       document.removeEventListener("mousedown", handleClickOutsideSearchBar);
       document.removeEventListener("mousedown", handleClickOutsideSideBar);
     };
-  }, []);
+  }, [showSearchBar]);
 
   return (
     <div className="flex flex-col sticky top-0 z-30">
@@ -120,10 +122,10 @@ const TheHeader: React.FC = () => {
         onClick={() => {}}
         className="w-full flex flex-row items-center justify-between px-10 py-8 bg-zinc-950 text-white gap-x-6"
       >
-        <div ref={sideBarRef}>
+        <div className="flex md:hidden" ref={sideBarRef}>
           <Sidebar isOpen={showMenu} toggleSidebar={toggleMenu}></Sidebar>
         </div>
-        <div className="flex lg:hidden mt-1.5 pr-4 ">
+        <div className="flex lg:hidden mt-1.5">
           <FontAwesomeIcon
             icon={faBars}
             className="text-2xl cursor-pointer transition-transform duration-500 ease-in-out"
@@ -145,6 +147,7 @@ const TheHeader: React.FC = () => {
           {" "}
           GLAMOURGLOW
         </p>
+
         <div ref={lgSearchBarRef} className="relative hidden lg:flex w-2/4">
           <input
             onChange={(e) => {
@@ -163,7 +166,6 @@ const TheHeader: React.FC = () => {
             className="absolute top-1.5 right-12 cursor-pointer "
             onClick={() => {
               setTextValue("");
-              setShowSearchBar(false);
             }}
           >
             {" "}
@@ -315,7 +317,7 @@ const TheHeader: React.FC = () => {
       {/* search results */}
       {showSearchBar && (
         <div
-          ref={lgSearchBarRef}
+          ref={smSearchBarRef}
           className={`${primaryColor} max-h-96 z-30 overflow-y-scroll fixed flex lg:hidden flex-col top-28 right-0 left-0 py-10 rounded-b-2xl shadow-sm shadow-black mb-20 `}
           style={{
             scrollbarWidth: "none",
@@ -338,7 +340,6 @@ const TheHeader: React.FC = () => {
             <p
               onClick={() => {
                 setTextValue("");
-                setShowSearchBar(false);
               }}
               className="absolute top-3 right-12 hover:cursor-pointer"
             >

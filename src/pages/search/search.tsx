@@ -110,7 +110,7 @@ const Search = () => {
         <div className="flex-col w-2/5 lg:w-2/6 hidden md:flex md:flex-col md:justify-start">
           <div className="sticky top-44 w-full">
             <SearchFilterBar
-            toggleShowFilterBar={toggleFilterBar}
+              toggleShowFilterBar={toggleFilterBar}
               currentPage={page}
               search={searchText!}
               filterBy={filterBy}
@@ -128,7 +128,7 @@ const Search = () => {
           }`}
         >
           <SearchFilterBar
-          toggleShowFilterBar={toggleFilterBar}
+            toggleShowFilterBar={toggleFilterBar}
             currentPage={page}
             search={searchText!}
             filterBy={filterBy}
