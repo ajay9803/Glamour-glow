@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/slider.css";
 
 const FilterBar: React.FC<{
+  toggleShowFilterBar: () => void;
   currentPage: number;
   category: string;
   filterBy: string;
@@ -67,13 +68,14 @@ const FilterBar: React.FC<{
   return (
     <div
       className={`${
-        darkMode ? "bg-zinc-800 shadow-zinc-600" : "bg-slate-50 shadow-gray-700"
+        darkMode ? "bg-zinc-800 shadow-zinc-600" : "bg-slate-50 shadow-gray-700 z-20"
       } px-3 py-4 shadow-sm gap-y-3 flex flex-col rounded-md`}
     >
       <p className="font-semibold tracking-wider">Sort By</p>
       <select
         value={filterBy}
         onChange={(e) => {
+          props.toggleShowFilterBar();
           setFilterBy(e.target.value);
           navigate(
             `/products/${category}?filterBy=${e.target.value}&minPrice=${range[0]}&maxPrice=${range[1]}&page=1&instockFilter=${instockFilter}`
@@ -124,6 +126,7 @@ const FilterBar: React.FC<{
           value={range}
           onChange={handleRangeChange}
           onChangeComplete={(newRange: any) => {
+            props.toggleShowFilterBar();
             navigate(
               `/products/${category}?filterBy=${filterBy}&minPrice=${newRange[0]}&maxPrice=${newRange[1]}&page=1&instockFilter=${instockFilter}`
             );
@@ -150,6 +153,7 @@ const FilterBar: React.FC<{
             <input
               checked={instock}
               onChange={(event) => {
+                props.toggleShowFilterBar();
                 const isChecked = event.target.checked;
                 setInstock(isChecked);
                 if (isChecked && outofstock) {
@@ -185,12 +189,12 @@ const FilterBar: React.FC<{
               className="mr-3 h-7 w-7  checked:bg-purple-500 checked:border-white border border-solid"
             />
             <span className="text tracking-wider">In stock</span>
-            
           </div>
           <div className="w-full relative flex flex-row items-center">
             <input
               checked={outofstock}
               onChange={(event) => {
+                props.toggleShowFilterBar();
                 const isChecked = event.target.checked;
                 setOutofstock(isChecked);
                 if (isChecked && instock) {

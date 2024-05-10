@@ -6,7 +6,7 @@ import Rating from "@mui/material/Rating";
 import { cartSliceActions } from "../../slices/cart-slice";
 import toast from "react-hot-toast";
 import { TheProductType } from "../admin_account/admin_product_item";
-import '../../styles/animated_button.css';
+import "../../styles/animated_button.css";
 
 const ProductDetailsSidebar: React.FC<{
   product: TheProductType;
@@ -31,7 +31,6 @@ const ProductDetailsSidebar: React.FC<{
   const user = authState.user;
 
   const dispatch = useAppDispatch();
-
 
   return (
     <div
@@ -94,7 +93,7 @@ const ProductDetailsSidebar: React.FC<{
               toast.error("Action denied.");
               return;
             } else if (props.product.availableQuantity === 0) {
-              toast.error(`${props.product.name} has been sold out.`)
+              toast.error(`${props.product.name} has been sold out.`);
               return;
             }
             dispatch(

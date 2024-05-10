@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/slider.css";
 
 const SearchFilterBar: React.FC<{
+  toggleShowFilterBar: () => void;
   currentPage: number;
   search: string;
   filterBy: string;
@@ -74,6 +75,7 @@ const SearchFilterBar: React.FC<{
       <select
         value={filterBy}
         onChange={(e) => {
+          props.toggleShowFilterBar();
           setFilterBy(e.target.value);
           navigate(
             `/search/${search}?filterBy=${e.target.value}&minPrice=${range[0]}&maxPrice=${range[1]}&page=1&instockFilter=${instockFilter}`
@@ -124,6 +126,7 @@ const SearchFilterBar: React.FC<{
           value={range}
           onChange={handleRangeChange}
           onChangeComplete={(newRange: any) => {
+            props.toggleShowFilterBar();
             navigate(
               `/search/${search}?filterBy=${filterBy}&minPrice=${newRange[0]}&maxPrice=${newRange[1]}&page=1&instockFilter=${instockFilter}`
             );
@@ -150,6 +153,7 @@ const SearchFilterBar: React.FC<{
             <input
               checked={instock}
               onChange={(event) => {
+                props.toggleShowFilterBar();
                 const isChecked = event.target.checked;
                 setInstock(isChecked);
                 if (isChecked && outofstock) {
@@ -190,6 +194,7 @@ const SearchFilterBar: React.FC<{
             <input
               checked={outofstock}
               onChange={(event) => {
+                props.toggleShowFilterBar();
                 const isChecked = event.target.checked;
                 setOutofstock(isChecked);
                 if (isChecked && instock) {

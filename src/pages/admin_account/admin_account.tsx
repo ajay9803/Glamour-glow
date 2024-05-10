@@ -15,7 +15,7 @@ const AdminAccountPage: React.FC = () => {
           onClick={() => {
             navigate("/add-product");
           }}
-          className="text-white font-semibold tracking-wider mb-5 hover:cursor-pointer flex flex-row justify-center items-center px-4 py-2 bg-purple-500 text-center mr-5 rounded-md hover:bg-purple-700 transition-all duration-300 ease-in-out"
+          className="text-white hidden font-semibold tracking-wider mb-5 hover:cursor-pointer md:flex flex-row justify-center items-center px-4 py-2 bg-purple-500 text-center mr-5 rounded-md hover:bg-purple-700 transition-all duration-300 ease-in-out"
         >
           <p> Add Product </p>
         </div>

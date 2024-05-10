@@ -17,6 +17,7 @@ import HeaderAuthPopUp from "./header_auth_popup";
 import { useNavigate } from "react-router-dom";
 import useSpeechRecognition from "../hooks/speech_recognition_hook";
 import GeneralCategories from "./general_categories";
+import Sidebar from "./side_bar";
 
 const TheHeader: React.FC = () => {
   const themeState = useAppSelector((state) => {
@@ -67,6 +68,8 @@ const TheHeader: React.FC = () => {
 
   // const searchBarRef = useRef<HTMLDivElement>(null);
   const authPopupRef = useRef<HTMLDivElement>(null);
+  const lgSearchBarRef = useRef<HTMLDivElement>(null);
+  const sideBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setShowSearchBar(text.length > 0);
@@ -78,39 +81,48 @@ const TheHeader: React.FC = () => {
       !authPopupRef.current.contains(event.target as Node)
     ) {
       setShowAuthPopup(false);
-    } else {
+    }
+  };
+
+  const handleClickOutsideSearchBar = (event: MouseEvent) => {
+    if (
+      lgSearchBarRef.current &&
+      !lgSearchBarRef.current.contains(event.target as Node) &&
+      showSearchBar
+    ) {
+      setShowSearchBar(false);
+    }
+  };
+
+  const handleClickOutsideSideBar = (event: MouseEvent) => {
+    if (
+      sideBarRef.current &&
+      !sideBarRef.current.contains(event.target as Node)
+    ) {
+      setShowMenu(false);
     }
   };
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutsideSearchBar);
+    document.addEventListener("mousedown", handleClickOutsideSideBar);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutsideSearchBar);
+      document.removeEventListener("mousedown", handleClickOutsideSideBar);
     };
   }, []);
 
   return (
     <div className="flex flex-col sticky top-0 z-30">
-      {(showSearchBar || showAuthPopup) && (
-        <div
-          style={{
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            backdropFilter: "blur(5px)",
-          }}
-          className="fixed top-24 right-0 h-full w-screen bg-black bg-opacity-80 z-20"
-          onClick={() => {
-            setShowSearchBar(false);
-            setShowAuthPopup(false);
-            setTextValue("");
-          }}
-        ></div>
-      )}
       <div
-        onClick={() => {
-          setShowSearchBar(false);
-        }}
+        onClick={() => {}}
         className="w-full flex flex-row items-center justify-between px-10 py-8 bg-zinc-950 text-white gap-x-6"
       >
+        <div ref={sideBarRef}>
+          <Sidebar isOpen={showMenu} toggleSidebar={toggleMenu}></Sidebar>
+        </div>
         <div className="flex lg:hidden mt-1.5 pr-4 ">
           <FontAwesomeIcon
             icon={faBars}
@@ -133,7 +145,7 @@ const TheHeader: React.FC = () => {
           {" "}
           GLAMOURGLOW
         </p>
-        <div className="relative hidden lg:flex w-2/4">
+        <div ref={lgSearchBarRef} className="relative hidden lg:flex w-2/4">
           <input
             onChange={(e) => {
               setTextValue(e.target.value);
@@ -222,6 +234,7 @@ const TheHeader: React.FC = () => {
                   {data.totalCount > 12 && (
                     <p
                       onClick={() => {
+                        setShowSearchBar(false);
                         navigate(
                           `/search/${text}?filterBy=dsc&minPrice=0&maxPrice=25000&page=1&instockFilter=all`
                         );
@@ -242,14 +255,13 @@ const TheHeader: React.FC = () => {
             className="cursor-pointer text-lg hidden lg:flex"
             onClick={() => {
               dispatch(themeSliceActions.toggleDarkMode());
-              setShowSearchBar(false);
             }}
             icon={darkMode ? faSun : faMoon}
           ></FontAwesomeIcon>
           <FontAwesomeIcon
             className="cursor-pointer text-2xl flex lg:hidden"
-            onClick={() => {
-              setShowSearchBar(!showSearchBar);
+            onClick={(e) => {
+              setShowSearchBar(true);
             }}
             icon={faSearch}
           ></FontAwesomeIcon>
@@ -257,7 +269,6 @@ const TheHeader: React.FC = () => {
             <FontAwesomeIcon
               onClick={() => {
                 setShowAuthPopup(!showAuthPopup);
-                setShowSearchBar(false);
               }}
               className="cursor-pointer  text-lg hidden lg:flex"
               icon={faUser}
@@ -304,6 +315,7 @@ const TheHeader: React.FC = () => {
       {/* search results */}
       {showSearchBar && (
         <div
+          ref={lgSearchBarRef}
           className={`${primaryColor} max-h-96 z-30 overflow-y-scroll fixed flex lg:hidden flex-col top-28 right-0 left-0 py-10 rounded-b-2xl shadow-sm shadow-black mb-20 `}
           style={{
             scrollbarWidth: "none",
@@ -392,6 +404,7 @@ const TheHeader: React.FC = () => {
               {data.totalCount > 12 && (
                 <p
                   onClick={() => {
+                    setShowSearchBar(false);
                     navigate(
                       `/search/${text}?filterBy=dsc&minPrice=0&maxPrice=25000&page=1&instockFilter=all`
                     );
