@@ -67,7 +67,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void, }> = ({
             className="font-semibold text-xl tracking-wider cursor-pointer"
           >
             {" "}
-            GLAMOURGLOW
+            ELEGANTESSENTIALS
           </p>
         </div>
         {user && user.status === "admin" && (

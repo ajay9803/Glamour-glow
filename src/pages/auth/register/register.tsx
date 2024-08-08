@@ -81,7 +81,7 @@ const Register: React.FC = () => {
   const scrollRef = useRef(0);
 
   useEffect(() => {
-    document.title = "Account - Glamour Glow Cosmetic";
+    document.title = "Account - Glamour Elegant Essentials";
     window.scrollTo(0, scrollRef.current);
   });
 

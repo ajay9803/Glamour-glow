@@ -16,7 +16,7 @@ const Home = () => {
   const darkMode = themeState.darkMode;
 
   useEffect(() => {
-    document.title = 'Glamour Glow Cosmetic';
+    document.title = 'Elegant Essentials';
     window.scrollTo(0, scrollRef.current);
 
     const observer = new IntersectionObserver(
@@ -50,7 +50,7 @@ const Home = () => {
       <div className="flex  w-full gap-x-10 flex-col gap-y-10 md:flex-row py-12">
         <div className="flex-col  w-full md:w-2/5 lg:w-2/5 flex gap-y-6">
           <p className="text-5xl font-semibold tracking-wider leading-snug">
-            GLAMOUR GLOW COSMETIC
+            Elegant Essentials
           </p>
           <div
             onClick={() => {

@@ -13,10 +13,10 @@ const Footer: React.FC = () => {
     <div className="bg-zinc-900 shawdow px-10 lg:px-0 sm:w-full  flex flex-col gap-y-7 lg:flex-row lg:justify-around py-20 md:py-10">
       {/* first */}
       <div className=" flex flex-col justify-start text-start">
-        <h2 className="text-white font-semibold"> GLAMOUR GLOW COSMETIC</h2>
+        <h2 className="text-white font-semibold"> Elegant Essentials</h2>
         <p className=" text-xs  text-white">
           Copyright @2024,{" "}
-          <span className="text-purple-400 font-semibold">Glamour Glow</span>.
+          <span className="text-purple-400 font-semibold">Elegant Essentials</span>.
           All rights reserved.
         </p>
         <div className="mt-4 cursor-pointer">

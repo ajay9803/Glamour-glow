@@ -145,7 +145,7 @@ const TheHeader: React.FC = () => {
           className="font-semibold text-xl tracking-wider cursor-pointer"
         >
           {" "}
-          GLAMOURGLOW
+          ELEGANTESSENTIALS
         </p>
 
         <div ref={lgSearchBarRef} className="relative hidden lg:flex w-2/4">

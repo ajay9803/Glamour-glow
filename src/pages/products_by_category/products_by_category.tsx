@@ -59,7 +59,7 @@ const ProductsByCategory: React.FC = () => {
   };
 
   useEffect(() => {
-    document.title = category || "Glamour Glow Cosmetic";
+    document.title = category || "Elegant Essentials";
     window.scrollTo(0, scrollRef.current);
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
