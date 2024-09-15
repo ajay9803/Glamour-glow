@@ -8,6 +8,7 @@ export class NewBeautyProduct {
   price: number;
   quantity: number;
   images: File[];
+  skinType: string;
 
   constructor(
     id: string,
@@ -18,7 +19,8 @@ export class NewBeautyProduct {
     description: string,
     price: number,
     quantity: number,
-    images: File[]
+    images: File[],
+    skinType: string,
   ) {
     this.id = id;
     this.type = type;
@@ -29,6 +31,7 @@ export class NewBeautyProduct {
     this.price = price;
     this.quantity = quantity;
     this.images = images;
+    this.skinType = skinType;
   }
 }
 

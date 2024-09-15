@@ -51,6 +51,7 @@ export const loginUser = async (email: string, password: string) => {
     console.log(jsonData);
 
     if (response.status === 200) {
+     
       localStorage.setItem("token", jsonData.token);
       localStorage.setItem("user", JSON.stringify(jsonData.user));
       console.log("tada");

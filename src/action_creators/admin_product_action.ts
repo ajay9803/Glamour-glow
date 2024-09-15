@@ -13,7 +13,10 @@ export const addProduct = async (product: NewBeautyProduct, token: string) => {
   formData.append("price", product.price.toString());
   formData.append("quantityAvailable", product.quantity.toString());
   formData.append("description", product.description);
-  formData.append("rating", "1");
+  formData.append("rating", "1"); // Assuming rating is hardcoded for now
+  formData.append("skinType", product.skinType); // Append skinType to formData
+
+  // Append all images
   for (let i = 0; i < product.images.length; i++) {
     formData.append("images", product.images[i]);
   }
@@ -26,6 +29,7 @@ export const addProduct = async (product: NewBeautyProduct, token: string) => {
         Authorization: `Bearer ${token}`,
       },
     });
+
     console.log(response.status);
     const jsonData = await response.json();
     console.log(jsonData);
@@ -39,6 +43,7 @@ export const addProduct = async (product: NewBeautyProduct, token: string) => {
     throw e;
   }
 };
+
 
 export const updateProduct = async (
   product: NewBeautyProduct,

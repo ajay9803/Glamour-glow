@@ -38,6 +38,7 @@ const UpdateProduct = () => {
     price: number | null;
     quantity: number | null;
     images: string[];
+    skinType: string;
   };
 
   const initialValues = {
@@ -48,6 +49,7 @@ const UpdateProduct = () => {
     price: product.price,
     quantity: product.availableQuantity,
     images: [],
+    skinType: product.skinType || "NORMAL SKIN",
   } as FormValues;
 
   const validationSchema = Yup.object().shape({
@@ -62,6 +64,7 @@ const UpdateProduct = () => {
       .required("Quantity is required")
       .min(0, "Quantity must be greater than or equal to 0"),
     images: Yup.array(),
+    skinType: Yup.string().required("Skin type is required"),
   });
 
   const authState = useAppSelector((state) => {
@@ -85,7 +88,8 @@ const UpdateProduct = () => {
         values.description,
         values.price!,
         values.quantity!,
-        imageFiles
+        imageFiles,
+        values.skinType
       ),
       token ?? ""
     )
@@ -115,7 +119,7 @@ const UpdateProduct = () => {
         onSubmit={handleSubmit}
       >
         {({ errors, touched, isSubmitting, setFieldValue }) => (
-          <Form className=" w-full md:w-2/3 lg:w-1/2">
+          <Form className="w-full md:w-2/3 lg:w-1/2">
             <div className="mb-5 flex flex-col items-start w-full">
               <label
                 className="mb-2 font-semibold tracking-wider text-lg"
@@ -127,7 +131,7 @@ const UpdateProduct = () => {
                 placeholder="Enter product name"
                 type="text"
                 name="productName"
-                className={` ${
+                className={`${
                   darkMode
                     ? "bg-zinc-800 shadow-sm shadow-white"
                     : "bg-purple-50 shadow-black shadow-sm"
@@ -151,7 +155,7 @@ const UpdateProduct = () => {
                 placeholder="Enter brand"
                 type="text"
                 name="brand"
-                className={` ${
+                className={`${
                   darkMode
                     ? "bg-zinc-800 shadow-sm shadow-white"
                     : "bg-purple-50 shadow-black shadow-sm"
@@ -174,7 +178,7 @@ const UpdateProduct = () => {
               <Field
                 as="select"
                 name="category"
-                className={` ${
+                className={`${
                   darkMode
                     ? "bg-zinc-800 shadow-sm shadow-white"
                     : "bg-purple-50 shadow-black shadow-sm"
@@ -218,7 +222,7 @@ const UpdateProduct = () => {
                 placeholder="Enter description"
                 type="text"
                 name="description"
-                className={` ${
+                className={`${
                   darkMode
                     ? "bg-zinc-800 shadow-sm shadow-white"
                     : "bg-purple-50 shadow-black shadow-sm"
@@ -242,7 +246,7 @@ const UpdateProduct = () => {
                 type="number"
                 name="price"
                 placeholder="Enter price"
-                className={` ${
+                className={`${
                   darkMode
                     ? "bg-zinc-800 shadow-sm shadow-white"
                     : "bg-purple-50 shadow-black shadow-sm"
@@ -266,7 +270,7 @@ const UpdateProduct = () => {
                 type="number"
                 name="quantity"
                 placeholder="Enter quantity"
-                className={` ${
+                className={`${
                   darkMode
                     ? "bg-zinc-800 shadow-sm shadow-white"
                     : "bg-purple-50 shadow-black shadow-sm"
@@ -274,6 +278,36 @@ const UpdateProduct = () => {
               />
               <ErrorMessage
                 name="quantity"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+
+            <div className="mb-5 flex flex-col items-start w-full">
+              <label
+                className="mb-2 font-semibold tracking-wider text-lg"
+                htmlFor="skinType"
+              >
+                Skin Type
+              </label>
+              <Field
+                as="select"
+                name="skinType"
+                className={`${
+                  darkMode
+                    ? "bg-zinc-800 shadow-sm shadow-white"
+                    : "bg-purple-50 shadow-black shadow-sm"
+                } px-3 py-3 rounded-lg w-full`}
+              >
+                <option value="">Select Skin Type</option>
+                <option value="Normal">Normal</option>
+                <option value="Oily">Oily</option>
+                <option value="Dry">Dry</option>
+                <option value="Combination">Combination</option>
+                <option value="Sensitive">Sensitive</option>
+              </Field>
+              <ErrorMessage
+                name="skinType"
                 component="div"
                 className="text-red-500"
               />
@@ -293,7 +327,7 @@ const UpdateProduct = () => {
                 onChange={(event) => handleImageChange(event, setFieldValue)}
                 multiple // Allow multiple file selection
                 accept="image/*"
-                className={` ${
+                className={`${
                   darkMode
                     ? "bg-zinc-800 shadow-sm shadow-white"
                     : "bg-purple-50 shadow-black shadow-sm"

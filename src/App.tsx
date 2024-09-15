@@ -29,6 +29,7 @@ import { retrieveThemeData, themeSliceActions } from "./slices/theme_slice";
 import AdminOrderHistory from "./pages/admin_account/admin_order_history";
 import ForgotPasswordPage from "./pages/forgot_password/forgot_password";
 import ResetPasswordPage from "./pages/forgot_password/reset_password";
+import ScanImage from "./pages/scan_image/scan_image";
 
 const App: React.FC = () => {
   const themeState = useAppSelector((state) => {
@@ -91,9 +92,8 @@ const App: React.FC = () => {
 
   return (
     <div
-      className={`${
-        darkMode ? "text-white bg-zinc-950" : "text-black bg-white"
-      } transition-all duration-500 ease-in-out`}
+      className={`${darkMode ? "text-white bg-zinc-950" : "text-black bg-white"
+        } transition-all duration-500 ease-in-out`}
     >
       <Toaster
         position="bottom-right"
@@ -128,6 +128,7 @@ const App: React.FC = () => {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/home" element={<Home />}></Route>
           <Route path="/search/:keyword" element={<Search></Search>}></Route>
+          <Route path="/analyze-skin" element={<ScanImage></ScanImage>}></Route>
           {user && user.status === "user" && totalItems !== 0 && (
             <Route path="/:userId/check-out" element={<CheckOut />}></Route>
           )}

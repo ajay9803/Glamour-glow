@@ -33,6 +33,7 @@ const AddBeautyProduct = () => {
     price: number | null;
     quantity: number | null;
     images: string[];
+    skinType: string;
   };
 
   const initialValues = {
@@ -43,6 +44,7 @@ const AddBeautyProduct = () => {
     price: null,
     quantity: null,
     images: images,
+    skinType: "NORMAL SKIN", // Default value
   } as FormValues;
 
   const validationSchema = Yup.object().shape({
@@ -57,7 +59,9 @@ const AddBeautyProduct = () => {
       .required("Quantity is required")
       .min(0, "Quantity must be greater than or equal to 0"),
     images: Yup.array().min(1, "At least one image is required").nullable(),
+    skinType: Yup.string().required("Skin type is required"), // Add validation for skinType
   });
+
 
   const authState = useAppSelector((state) => {
     return state.auth;
@@ -79,7 +83,8 @@ const AddBeautyProduct = () => {
         values.description,
         values.price!,
         values.quantity!,
-        imageFiles
+        imageFiles,
+        values.skinType // Include skinType in product creation
       ),
       token ?? ""
     )
@@ -92,6 +97,7 @@ const AddBeautyProduct = () => {
       });
     setSubmitting(false);
   };
+
 
   const themeState = useAppSelector((state) => {
     return state.theme;
@@ -198,6 +204,33 @@ const AddBeautyProduct = () => {
                 className="text-red-500"
               />
             </div>
+
+            <div className="mb-5 flex flex-col items-start w-full ">
+              <label
+                className="mb-2 font-semibold tracking-wider text-lg"
+                htmlFor="skinType"
+              >
+                Skin Type
+              </label>
+              <Field
+                as="select"
+                name="skinType"
+                className={`${darkMode
+                    ? "bg-zinc-800 shadow-sm shadow-white"
+                    : "bg-purple-50 shadow-black shadow-sm"
+                  } px-3 py-3 rounded-lg w-full`}
+              >
+                <option value="NORMAL SKIN">Normal Skin</option>
+                <option value="OILY SKIN">Oily Skin</option>
+                <option value="DRY SKIN">Dry Skin</option>
+              </Field>
+              <ErrorMessage
+                name="skinType"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+
 
             <div className="mb-5 flex flex-col items-start w-full">
               <label

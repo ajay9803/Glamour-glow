@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useAppSelector } from "../hooks/hooks";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFan } from "@fortawesome/free-solid-svg-icons";
 
 const GeneralCategories: React.FC = () => {
   const themeState = useAppSelector((state) => {
@@ -259,6 +261,12 @@ const GeneralCategories: React.FC = () => {
           </div>
         )}
       </div>
+      <p onClick={() => {
+        navigate('/analyze-skin')
+      }} className="font-semibold cursor-pointer hover:bg-purple-600 px-5 py-4 transition-all duration-200 ease-in">
+        {" "}
+        Analyze Skin +
+      </p>
     </div>
   );
 };
