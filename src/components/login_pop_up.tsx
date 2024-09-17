@@ -62,8 +62,9 @@ const LoginPopup: React.FC<{
       />
       <input
         onChange={(e) => {
-          setPassword(e.target.value);
+          setPassword(e.target.value); 
         }}
+        type="password"
         placeholder="Password"
         className={`px-2 py-1.5 rounded-2xl w-full shadow-sm shadow-black placeholder-gray-500 ${
           darkMode

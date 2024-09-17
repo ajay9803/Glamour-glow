@@ -169,6 +169,7 @@ const Search = () => {
                       availableQuantity: product.quantityAvailable,
                       rating: product.rating,
                       totalReviews: product.totalReviews,
+                      skinType: product.skinType,
                     }}
                   />
                 ))}

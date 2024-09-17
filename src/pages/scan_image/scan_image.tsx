@@ -103,7 +103,6 @@ const ScanImage: React.FC = () => {
                 const thePrediction = `${result.prediction.toUpperCase()} SKIN`
                 // Fetch recommended products based on prediction
                 const productsResponse = await fetch(`http://localhost:8080/products/recommendations/${thePrediction}?page=1`);
-                console.log(productsResponse.status);
                 if (!productsResponse.ok) {
                     throw new Error('Failed to fetch recommended products');
                 }
@@ -144,7 +143,7 @@ const ScanImage: React.FC = () => {
 
                 <div
                     className="border-2 border-dashed border-purple-500 p-6 flex flex-col justify-center items-center cursor-pointer rounded-md relative"
-                    onClick={handleUploadClick}
+                    onClick={() => !isCameraOpen && handleUploadClick()} // Ensure file input only triggers when the camera is not open
                 >
                     <input
                         type="file"
@@ -223,6 +222,7 @@ const ScanImage: React.FC = () => {
                                     availableQuantity: product.quantityAvailable,
                                     rating: product.rating,
                                     totalReviews: product.totalReviews,
+                                    skinType: product.skinType,
                                 }}
                             />
                         ))}

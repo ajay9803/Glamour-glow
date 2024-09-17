@@ -229,6 +229,7 @@ const TheHeader: React.FC = () => {
                           availableQuantity: product.quantityAvailable,
                           rating: product.rating,
                           totalReviews: product.totalReviews,
+                          skinType: product.skinType,
                         }}
                       ></SearchItem>
                     ))}
@@ -398,6 +399,7 @@ const TheHeader: React.FC = () => {
                       availableQuantity: product.quantityAvailable,
                       rating: product.rating,
                       totalReviews: product.totalReviews,
+                      skinType: product.skinType,
                     }}
                   ></SearchItem>
                 ))}
